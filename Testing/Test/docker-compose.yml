@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Admin1234.
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+  db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    depends_on:
+      - sqlserver
+    entrypoint: /bin/bash -c "
+      sleep 15 &&
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'Admin1234.' -Q 'IF DB_ID('walletDB') IS NULL CREATE DATABASE walletDB;'"
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    ports:
+      - "9273:9273"
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+        - ./prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  sql_data:
