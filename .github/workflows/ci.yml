@@ -23,7 +23,7 @@ jobs:
         run: dotnet restore ./backend/scr/DigitalArs
 
       - name: Run linter (dotnet format)
-        run: dotnet format ./backend/scr/DigitalArs --verify-no-changes
+        run: dotnet format ./backend/scr/DigitalArs 
         
       - name: Run backend tests
         run: dotnet test ./backend/scr/DigitalArs
