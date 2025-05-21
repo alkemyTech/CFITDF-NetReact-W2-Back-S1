@@ -1,0 +1,44 @@
+name: CI - Build, Test y Linter
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore backend dependencies
+        run: dotnet restore ./backend/scr/DigitalArs
+
+      - name: Run linter (dotnet format)
+        run: dotnet format ./backend/scr/DigitalArs --verify-no-changes
+        
+      - name: Run backend tests
+        run: dotnet test ./backend/scr/DigitalArs
+
+      # Esta sección del workflow de GitHub Actions configura el entorno para el frontend desarrollado en React.
+      # 1. Utiliza la acción 'actions/setup-node@v3' para instalar Node.js versión 20, necesario para ejecutar y construir aplicaciones Node.js.
+      # 2. Instala las dependencias del frontend ejecutando 'npm install' en la carpeta './frontend'.
+      # 3. Ejecuta los tests del frontend con 'npm test' en la misma carpeta, asegurando que la aplicación React funcione correctamente antes de continuar con el pipeline.
+
+      # --- Frontend (React) ---
+ #     - name: Setup Node.js
+ #       uses: actions/setup-node@v3
+ #       with:
+ #         node-version: '20'
+#      - name: Install frontend dependencies
+#        run: npm install --prefix ./frontend
+#      - name: Run frontend tests
+#        run: npm test --prefix ./frontend
