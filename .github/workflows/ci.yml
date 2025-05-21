@@ -20,13 +20,13 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore backend dependencies
-        run: dotnet restore ./backend/scr/DigitalArs.sln
+        run: dotnet restore ./backend/scr/DigitalArs/DigitalArs.sln
 
       - name: Run linter (dotnet format)
-        run: dotnet format ./backend/scr/DigitalArs.sln 
+        run: dotnet format ./backend/scr/DigitalArs/DigitalArs.sln 
         
       - name: Run backend tests
-        run: dotnet test ./backend/scr/DigitalArs.sln
+        run: dotnet test ./backend/scr/DigitalArs/DigitalArs.sln
 
       # Esta sección del workflow de GitHub Actions configura el entorno para el frontend desarrollado en React.
       # 1. Utiliza la acción 'actions/setup-node@v3' para instalar Node.js versión 20, necesario para ejecutar y construir aplicaciones Node.js.
