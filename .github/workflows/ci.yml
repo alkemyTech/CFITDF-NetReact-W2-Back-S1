@@ -24,6 +24,7 @@ jobs:
 
       - name: Run linter (dotnet format)
         run: dotnet format ./backend/scr/DigitalArs/DigitalArs.sln
+     
         
       - name: Run backend tests
         run: dotnet test ./backend/scr/DigitalArs/DigitalArs.sln
