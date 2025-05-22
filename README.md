@@ -23,16 +23,13 @@ Repositorio Back Squad 1 | NetReact | CFI TDF 25
 |--- 
 ├── backend/
 ├── frontend/
+|── bacups
 ├── infra/
 │   ├── prometheus/
 │   ├── grafana/
 │   └── telegraf/
-├── envs/
-│   ├── dev.env
-│   ├── prod.env
-│   └── test.env
 ├── docker-compose.yml
-└── ...
+└── .env
 
 ## 3. Variables de entorno
 Los archivos .env se guardan en la carpeta envs/.
