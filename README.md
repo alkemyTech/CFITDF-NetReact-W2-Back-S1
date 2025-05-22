@@ -47,6 +47,7 @@ Prometheus	    http://localhost:9090	         9090	  Métricas
 Grafana	       http://localhost:3000	         3000	  Dashboards/monitoreo
 Telegraf	      http://localhost:9273/metrics	 9273	  Exportador de métricas
 
+
 ## 6. Flujo de trabajo con ramas 
 
         Para mantener el proyecto ordenado y estable.
