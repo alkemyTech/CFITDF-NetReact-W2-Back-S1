@@ -46,7 +46,7 @@ public class TransaccionController : ControllerBase
             Id_cuentaorigen = createTransaccionDto.Id_transaccion,
             Id_cuenta_destino = createTransaccionDto.Id_cuenta_destino,
             monto = createTransaccionDto.monto,
-            fecha = createTransaccionDto.fecha,
+            //fecha = createTransaccionDto.fecha,
             tipo = createTransaccionDto.tipo,
         };
 
