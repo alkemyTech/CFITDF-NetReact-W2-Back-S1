@@ -7,7 +7,7 @@ namespace DigitalArs.Data {
         public DbSet<Dummy> Dummies { get; set; }
         public DbSet<Transaccion> Transacciones { get; set; }
         public DbSet<Usuario> USUARIO { get; set; }
-
+        public DbSet<Cuenta> Cuentas { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
