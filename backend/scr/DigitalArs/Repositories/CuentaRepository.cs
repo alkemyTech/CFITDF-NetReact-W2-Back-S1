@@ -16,39 +16,45 @@ namespace DigitalArs.Repositories
 
         public IEnumerable<Cuenta> GetAllCuentas()
         {
-            return _dbContext.Cuentas.ToList();
+            try
+            {
+                return _dbContext.Cuenta.ToList();
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine($"Error de conversión: {ex.Message}");
+                return Enumerable.Empty<Cuenta>();
+            }
         }
 
         public Cuenta? GetCuentaById(int id)
         {
-            return _dbContext.Cuentas.FirstOrDefault(t => t.ID_CUENTA == id);
+            return _dbContext.Cuenta.FirstOrDefault(c => c.ID_CUENTA == id);
+
         }
+
 
         public void AddCuenta(Cuenta cuenta)
         {
-            _dbContext.Cuentas.Add(cuenta);
+            _dbContext.Cuenta.Add(cuenta);
             _dbContext.SaveChanges();
         }
 
         public void UpdateCuenta(Cuenta cuenta)
         {
-            _dbContext.Cuentas.Update(cuenta);
+            _dbContext.Cuenta.Update(cuenta);
             _dbContext.SaveChanges();
         }
 
         public void RemoveCuenta(int id)
         {
-            var cuenta = _dbContext.Cuentas.FirstOrDefault(t => t.ID_CUENTA == id);
+            var cuenta = _dbContext.Cuenta.FirstOrDefault(c => c.ID_CUENTA == id);
             if (cuenta != null)
             {
-                _dbContext.Cuentas.Remove(cuenta);
+                _dbContext.Cuenta.Remove(cuenta);
                 _dbContext.SaveChanges();
             }
         }
 
-        public IEnumerable<Cuenta> GetAllTransacciones()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
