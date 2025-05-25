@@ -3,10 +3,10 @@ using DigitalArs.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigitalArs.Data {
-    public class AppDbContext : DbContext{
-        public DbSet<Dummy> Dummies { get; set; }
+    public class AppDbContext : DbContext{        
         public DbSet<Transaccion> Transacciones { get; set; }
         public DbSet<Usuario> USUARIO { get; set; }
+        public DbSet<PlazoFijo> PlazoFijo { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

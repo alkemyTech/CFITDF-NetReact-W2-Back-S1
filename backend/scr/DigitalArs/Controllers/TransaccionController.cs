@@ -43,7 +43,7 @@ public class TransaccionController : ControllerBase
     {
         var transaccion = new Transaccion()
         {
-            Id_cuentaorigen = createTransaccionDto.Id_transaccion,
+            ID_CUENTA_ORIGEN = createTransaccionDto.Id_transaccion,
             Id_cuenta_destino = createTransaccionDto.Id_cuenta_destino,
             monto = createTransaccionDto.monto,
             //fecha = createTransaccionDto.fecha,
@@ -60,7 +60,7 @@ public class TransaccionController : ControllerBase
     {
         if(_transaccionRepository.GetTransaccionById(id) is Transaccion transaccion)
         {
-            //transaccion.Id_cuentaorigen = updateTransaccion.Id_cuentaorigen;
+            //transaccion.ID_CUENTA_ORIGEN = updateTransaccion.ID_CUENTA_ORIGEN;
             //transaccion.Id_cuenta_destino = updateTransaccion.Id_cuenta_destino;
             transaccion.monto = updateTransaccion.monto;
             //transaccion.fecha = updateTransaccion.fecha;
