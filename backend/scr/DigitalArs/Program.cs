@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ICuentaRepository, CuentaRepository>();
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
