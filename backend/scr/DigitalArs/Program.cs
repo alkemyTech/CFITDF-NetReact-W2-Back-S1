@@ -12,6 +12,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 builder.Services.AddScoped<IDummyRepository, DummyRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ITransaccionRepository, TransaccionRepository>();
 
 builder.Services.Configure<RouteOptions>(options => {
     options.LowercaseUrls = true;
