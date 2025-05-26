@@ -20,7 +20,7 @@ namespace DigitalArs.Repositories
 
         public Transaccion? GetTransaccionById(int id)
         {
-            return _dbContext.Transacciones.FirstOrDefault(t => t.Id_transaccion == id);
+            return _dbContext.Transacciones.FirstOrDefault(t => t.ID_TRANSACCION == id);
         }
 
         public void AddTransaccion(Transaccion transaccion)
@@ -37,7 +37,7 @@ namespace DigitalArs.Repositories
 
         public void RemoveTransaccion(int id)
         {
-            var transaccion = _dbContext.Transacciones.FirstOrDefault(t => t.Id_transaccion == id);
+            var transaccion = _dbContext.Transacciones.FirstOrDefault(t => t.ID_TRANSACCION == id);
             if (transaccion != null)
             {
                 _dbContext.Transacciones.Remove(transaccion);

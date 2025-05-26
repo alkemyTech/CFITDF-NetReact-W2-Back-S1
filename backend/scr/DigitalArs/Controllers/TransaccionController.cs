@@ -43,16 +43,16 @@ public class TransaccionController : ControllerBase
     {
         var transaccion = new Transaccion()
         {
-            ID_CUENTA_ORIGEN = createTransaccionDto.Id_transaccion,
-            Id_cuenta_destino = createTransaccionDto.Id_cuenta_destino,
-            monto = createTransaccionDto.monto,
-            //fecha = createTransaccionDto.fecha,
-            tipo = createTransaccionDto.tipo,
+            ID_CUENTA_ORIGEN = createTransaccionDto.ID_CUENTA_ORIGEN,
+            ID_CUENTA_DESTINO = createTransaccionDto.ID_CUENTA_DESTINO,
+            MONTO = createTransaccionDto.MONTO,
+            FECHA = createTransaccionDto.FECHA,
+            TIPO = createTransaccionDto.TIPO,
         };
 
         _transaccionRepository.AddTransaccion(transaccion);
 
-        return CreatedAtAction(nameof(GetTransaccion), new { Id_transaccion = transaccion.Id_transaccion }, transaccion);
+        return Ok(transaccion);
     }
 
     [HttpPut("{id}")]
@@ -60,11 +60,8 @@ public class TransaccionController : ControllerBase
     {
         if(_transaccionRepository.GetTransaccionById(id) is Transaccion transaccion)
         {
-            //transaccion.ID_CUENTA_ORIGEN = updateTransaccion.ID_CUENTA_ORIGEN;
-            //transaccion.Id_cuenta_destino = updateTransaccion.Id_cuenta_destino;
-            transaccion.monto = updateTransaccion.monto;
-            //transaccion.fecha = updateTransaccion.fecha;
-            transaccion.tipo = updateTransaccion.tipo;
+            transaccion.MONTO = updateTransaccion.MONTO;
+            transaccion.TIPO = updateTransaccion.TIPO;
 
             _transaccionRepository.UpdateTransaccion(transaccion);
             return NoContent();
