@@ -17,7 +17,7 @@ services:
       - sqlserver
     entrypoint: /bin/bash -c "
       sleep 15 &&
-      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P ${DB_PASSWORD} -Q 'IF DB_ID('walletDB') IS NULL CREATE DATABASE walletDB;'"
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P ${DB_PASSWORD} -Q 'IF DB_ID('DIGITALARS_DB') IS NULL CREATE DATABASE DIGITALARS_DB;'"
 
   telegraf:
     image: telegraf:latest
@@ -56,7 +56,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080   
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=walletDB;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=DIGITALARS_DB;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;
     depends_on:
       - sqlserver
 volumes:

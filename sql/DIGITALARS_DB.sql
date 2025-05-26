@@ -59,7 +59,7 @@ CREATE TABLE TRANSACCIONES (
 );
 GO
 
-CREATE TABLE PLAZO_FIJO (
+CREATE TABLE PLAZOFIJO (
 	ID_PLAZOFIJO INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	ID_CUENTA INT NOT NULL,
 	MONTO FLOAT NOT NULL,
@@ -96,7 +96,7 @@ GO
 
 -- Usuario 1
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Juan Pérez', 'juan.perez@mail.com', 'clave123', 2);
+VALUES ('Juan Pï¿½rez', 'juan.perez@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.juan.perez', 1234567890000001);
@@ -104,7 +104,7 @@ GO
 
 -- Usuario 2
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('María Gómez', 'maria.gomez@mail.com', 'clave123', 2);
+VALUES ('Marï¿½a Gï¿½mez', 'maria.gomez@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.maria.gomez', 1234567890000002);
@@ -112,7 +112,7 @@ GO
 
 -- Usuario 3
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Carlos López', 'carlos.lopez@mail.com', 'clave123', 2);
+VALUES ('Carlos Lï¿½pez', 'carlos.lopez@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.carlos.lopez', 1234567890000003);
@@ -120,7 +120,7 @@ GO
 
 -- Usuario 4
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Ana Martínez', 'ana.martinez@mail.com', 'clave123', 2);
+VALUES ('Ana Martï¿½nez', 'ana.martinez@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.ana.martinez', 1234567890000004);
@@ -128,7 +128,7 @@ GO
 
 -- Usuario 5
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Pedro Ramírez', 'pedro.ramirez@mail.com', 'clave123', 2);
+VALUES ('Pedro Ramï¿½rez', 'pedro.ramirez@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.pedro.ramirez', 1234567890000005);
@@ -136,7 +136,7 @@ GO
 
 -- Usuario 6
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Laura Sánchez', 'laura.sanchez@mail.com', 'clave123', 2);
+VALUES ('Laura Sï¿½nchez', 'laura.sanchez@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.laura.sanchez', 1234567890000006);
@@ -152,7 +152,7 @@ GO
 
 -- Usuario 8
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Camila Díaz', 'camila.diaz@mail.com', 'clave123', 2);
+VALUES ('Camila Dï¿½az', 'camila.diaz@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.camila.diaz', 1234567890000008);
@@ -160,7 +160,7 @@ GO
 
 -- Usuario 9
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Lucía Romero', 'lucia.romero@mail.com', 'clave123', 2);
+VALUES ('Lucï¿½a Romero', 'lucia.romero@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.lucia.romero', 1234567890000009);
@@ -184,7 +184,7 @@ GO
 
 -- Usuario 12
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Martín Castro', 'martin.castro@mail.com', 'clave123', 2);
+VALUES ('Martï¿½n Castro', 'martin.castro@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.martin.castro', 1234567890000012);
@@ -192,7 +192,7 @@ GO
 
 -- Usuario 13
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Sofía Morales', 'sofia.morales@mail.com', 'clave123', 2);
+VALUES ('Sofï¿½a Morales', 'sofia.morales@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.sofia.morales', 1234567890000013);
@@ -216,7 +216,7 @@ GO
 
 -- Usuario 16
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Tomás Ibáñez', 'tomas.ibanez@mail.com', 'clave123', 2);
+VALUES ('Tomï¿½s Ibï¿½ï¿½ez', 'tomas.ibanez@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.tomas.ibanez', 1234567890000016);
@@ -232,7 +232,7 @@ GO
 
 -- Usuario 18
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Matías Salas', 'matias.salas@mail.com', 'clave123', 2);
+VALUES ('Matï¿½as Salas', 'matias.salas@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.matias.salas', 1234567890000018);
@@ -248,7 +248,7 @@ GO
 
 -- Usuario 20
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Nicolás Silva', 'nicolas.silva@mail.com', 'clave123', 2);
+VALUES ('Nicolï¿½s Silva', 'nicolas.silva@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.nicolas.silva', 1234567890000020);
@@ -264,7 +264,7 @@ GO
 
 -- Usuario 22
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Sebastián Correa', 'sebastian.correa@mail.com', 'clave123', 2);
+VALUES ('Sebastiï¿½n Correa', 'sebastian.correa@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.sebastian.correa', 1234567890000022);
@@ -272,7 +272,7 @@ GO
 
 -- Usuario 23
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Julieta Méndez', 'julieta.mendez@mail.com', 'clave123', 2);
+VALUES ('Julieta Mï¿½ndez', 'julieta.mendez@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.julieta.mendez', 1234567890000023);
@@ -280,7 +280,7 @@ GO
 
 -- Usuario 24
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Gonzalo Farías', 'gonzalo.farias@mail.com', 'clave123', 2);
+VALUES ('Gonzalo Farï¿½as', 'gonzalo.farias@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.gonzalo.farias', 1234567890000024);
@@ -296,7 +296,7 @@ GO
 
 -- Usuario 26
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Ramiro Peña', 'ramiro.pena@mail.com', 'clave123', 2);
+VALUES ('Ramiro Peï¿½a', 'ramiro.pena@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.ramiro.pena', 1234567890000026);
@@ -328,7 +328,7 @@ GO
 
 -- Usuario 30
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
-VALUES ('Facundo Del Río', 'facundo.delrio@mail.com', 'clave123', 2);
+VALUES ('Facundo Del Rï¿½o', 'facundo.delrio@mail.com', 'clave123', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
 INSERT INTO CUENTA (ID_USUARIO, SALDO, ALIAS, CBU)
 VALUES (@ID_USUARIO, 10000.00, 'digitalars.facundo.delrio', 1234567890000030);
