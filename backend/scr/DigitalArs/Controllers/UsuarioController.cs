@@ -32,12 +32,12 @@ public class UsuarioController : ControllerBase {
     [HttpPost]
     public ActionResult<Usuario> CreateUser(CreateUsuarioDto createUsarioDto) {
         var usuario = new Usuario() {
-                                        NOMBRE = createUsarioDto.NOMBRE,
-                                        EMAIL = createUsarioDto.EMAIL,
-                                        CREATION_DATE = createUsarioDto.CREATION_DATE,
-                                        PASS = createUsarioDto.PASS,
-                                        ID_ROL = createUsarioDto.ID_ROL
-                                    }; 
+            NOMBRE = createUsarioDto.NOMBRE,
+            EMAIL = createUsarioDto.EMAIL,
+            CREATION_DATE = createUsarioDto.CREATION_DATE,
+            PASS = createUsarioDto.PASS,
+            ID_ROL = createUsarioDto.ID_ROL
+        }; 
         _usuarioRepository.AddUser(usuario);
         return CreatedAtAction(nameof(GetUserById), new { id = usuario.ID_USUARIO }, usuario);
     }

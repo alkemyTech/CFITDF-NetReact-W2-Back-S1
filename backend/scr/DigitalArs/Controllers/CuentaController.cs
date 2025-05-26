@@ -49,7 +49,7 @@ public class CuentaController : ControllerBase
 
         _cuentaRepository.AddCuenta(cuenta);
 
-        return CreatedAtAction(nameof(GetCuenta), new { ID_CUENTA = cuenta.ID_CUENTA}, cuenta);
+        return Ok(cuenta);
     }
 
     [HttpPut("{id}")]
@@ -59,7 +59,7 @@ public class CuentaController : ControllerBase
         {
             cuenta.SALDO = updateCuenta.SALDO;
             cuenta.ALIAS = updateCuenta.ALIAS;
-            cuenta.CBU= updateCuenta.CBU;
+            cuenta.CBU = updateCuenta.CBU;
 
             _cuentaRepository.UpdateCuenta(cuenta);
             return NoContent();

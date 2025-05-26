@@ -3,7 +3,7 @@ using DigitalArs.Data;
 using DigitalArs.Entities;
 using DigitalArs.Interfaces;
 using DigitalArs.Models;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 
 namespace DigitalArs.Repositories
 {
@@ -18,8 +18,13 @@ namespace DigitalArs.Repositories
 
         public async Task<PlazoFijo> CrearAsync(PlazoFijo plazoFijo)
         {
-            await _context.PlazoFijo.AddAsync(plazoFijo);
+            plazoFijo.CalcularFechaVencimiento();
+            plazoFijo.CalcularInteres();
+            plazoFijo.ActualizarEstado();
+
+            _context.PlazoFijo.Add(plazoFijo);
             await _context.SaveChangesAsync();
+
             return plazoFijo;
         }
 
