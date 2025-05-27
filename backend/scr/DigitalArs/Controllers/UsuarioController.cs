@@ -43,16 +43,20 @@ public class UsuarioController : ControllerBase {
     }
 
     [HttpPut("{id}")]
-    public ActionResult UpdateUser(int id, Usuario updatedUser) {
-        if (_usuarioRepository.GetUserById(id) is Usuario usuario) {
-            usuario.NOMBRE = updatedUser.NOMBRE;
-            usuario.EMAIL = updatedUser.EMAIL;
-            usuario.PASS = updatedUser.PASS;        
+    public ActionResult UpdateUser(int id,UpdateUsuarioDto updateUsuarioDto) {
+        var usuario = _usuarioRepository.GetUserById(id);
+        if (usuario == null)
+        {
+            return NotFound();
+        }
+
+            usuario.NOMBRE = updateUsuarioDto.NOMBRE;
+            usuario.EMAIL = updateUsuarioDto.EMAIL;
+            usuario.PASS = updateUsuarioDto.PASS;        
 
             _usuarioRepository.UpdateUser(usuario);
             return NoContent();
-        }
-        return NotFound();
+       
     }
 
     [HttpDelete("{id}")]
