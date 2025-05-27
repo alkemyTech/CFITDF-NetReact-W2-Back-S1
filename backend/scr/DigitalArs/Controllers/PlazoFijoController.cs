@@ -60,14 +60,14 @@ namespace DigitalArs.Controllers
             return CreatedAtAction(nameof(GetPorId), new { id = creado.ID_PLAZOFIJO }, resultado);
         }
 
-        [HttpPut("{id}/Actualizar")]
-        public async Task<IActionResult> Actualizar(int id, [FromBody] PlazoFijo plazoFijo)
-        {
-            plazoFijo.ID_PLAZOFIJO = id;
+        // [HttpPut("{id}/Actualizar")]
+        // public async Task<IActionResult> Actualizar(int id, [FromBody] PlazoFijo plazoFijo)
+        // {
+        //     plazoFijo.ID_PLAZOFIJO = id;
 
-            await _repo.ActualizarAsync(plazoFijo);
-            return NoContent();
-        }
+        //     await _repo.ActualizarAsync(plazoFijo);
+        //     return NoContent();
+        // }
 
         [HttpDelete("{id}/Eliminar")]
         public async Task<IActionResult> Eliminar(int id)

@@ -1,11 +1,14 @@
 using DigitalArs.Dtos;
 using DigitalArs.Interfaces;
 using DigitalArs.Models;
+using DigitalArs.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalArs.Controllers;
+
+
 
 [Route("api/User")]
 [ApiController]
@@ -13,11 +16,14 @@ public class UsuarioController : ControllerBase
 {
 
     private IUsuarioRepository _usuarioRepository;
-
-    public UsuarioController(IUsuarioRepository usuarioRepository)
+    private readonly PasswordService _passwordService;
+    public UsuarioController(IUsuarioRepository usuarioRepository, PasswordService passwordService)
     {
         _usuarioRepository = usuarioRepository;
+        _passwordService = passwordService;
     }
+
+
 
     [HttpGet]
     public ActionResult<Usuario[]> GetAllUser()
@@ -36,17 +42,19 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Usuario> CreateUser(CreateUsuarioDto createUsarioDto)
+    public ActionResult<Usuario> CreateUser(CreateUsuarioDto createUsuarioDto)
     {
         var usuario = new Usuario()
         {
-            NOMBRE = createUsarioDto.NOMBRE,
-            EMAIL = createUsarioDto.EMAIL,
-            CREATION_DATE = createUsarioDto.CREATION_DATE,
-            PASS = createUsarioDto.PASS,
-            ID_ROL = createUsarioDto.ID_ROL
+            NOMBRE = createUsuarioDto.NOMBRE,
+            EMAIL = createUsuarioDto.EMAIL,
+            CREATION_DATE = createUsuarioDto.CREATION_DATE,
+            PASS = _passwordService.HashPassword(createUsuarioDto.PASS),
+            ID_ROL = createUsuarioDto.ID_ROL
         };
+
         _usuarioRepository.AddUser(usuario);
+
         return CreatedAtAction(nameof(GetUserById), new { id = usuario.ID_USUARIO }, usuario);
     }
 
