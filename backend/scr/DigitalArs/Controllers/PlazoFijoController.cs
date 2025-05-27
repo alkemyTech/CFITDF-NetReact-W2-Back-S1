@@ -17,14 +17,14 @@ namespace DigitalArs.Controllers
             _repo = repo;
         }
 
-        [HttpGet]
+        [HttpGet("/obtener todos")]
         public async Task<ActionResult<IEnumerable<PlazoFijo>>> GetTodos()
         {
             var lista = await _repo.ObtenerTodosAsync();
             return Ok(lista);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("/obtener por {id}")]
         public async Task<ActionResult<PlazoFijoResultadoDto>> GetPorId(int id)
         {
             var pf = await _repo.ObtenerPorIdAsync(id);
@@ -36,8 +36,8 @@ namespace DigitalArs.Controllers
             var dto = MapearAResultadoDto(pf);
             return Ok(dto);
         }
-        // CREA EL PLAZO FIJO USANDO EL CUERPO DE CREATEPLAZOFIJODTO Y ADEMAS AGREGA LOS CÁLCULOS NECESARIOS
-        [HttpPost]
+        // CREA EL PLAZO FIJO USANDO EL CUERPO DE CREATEPLAZOFIJODTO Y ADEMAS AGREGA LOS Cï¿½LCULOS NECESARIOS
+        [HttpPost("/Crear")]
         public async Task<ActionResult<PlazoFijoResultadoDto>> Crear([FromBody] CreatePlazoFijoDto dto)
         {
             var plazoFijo = new PlazoFijo
@@ -60,7 +60,7 @@ namespace DigitalArs.Controllers
             return CreatedAtAction(nameof(GetPorId), new { id = creado.ID_PLAZOFIJO }, resultado);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/Actualizar")]
         public async Task<IActionResult> Actualizar(int id, [FromBody] PlazoFijo plazoFijo)
         {
             plazoFijo.ID_PLAZOFIJO = id;
@@ -69,7 +69,7 @@ namespace DigitalArs.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}/Eliminar")]
         public async Task<IActionResult> Eliminar(int id)
         {
             await _repo.EliminarAsync(id);

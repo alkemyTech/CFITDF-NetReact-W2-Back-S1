@@ -38,12 +38,19 @@ namespace DigitalArs.Repositories
             return await _context.PlazoFijo.ToListAsync();
         }
 
-        public async Task ActualizarAsync(PlazoFijo plazoFijo)
+        // ✅ 1. Actualización para objetos que ya vienen cargados (como cancelar)
+        public async Task ActualizarAsync(PlazoFijo pf)
         {
-            _context.Entry(plazoFijo).State = EntityState.Modified;
+            _context.PlazoFijo.Update(pf);
             await _context.SaveChangesAsync();
         }
 
+        // ✅ 2. Actualización manual (por ejemplo: editar todo el objeto desde un PUT)
+        public async Task ActualizarManualAsync(PlazoFijo pf)
+        {
+            _context.Entry(pf).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
         public async Task EliminarAsync(int id)
         {
             var plazoFijo = await ObtenerPorIdAsync(id);

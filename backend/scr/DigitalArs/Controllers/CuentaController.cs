@@ -53,13 +53,13 @@ public class CuentaController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public ActionResult UpdateCuenta(int id, Cuenta updateCuenta)
+    public ActionResult UpdateCuenta(int id, UpdateCuentaDto updateCuentaDto)
     {
         if (_cuentaRepository.GetCuentaById(id) is Cuenta cuenta)
         {
-            cuenta.SALDO = updateCuenta.SALDO;
-            cuenta.ALIAS = updateCuenta.ALIAS;
-            cuenta.CBU = updateCuenta.CBU;
+            cuenta.SALDO = updateCuentaDto.SALDO;
+            cuenta.ALIAS = updateCuentaDto.ALIAS;
+            cuenta.CBU = updateCuentaDto.CBU;
 
             _cuentaRepository.UpdateCuenta(cuenta);
             return NoContent();

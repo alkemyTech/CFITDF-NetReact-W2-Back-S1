@@ -1,7 +1,8 @@
 using DigitalArs.Dtos;
 using System.ComponentModel.DataAnnotations;
 
-namespace DigitalArs.Entities {
+
+namespace DigitalArs.Models {
     public class Usuario {
         [Key]
         public int ID_USUARIO { get; set; }
