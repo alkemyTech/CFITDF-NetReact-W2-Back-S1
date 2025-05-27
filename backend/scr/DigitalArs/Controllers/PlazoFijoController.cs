@@ -24,7 +24,7 @@ namespace DigitalArs.Controllers
             return Ok(lista);
         }
 
-        [HttpGet("/obtener por {id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<PlazoFijoResultadoDto>> GetPorId(int id)
         {
             var pf = await _repo.ObtenerPorIdAsync(id);
