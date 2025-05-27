@@ -1,4 +1,4 @@
-using DigitalArs.Entities;
+using DigitalArs.Models;
 
 namespace DigitalArs.Interfaces {
     public interface IUsuarioRepository {

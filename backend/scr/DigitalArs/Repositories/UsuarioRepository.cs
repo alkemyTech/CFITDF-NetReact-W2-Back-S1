@@ -1,5 +1,5 @@
 using DigitalArs.Data;
-using DigitalArs.Entities;
+using DigitalArs.Models;
 using DigitalArs.Interfaces;
 
 namespace DigitalArs.Repositories {

@@ -11,6 +11,7 @@ namespace DigitalArs.Interfaces
         Task<PlazoFijo> ObtenerPorIdAsync(int id);
         Task<IEnumerable<PlazoFijo>> ObtenerTodosAsync();
         Task ActualizarAsync(PlazoFijo plazoFijo);
+    
         Task EliminarAsync(int id);
     }
 }

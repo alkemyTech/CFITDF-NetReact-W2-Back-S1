@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DigitalArs.Models;
 
 namespace DigitalArs.Dtos
 {

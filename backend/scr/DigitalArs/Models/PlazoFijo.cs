@@ -45,11 +45,11 @@ namespace DigitalArs.Models
         public void DeterminarTasaPorPlazo()
         {
             if (PLAZO <= 30)
-                TASA_INTERES = 60;
+                TASA_INTERES = 6;
             else if (PLAZO <= 60)
-                TASA_INTERES = 70;
+                TASA_INTERES = 7;
             else
-                TASA_INTERES = 80;
+                TASA_INTERES = 8;
         }
 
 
