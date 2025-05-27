@@ -28,9 +28,11 @@ public class TransaccionController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Transaccion> GetTransaccion(int Id)
+    public ActionResult<Transaccion> GetTransaccion(int id)
     {
-        if (_transaccionRepository.GetTransaccionById(Id) is Transaccion transaccion)
+        Transaccion transaccion = _transaccionRepository.GetTransaccionById(id);
+
+        if (transaccion != null)
         {
             return Ok(transaccion);
         }
