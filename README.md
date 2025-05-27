@@ -1,5 +1,3 @@
-# CFITDF-NetReact-W2-S1
-
 Repositorio Back Squad 1 | NetReact | CFI TDF 25
 
 # Guía para levantar el entorno de desarrollo.
@@ -18,7 +16,7 @@ Repositorio Back Squad 1 | NetReact | CFI TDF 25
 
 ## 2. Estructura del proyecto
 
------- ¡ VER VARIABLES DE ENTORNO AL FINAL DEL DOCUMENTO !----------------
+
 /
 |--- 
 ├── backend/
@@ -32,6 +30,7 @@ Repositorio Back Squad 1 | NetReact | CFI TDF 25
 └── .env
 
 ## 3. Variables de entorno
+------ ¡ VER VARIABLES DE ENTORNO AL FINAL DEL DOCUMENTO (A MODO DE PRACTICA)!----------------
 Los archivos .env se guardan en la carpeta envs/.
 
 Antes de levantar el entorno, copiá el .env adecuado a la raíz del proyecto.
@@ -64,25 +63,14 @@ Telegraf	      http://localhost:9273/metrics	 9273	  Exportador de métricas
         **SUBIR CAMBIOS**
         ```bash
         git checkout dev
-        git pull origin dev
+        git push origin dev
 
-
-        # ¿Cómo hacer cambios en la base de datos?
-
-        1. **Modificá los modelos (clases) en el backend según el cambio que necesitás.**
-        2. **Generá una nueva migración:**
-        ```bash
-        dotnet ef migrations add DescripcionDelCambio --project backend/scr/DigitalArs
-        3.Committéa y pusheá los archivos de migración generados.
-        4.Para actualizar la rama correr:
-        --//  bash
-                dotnet ef database update --project backend/scr/DigitalArs
 
 ## 7. Recomendaciones
 
 Cambiá los puertos en el docker-compose.yml si alguno ya está en uso en tu maquina.
 
-Los datos de la base de datos se mantienen gracias a los volúmenes configurados.
+Los datos de la base de datos se mantienen en el contenedor gracias a los volúmenes configurados.
 
 Consultá Grafana (por defecto pass: admin/admin) y Prometheus para monitorear el sistema.
 
@@ -92,5 +80,5 @@ Consultá Grafana (por defecto pass: admin/admin) y Prometheus para monitorear e
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 |.env                                                                                    |
 |   DB_PASSWORD=Admin1234.  # Mínimo 8 caracteres, mayúsculas, números y símbolos        |
-|   GITHUB_TOKEN=        # Token para GitHub Actions                                     |
+|                                   |
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
