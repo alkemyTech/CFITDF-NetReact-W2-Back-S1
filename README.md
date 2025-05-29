@@ -17,16 +17,24 @@ Repositorio Back Squad 1 | NetReact | CFI TDF 25
 ## 2. Estructura del proyecto
 
 
-/
 |--- 
+
 ├── backend/
+
 ├── frontend/
+
 |── bacups
+
 ├── infra/
+
 │   ├── prometheus/
+
 │   ├── grafana/
+
 │   └── telegraf/
+
 ├── docker-compose.yml
+
 └── .env
 
 ## 3. Variables de entorno
@@ -41,10 +49,15 @@ docker-compose up --build
 ## 5. Puertos de cada servicio
 
 Backend     	  http://localhost:5000	         5000	  API .NET
+
 Frontend	      http://localhost:3000	         3000	  React
+
 SQL Server		                                  1433   Base de datos
+
 Prometheus	    http://localhost:9090	         9090	  Métricas
+
 Grafana	       http://localhost:3000	         3000	  Dashboards/monitoreo
+
 Telegraf	      http://localhost:9273/metrics	 9273	  Exportador de métricas
 
 

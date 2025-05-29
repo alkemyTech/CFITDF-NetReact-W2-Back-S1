@@ -1,6 +1,7 @@
 ﻿using DigitalArs.Dtos;
 using DigitalArs.Interfaces;
 using DigitalArs.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -9,6 +10,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace DigitalArs.Controllers;
 
+[Authorize]
 [Route("/api/[controller]")]
 [ApiController]
 

@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using DigitalArs.Data;
 using DigitalArs.Dtos;
 using DigitalArs.Services;
+using System.Security.Claims;
 using DigitalArs.Models;
 
 namespace DigitalArs.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
@@ -24,19 +26,31 @@ public class AuthController : ControllerBase
     }
 
     // 🔐 LOGIN
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
+        //Busca usuario por email
         var user = await _context.USUARIO.FirstOrDefaultAsync(u => u.EMAIL == dto.Email);
         if (user == null)
             return Unauthorized("El usuario no existe");
+        // Verifica si la contraseña es correcta 
+        //    if (!_passwordService.VerifyPassword(user.PASS, dto.Password))
+        //      return Unauthorized("Contraseña incorrecta");
+        // bool isPasswordValid = _passwordService.VerifyPassword(user.PASS, dto.Password); //ME BUSCA CONTRASEÑAS HASHEADAS
+        bool isPasswordValid = user.PASS == dto.Password;
 
-        if (!_passwordService.VerifyPassword(user.PASS, dto.Password))
-            return Unauthorized("Contraseña incorrecta");
-
+        if (!isPasswordValid)
+        {
+            return Unauthorized("Contraseña incorrecta.");
+        }
+        // Genera el token JWT si es todo valido
         var token = _jwtService.GenerateToken(user);
 
-        return Ok(new { token });
+        // 4. Devolver token en el header
+        Response.Headers.Add("Authorization", $"Bearer {token}");
+
+        return Ok(new { Mensaje = "Login exitoso." });
     }
 
     // ✅ CONSULTA DATOS DE USUARIO AUTENTICADO
@@ -44,7 +58,8 @@ public class AuthController : ControllerBase
     [HttpGet("datos-usuario")]
     public async Task<IActionResult> GetDatosUsuario()
     {
-        var idUsuario = int.Parse(User.FindFirst("sub")?.Value!);
+        var sub = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var idUsuario = int.Parse(sub!);
         var usuario = await _context.USUARIO.FindAsync(idUsuario);
 
         if (usuario == null)

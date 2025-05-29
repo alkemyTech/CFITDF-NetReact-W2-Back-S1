@@ -7,7 +7,9 @@ using System.Data;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks.Dataflow;
 namespace DigitalArs.Controllers;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 [Route("/api/[controller]")]
 [ApiController]
 public class CuentaController : ControllerBase
