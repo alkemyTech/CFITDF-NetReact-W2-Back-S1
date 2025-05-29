@@ -1,8 +1,8 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using DigitalArs.Models;
+using System.Security.Claims;
 
 namespace DigitalArs.Services;
 
@@ -22,9 +22,9 @@ namespace DigitalArs.Services;
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.ID_USUARIO.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.EMAIL),            
-            new Claim("role", user.ID_ROL.ToString())
+            new Claim(ClaimTypes.NameIdentifier, user.ID_USUARIO.ToString()),
+            new Claim(ClaimTypes.Email, user.EMAIL),            
+            new Claim(ClaimTypes.Role, user.ID_ROL.ToString())
         };
 
         var token = new JwtSecurityToken(
