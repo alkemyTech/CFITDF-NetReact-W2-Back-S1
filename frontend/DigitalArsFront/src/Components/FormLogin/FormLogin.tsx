@@ -30,10 +30,6 @@ const signIn = async ( provider: AuthProvider, formData?: FormData,
     const email = formData?.get?.('email') as string | null;
     const password = formData?.get?.('password') as string | null;
 
-    console.log('Provider:', provider);
-    console.log('email:', email);
-    console.log('password:', password);
-
       if (provider.id !== 'credentials' || !email || !password) {
         return { 
           status: 'failure', 
