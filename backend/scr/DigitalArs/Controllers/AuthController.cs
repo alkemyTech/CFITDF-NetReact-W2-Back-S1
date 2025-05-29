@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using DigitalArs.Data;
 using DigitalArs.Dtos;
 using DigitalArs.Services;
-using DigitalArs.Models;
+using System.Security.Claims;
 
 namespace DigitalArs.Controllers;
 
@@ -44,7 +44,8 @@ public class AuthController : ControllerBase
     [HttpGet("datos-usuario")]
     public async Task<IActionResult> GetDatosUsuario()
     {
-        var idUsuario = int.Parse(User.FindFirst("sub")?.Value!);
+        var sub = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var idUsuario = int.Parse(sub!);
         var usuario = await _context.USUARIO.FindAsync(idUsuario);
 
         if (usuario == null)
