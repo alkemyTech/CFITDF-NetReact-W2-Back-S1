@@ -399,3 +399,31 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Archivos de entorno
+*.env
+envs/*/.env
+
+# Volúmenes y datos persistentes
+/backups/
+sql_data/
+grafana_data/
+
+# Dependencias y builds
+node_modules/
+build/
+dist/
+
+# VS Code y Visual Studio settings (ya tenés)
+.vscode/
+.vs/
+bin/
+obj/
+
+# Otros temporales y logs
+*.log
+
+# Infraestructura 
+ /infra/grafana/data/
+ /infra/prometheus/data/
+ /infra/telegraf/data/
