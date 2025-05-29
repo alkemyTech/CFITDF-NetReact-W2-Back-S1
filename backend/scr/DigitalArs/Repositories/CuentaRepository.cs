@@ -22,7 +22,7 @@ namespace DigitalArs.Repositories
             }
             catch (InvalidCastException ex)
             {
-                Console.WriteLine($"Error de conversión: {ex.Message}");
+                Console.WriteLine($"Error de conversion: {ex.Message}");
                 return Enumerable.Empty<Cuenta>();
             }
         }

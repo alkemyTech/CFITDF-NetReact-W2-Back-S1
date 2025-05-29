@@ -3,9 +3,11 @@ using DigitalArs.Dtos;
 using DigitalArs.Interfaces;
 using DigitalArs.Models;
 using DigitalArs.Constantes;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DigitalArs.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PlazoFijoController : ControllerBase

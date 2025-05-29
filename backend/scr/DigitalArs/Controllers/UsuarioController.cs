@@ -5,11 +5,11 @@ using DigitalArs.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DigitalArs.Controllers;
 
-
-
+[Authorize]
 [Route("api/User")]
 [ApiController]
 public class UsuarioController : ControllerBase
@@ -49,7 +49,8 @@ public class UsuarioController : ControllerBase
             NOMBRE = createUsuarioDto.NOMBRE,
             EMAIL = createUsuarioDto.EMAIL,
             CREATION_DATE = createUsuarioDto.CREATION_DATE,
-            PASS = _passwordService.HashPassword(createUsuarioDto.PASS),
+            //PASS = _passwordService.HashPassword(createUsuarioDto.PASS), // PASSWORD HASHEADA
+            PASS = createUsuarioDto.PASS, // PASSWORD SIN HASHEAR
             ID_ROL = createUsuarioDto.ID_ROL
         };
 
