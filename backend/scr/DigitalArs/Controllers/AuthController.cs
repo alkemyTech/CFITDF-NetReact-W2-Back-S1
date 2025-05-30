@@ -50,10 +50,11 @@ public class AuthController : ControllerBase
         // 4. Devolver token en el header
         Response.Headers.Add("Authorization", $"Bearer {token}");
 
-        return Ok(new { Mensaje = "Login exitoso." });
+        return Ok(new { Mensaje = "Login exitoso.", token = token });
+        
     }
 
-    // ✅ CONSULTA DATOS DE USUARIO AUTENTICADO
+    // CONSULTA DATOS DE USUARIO AUTENTICADO
     [Authorize]
     [HttpGet("datos-usuario")]
     public async Task<IActionResult> GetDatosUsuario()
