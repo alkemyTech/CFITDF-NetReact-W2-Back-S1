@@ -32,7 +32,11 @@ namespace DigitalArs.Repositories
             return _dbContext.Cuenta.FirstOrDefault(c => c.ID_CUENTA == id);
 
         }
+        public Cuenta? GetCuentaByAlias(string alias)
+        {
+            return _dbContext.Cuenta.FirstOrDefault(c => c.ALIAS == alias);
 
+        }
 
         public void AddCuenta(Cuenta cuenta)
         {

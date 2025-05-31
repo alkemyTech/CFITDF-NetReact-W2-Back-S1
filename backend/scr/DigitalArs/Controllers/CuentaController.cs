@@ -27,10 +27,20 @@ public class CuentaController : ControllerBase
         return Ok(_cuentaRepository.GetAllCuentas());
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("id/{id}")]
     public ActionResult<Cuenta> GetCuenta(int id)
     {
         if (_cuentaRepository.GetCuentaById(id) is Cuenta cuenta)
+        {
+            return Ok(cuenta);
+        }
+
+        return NotFound();
+    }
+    [HttpGet("alias/{alias}")]
+    public ActionResult<Cuenta> GetCuenta(string alias)
+    {
+        if (_cuentaRepository.GetCuentaByAlias(alias) is Cuenta cuenta)
         {
             return Ok(cuenta);
         }
