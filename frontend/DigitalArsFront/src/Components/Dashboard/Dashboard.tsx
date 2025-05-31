@@ -9,6 +9,9 @@ import LayersIcon from '@mui/icons-material/Layers';
 import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 
 const NAVIGATION: Navigation = [
   {
@@ -24,6 +27,11 @@ const NAVIGATION: Navigation = [
     segment: 'orders',
     title: 'Orders',
     icon: <ShoppingCartIcon />,
+  },
+    {
+    segment: 'Transaccion',
+    title: 'Transaccion',
+    icon: <DashboardIcon />,
   },
   {
     kind: 'divider',
@@ -73,6 +81,7 @@ const demoTheme = createTheme({
 });
 
 function DemoPageContent({ pathname }: { pathname: string }) {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -84,6 +93,8 @@ function DemoPageContent({ pathname }: { pathname: string }) {
       }}
     >
       <Typography>Dashboard content for {pathname}</Typography>
+        <Button variant="contained" color="primary" onClick={() => navigate("/transaccion")}>
+        Ir a Transacción </Button>
     </Box>
   );
 }
@@ -117,6 +128,7 @@ export default function DashboardLayoutBasic(props: DemoProps) {
         <DashboardLayout>
           <DemoPageContent pathname={router.pathname} />
         </DashboardLayout>
+      
       </AppProvider>
       {/* preview-end */}
     </DemoProvider>
