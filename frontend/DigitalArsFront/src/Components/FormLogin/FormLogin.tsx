@@ -1,94 +1,36 @@
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { SignInPage, type AuthProvider } from '@toolpad/core/SignInPage';
-import { useTheme } from '@mui/material/styles';
-import axios from 'axios';
+import { Box, Button, Container, Paper, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
-const providers = [{ id: 'credentials', name: 'Credentials' }];
-
-// preview-start
-const BRANDING = {
-  logo: (
-    <img
-      src="https://mui.com/static/logo.svg"
-      alt="MUI logo"
-      style={{ height: 24 }}
-    />
-  ),
-  title: 'Digitalars',
-};
-// preview-end
-
-type AuthResponse = {
-  status: 'success' | 'failure';
-  error?: string;
-};
-
-export default function BrandingSignInPage() {
-  const theme = useTheme();
+export default function FormLogin() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const signIn = async (
-    provider: AuthProvider,
-    formData?: FormData
-  ): Promise<AuthResponse> => {
-    const email = formData?.get?.('email') as string | null;
-    const password = formData?.get?.('password') as string | null;
-
-    if (provider.id !== 'credentials' || !email || !password) {
-      return {
-        status: 'failure',
-        error: 'provider inválido o faltan credentials',
-      };
-    }
-
+  const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        '/api/auth/login',
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true, // ESTA LÍNEA RESUELVE EL PROBLEMA DE CORS
-        }
-      );
-
-      console.log('Respuesta del backend:', response.data);
-      const token = response.data.token;
-
-      if (token) {
-        localStorage.setItem('token', token);
-        navigate('/dashboard');
-        return { status: 'success' };
-      } else {
-        return {
-          status: 'failure',
-          error: 'token no retornado por el server',
-        };
-      }
+      const res = await axios.post('/api/auth/login', { email, password }, { withCredentials: true });
+      localStorage.setItem('token', res.data.token);
+      navigate('/dashboard');
     } catch (error: any) {
-      return {
-        status: 'failure',
-        error:
-          error.response?.data?.message ||
-          'solicitud de inicio de sesión fallida',
-      };
+      setErrorMsg(error.response?.data?.message || 'Login fallido');
     }
   };
 
   return (
-    // preview-start
-    <AppProvider branding={BRANDING} theme={theme}>
-      <SignInPage
-        signIn={signIn}
-        providers={providers}
-        slotProps={{
-          emailField: { autoFocus: false },
-          form: { noValidate: true },
-        }}
-      />
-    </AppProvider>
-    // preview-end
+    <Container maxWidth="xs">
+      <Box display="flex" flexDirection="column" justifyContent="center" minHeight="100vh">
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h4" mb={2} align="center">DigitalArs</Typography>
+          <TextField label="Email" fullWidth margin="normal" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <TextField label="Contraseña" type="password" fullWidth margin="normal" value={password} onChange={(e) => setPassword(e.target.value)} />
+          {errorMsg && <Typography color="error" variant="body2" mt={1}>{errorMsg}</Typography>}
+          <Button fullWidth variant="contained" sx={{ mt: 2 }} onClick={handleLogin}>Iniciar sesión</Button>
+          <Button fullWidth sx={{ mt: 1 }} onClick={() => navigate('/register')}>Crear cuenta</Button>
+        </Paper>
+      </Box>
+    </Container>
   );
 }

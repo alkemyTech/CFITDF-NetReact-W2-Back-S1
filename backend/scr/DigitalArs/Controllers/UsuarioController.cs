@@ -40,7 +40,7 @@ public class UsuarioController : ControllerBase
         }
         return NotFound();
     }
-
+    [AllowAnonymous]
     [HttpPost]
     public ActionResult<Usuario> CreateUser(CreateUsuarioDto createUsuarioDto)
     {
@@ -49,14 +49,19 @@ public class UsuarioController : ControllerBase
             NOMBRE = createUsuarioDto.NOMBRE,
             EMAIL = createUsuarioDto.EMAIL,
             CREATION_DATE = createUsuarioDto.CREATION_DATE,
-            //PASS = _passwordService.HashPassword(createUsuarioDto.PASS), // PASSWORD HASHEADA
-            PASS = createUsuarioDto.PASS, // PASSWORD SIN HASHEAR
+            PASS = _passwordService.HashPassword(createUsuarioDto.PASS), // PASSWORD HASHEADA
+           // PASS = createUsuarioDto.PASS, // PASSWORD SIN HASHEAR
             ID_ROL = createUsuarioDto.ID_ROL
         };
 
         _usuarioRepository.AddUser(usuario);
 
-        return CreatedAtAction(nameof(GetUserById), new { id = usuario.ID_USUARIO }, usuario);
+        return CreatedAtAction(nameof(GetUserById), new { id = usuario.ID_USUARIO }, new
+        {
+            Mensaje = "Usuario creado exitosamente",
+            usuario.ID_USUARIO,
+            usuario.EMAIL
+        });
     }
 
     [HttpPut("{id}")]
