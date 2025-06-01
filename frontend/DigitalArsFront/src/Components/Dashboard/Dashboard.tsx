@@ -1,74 +1,53 @@
-// src/Components/Dashboard/Dashboard.tsx
-
+import React from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
-import { CssBaseline, ThemeProvider } from '@mui/material';
-import type { Dispatch, SetStateAction } from 'react';
-import getTheme from '../../../theme';
+import Container from '@mui/material/Container';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import { CssBaseline } from '@mui/material';
 
-const NAVIGATION: Navigation = [
-  { kind: 'header', title: 'Main' },
-  { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
-  { segment: 'transaccion', title: 'Transacciones', icon: <ShoppingCartIcon /> },
-  { segment: 'reportes', title: 'Reportes', icon: <BarChartIcon /> },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Otros' },
-  { segment: 'integraciones', title: 'Integraciones', icon: <LayersIcon /> },
-];
+import { AuthGuard } from '@/Components/auth/auth-guard';
+import { MainNav } from '@/Components/Dashboard/main-nav';
+import { SideNav } from '@/Components/Dashboard/side-nav';
 
-function DemoPageContent({ pathname }: { pathname: string }) {
-  return (
-    <Box
-      sx={{
-        py: 6,
-        px: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-        minHeight: '80vh',
-        backgroundColor: 'background.default',
-        borderRadius: 2,
-        boxShadow: 3,
-      }}
-    >
-      <Typography variant="h4" gutterBottom>
-        Bienvenido al Panel de Control
-      </Typography>
-      <Typography variant="body1">
-        Seleccioná una opción del menú para comenzar.
-      </Typography>
-    </Box>
-  );
+interface LayoutProps {
+  children?: React.ReactNode;
 }
 
-interface DemoProps {
-  darkMode: boolean;
-  setDarkMode: Dispatch<SetStateAction<boolean>>;
-  window?: () => Window;
-}
-
-export default function DashboardLayoutBasic({ darkMode, setDarkMode, window }: DemoProps) {
-  const router = useDemoRouter('/dashboard');
-  const theme = getTheme(darkMode);
-
+export default function dashboard({ children }: LayoutProps): React.JSX.Element {
   return (
-    <ThemeProvider theme={theme}>
+    <AuthGuard>
       <CssBaseline />
-      <AppProvider router={router} navigation={NAVIGATION}>
-        <DemoProvider>
-          <DashboardLayout>
-            <DemoPageContent pathname={router.pathname} />
-          </DashboardLayout>
-        </DemoProvider>
-      </AppProvider>
-    </ThemeProvider>
+      <GlobalStyles
+        styles={{
+          body: {
+            '--MainNav-height': '64px',
+            '--MainNav-zIndex': 1000,
+            '--SideNav-width': '280px',
+            '--SideNav-zIndex': 1100,
+            '--MobileNav-width': '320px',
+            '--MobileNav-zIndex': 1100,
+            fontFamily: 'Poppins, sans-serif',
+          },
+        }}
+      />
+      <Box
+        sx={{
+          bgcolor: 'var(--mui-palette-background-default)',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          minHeight: '100vh',
+        }}
+      >
+        <SideNav />
+        <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
+          <MainNav />
+          <main>
+            <Container maxWidth="xl" sx={{ py: '64px' }}>
+              {children}
+            </Container>
+          </main>
+        </Box>
+      </Box>
+    </AuthGuard>
   );
 }

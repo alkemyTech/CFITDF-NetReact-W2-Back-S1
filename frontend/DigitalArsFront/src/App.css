@@ -4,6 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
+body {
+  font-family: 'Poppins', sans-serif;
+}
 
 .logo {
   height: 6em;
