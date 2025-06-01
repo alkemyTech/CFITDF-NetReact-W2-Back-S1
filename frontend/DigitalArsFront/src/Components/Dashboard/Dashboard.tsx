@@ -10,12 +10,21 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
+<<<<<<< HEAD
 import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import getTheme from '../../../theme'; // Asegurate de tener theme.ts en src/
 import type { Dispatch, SetStateAction } from 'react';
+=======
+import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
+import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+>>>>>>> 92405497046202e197d6a4b170ae04ec5977c1ec
 
 const NAVIGATION: Navigation = [
   {
@@ -31,6 +40,11 @@ const NAVIGATION: Navigation = [
     segment: 'orders',
     title: 'Orders',
     icon: <ShoppingCartIcon />,
+  },
+    {
+    segment: 'Transaccion',
+    title: 'Transaccion',
+    icon: <DashboardIcon />,
   },
   {
     kind: 'divider',
@@ -64,6 +78,7 @@ const NAVIGATION: Navigation = [
 ];
 
 function DemoPageContent({ pathname }: { pathname: string }) {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -74,7 +89,13 @@ function DemoPageContent({ pathname }: { pathname: string }) {
         textAlign: 'center',
       }}
     >
+<<<<<<< HEAD
       <Typography variant="h5" gutterBottom>Dashboard content for {pathname}</Typography>
+=======
+      <Typography>Dashboard content for {pathname}</Typography>
+        <Button variant="contained" color="primary" onClick={() => navigate("/transaccion")}>
+        Ir a Transacción </Button>
+>>>>>>> 92405497046202e197d6a4b170ae04ec5977c1ec
     </Box>
   );
 }
@@ -91,6 +112,7 @@ export default function DashboardLayoutBasic({ darkMode, setDarkMode, window }: 
   const demoWindow = window !== undefined ? window() : undefined;
 
   return (
+<<<<<<< HEAD
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <DemoProvider window={demoWindow}>
@@ -117,5 +139,23 @@ export default function DashboardLayoutBasic({ darkMode, setDarkMode, window }: 
         </AppProvider>
       </DemoProvider>
     </ThemeProvider>
+=======
+    // Remove this provider when copying and pasting into your project.
+    <DemoProvider window={demoWindow}>
+      {/* preview-start */}
+      <AppProvider
+        navigation={NAVIGATION}
+        router={router}
+        theme={demoTheme}
+        window={demoWindow}
+      >
+        <DashboardLayout>
+          <DemoPageContent pathname={router.pathname} />
+        </DashboardLayout>
+      
+      </AppProvider>
+      {/* preview-end */}
+    </DemoProvider>
+>>>>>>> 92405497046202e197d6a4b170ae04ec5977c1ec
   );
 }
