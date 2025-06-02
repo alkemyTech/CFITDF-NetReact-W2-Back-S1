@@ -5,7 +5,7 @@ import axios from "axios";
 const ConsultaAlias = () => {
   const [alias, setAlias] = useState("");
   const [titular, setTitular] = useState(null);
-const [nombreUsuario, setNombreUsuario] = useState(null); // Nuevo estado para el nombre
+  const [nombreUsuario, setNombreUsuario] = useState(null); // Nuevo estado para el nombre 
 
   const handleChange = (e) => {
     setAlias(e.target.value);
@@ -22,7 +22,7 @@ const [nombreUsuario, setNombreUsuario] = useState(null); // Nuevo estado para e
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    const id = aliasResponse.data.iD_USUARIO;
+    const id = aliasResponse.data.ID_USUARIO;
 
     if (!id) {
       setTitular("Alias encontrado, pero no tiene un ID de usuario asociado");
@@ -37,7 +37,7 @@ const [nombreUsuario, setNombreUsuario] = useState(null); // Nuevo estado para e
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    setNombreUsuario(usuarioResponse.data.nombre || "Usuario sin nombre registrado");
+    setNombreUsuario(usuarioResponse.data.NOMBRE || "Usuario sin nombre registrado");
 
   } catch (error) {
     console.error("Error al obtener los datos:", error);
@@ -56,7 +56,6 @@ const [nombreUsuario, setNombreUsuario] = useState(null); // Nuevo estado para e
       </form>
       {titular && <Typography variant="h6">Titular: {titular}</Typography>}
       {nombreUsuario && <Typography variant="h6">Nombre: {nombreUsuario}</Typography>}
-       
     </div>
   );
 };

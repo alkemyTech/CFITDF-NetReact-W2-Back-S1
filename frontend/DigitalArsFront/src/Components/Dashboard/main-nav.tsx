@@ -1,5 +1,5 @@
 // src/components/dashboard/layout/main-nav.tsx
-import React from 'react';
+import React, { use } from 'react';
 import {
     AppBar,
     Toolbar,
@@ -56,16 +56,16 @@ export function MainNav(): React.JSX.Element {
                                 </Badge>
                             </IconButton>
                         </Tooltip>
-                        <Box>
-                            <Avatar
-                                alt="Usuario"
-                                src="https://i.pravatar.cc/150?img=32"
-                                onClick={userPopover.handleOpen}
-                                ref={userPopover.anchorRef}
-                                sx={{ width: 36, height: 36, cursor: 'pointer' }}
-                            />
-                        </Box>
-                    </Stack>
+                            <Box>
+                                <Avatar
+                                    alt="Usuario"
+                                    src="https://i.pravatar.cc/150?img=32"
+                                    onClick={userPopover.handleOpen}
+                                    ref={userPopover.anchorRef}
+                                    sx={{ width: 36, height: 36, cursor: 'pointer' }}
+                                />
+                            </Box>
+                        </Stack>
                 </Toolbar>
             </AppBar>
 

@@ -17,6 +17,7 @@ export default function FormLogin() {
   
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify({
+        ID_USUARIO: usuario.ID_USUARIO,
         NOMBRE: usuario.NOMBRE,
         EMAIL: usuario.EMAIL,
       }));

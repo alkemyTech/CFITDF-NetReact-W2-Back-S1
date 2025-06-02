@@ -7,6 +7,7 @@ import { CssBaseline } from '@mui/material';
 import { AuthGuard } from '@/Components/auth/auth-guard';
 import { MainNav } from '@/Components/Dashboard/main-nav';
 import { SideNav } from '@/Components/Dashboard/side-nav';
+import SaldoCard from '../Saldo/SaldoCard';
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -39,15 +40,18 @@ export default function dashboard({ children }: LayoutProps): React.JSX.Element 
         }}
       >
         <SideNav />
-        <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
-          <MainNav />
-          <main>
-            <Container maxWidth="xl" sx={{ py: '64px' }}>
-              {children}
-            </Container>
-          </main>
-        </Box>
-      </Box>
-    </AuthGuard>
+            <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
+              <MainNav />
+              <main>
+                <Container maxWidth="xl" sx={{ py: '64px' }}>
+                  <Box mb={4}>
+                    <SaldoCard />
+                  </Box>
+                  {children}
+                </Container>
+              </main>
+            </Box>
+          </Box>
+        </AuthGuard>
   );
 }
