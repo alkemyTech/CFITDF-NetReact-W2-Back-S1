@@ -1,6 +1,8 @@
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { teal } from '@mui/material/colors';
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 
 export default function SaldoCard() {
   const [saldo, setSaldo] = useState<number | null>(null);
@@ -37,16 +39,35 @@ export default function SaldoCard() {
       }, []);
 
   return (
-    <Card sx={{ minWidth: 275, borderRadius: 3, boxShadow: 3 }}>
-      <CardContent>
-        <Typography variant="h6" color="text.secondary" gutterBottom>
-          Saldo Disponible
-        </Typography>
-        <Typography variant="h4" component="div" color="primary">
-          ${saldo !== null ? saldo.toFixed(2) : 'Cargando...'}
-        </Typography>
-      </CardContent>
-    </Card>
+    <Card sx={{ backgroundColor: teal[600], py: "20px", mb: 5 }}>
+        <CardContent
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <AccountBalanceWalletIcon
+            sx={{ color: teal[200], fontSize: "6em" }}
+            fontSize="inherit"
+          />
+          <Container sx={{ textAlign: "start" }}>
+            <Typography variant="h5" color="white">
+              Saldo Disponible
+            </Typography>
+            <Typography variant="h3" color="white">
+              {saldo !== null ? saldo.toLocaleString("es-AR", {
+                style: "currency",
+                currency: "ARS",
+              }) : (0).toLocaleString("es-AR", {
+                style: "currency",
+                minimumIntegerDigits: 3,
+                currency: "ARS",
+              }).replace(/0/g, " - ")}
+            </Typography>
+          </Container>
+        </CardContent>
+      </Card>
   );
 }
 

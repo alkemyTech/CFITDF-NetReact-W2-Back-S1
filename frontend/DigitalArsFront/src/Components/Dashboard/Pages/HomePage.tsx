@@ -11,11 +11,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import { teal } from "@mui/material/colors";
 import { PageContainer } from "@toolpad/core";
 import type { Transaction } from "../../../types";
 import { useState } from "react";
+import SaldoCard from '@/Components/Saldo/SaldoCard';
 
 const testTransactions: Transaction[] = [
   {
@@ -42,7 +41,6 @@ const testTransactions: Transaction[] = [
 ];
 
 export default function InicioPage() {
-  const balance = 5200.0;
   const [transacctions, setTransacctions] = useState(testTransactions);
   return (
     <PageContainer
@@ -51,31 +49,7 @@ export default function InicioPage() {
       maxWidth="md"
       sx={{ textAlign: "start" }}
     >
-      <Card sx={{ backgroundColor: teal[600], py: "20px", mb: 5 }}>
-        <CardContent
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <AccountBalanceWalletIcon
-            sx={{ color: teal[200], fontSize: "6em" }}
-            fontSize="inherit"
-          />
-          <Container sx={{ textAlign: "start" }}>
-            <Typography variant="h5" color="white">
-              Balance Total
-            </Typography>
-            <Typography variant="h2" color="white">
-              {balance.toLocaleString("es-AR", {
-                style: "currency",
-                currency: "ARS",
-              })}
-            </Typography>
-          </Container>
-        </CardContent>
-      </Card>
+      <SaldoCard/>
       <Typography variant="h4" sx={{mb: 4}}>Transacciones Recientes</Typography>
       <TableContainer component={Paper}>
         <Table>
