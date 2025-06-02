@@ -17,10 +17,12 @@ namespace DigitalArs.Controllers;
 public class TransaccionController : ControllerBase
 {
     private ITransaccionRepository _transaccionRepository;
+    private ICuentaRepository _cuentaRepository;
 
-    public TransaccionController(ITransaccionRepository transaccionRepository)
+    public TransaccionController(ITransaccionRepository transaccionRepository, ICuentaRepository cuentaRepository)
     {
         _transaccionRepository = transaccionRepository;
+        _cuentaRepository = cuentaRepository;
     }
 
     [HttpGet]
@@ -53,12 +55,42 @@ public class TransaccionController : ControllerBase
             FECHA = createTransaccionDto.FECHA,
         };
 
+        var cuentaOrigenInfo = _cuentaRepository.GetCuentaById(transaccion.ID_CUENTA_ORIGEN);
+        var cuentaDestinoInfo = _cuentaRepository.GetCuentaById(transaccion.ID_CUENTA_DESTINO);
+
+        // Verifica si la cuenta de origen existe
+        if (cuentaOrigenInfo == null)
+        {
+            return BadRequest("Cuenta de origen no existe.");
+        }
+
+        // Verifica si la cuenta de destino existe
+        if (cuentaDestinoInfo == null)
+        {
+            return BadRequest("Cuenta no encontrada.");
+        }
+
+        // Verifica si el monto es positivo
+        if (transaccion.MONTO <= 0)
+        {
+            return BadRequest("El monto debe ser un numero positivo mayor a 0.");
+        }
+
+        // verifica si tiene fondos suficientes
+        if (transaccion.MONTO >= cuentaOrigenInfo.SALDO)
+        {
+            return BadRequest("Fondos Insuficientes.");
+        }
+
+        cuentaOrigenInfo.SALDO -= transaccion.MONTO;
+        cuentaDestinoInfo.SALDO += transaccion.MONTO;
+
         _transaccionRepository.AddTransaccion(transaccion);
 
         return Ok(transaccion);
     }
 
-    [HttpPut("{id}")]
+    /*[HttpPut("{id}")]
     public ActionResult UpdateTransaccion(int id, Transaccion updateTransaccion)
     {
         if(_transaccionRepository.GetTransaccionById(id) is Transaccion transaccion)
@@ -70,7 +102,7 @@ public class TransaccionController : ControllerBase
         }
 
         return NotFound();
-    }
+    }*/
 
     [HttpDelete("{id}")]
     public ActionResult RemoveTransaccion(int id)

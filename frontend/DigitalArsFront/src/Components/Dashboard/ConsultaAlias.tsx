@@ -6,6 +6,7 @@ const ConsultaAlias = () => {
   const [alias, setAlias] = useState("");
   const [titular, setTitular] = useState(null);
   const [nombreUsuario, setNombreUsuario] = useState(null); // Nuevo estado para el nombre 
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e) => {
     setAlias(e.target.value);
@@ -14,36 +15,92 @@ const ConsultaAlias = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("token"); // Recupera el token si la API lo requiere
 
-  const token = localStorage.getItem("token"); // Recupera el token si la API lo requiere
+    const isOnlyNumbers = (str: string) => /^\d+$/.test(str);
 
-  try {
-    const aliasResponse = await axios.get(`http://localhost:5056/api/cuenta/alias/${alias}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    const id = aliasResponse.data.ID_USUARIO;
-
-    if (!id) {
-      setTitular("Alias encontrado, pero no tiene un ID de usuario asociado");
-      return;
+    if (isOnlyNumbers(alias)) {
+      try {
+        const aliasResponse = await axios.get(`http://localhost:5056/api/cuenta/cbu/${alias}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+    
+        const id = aliasResponse.data.ID_CUENTA;
+    
+        if (!id) {
+          setError("Alias encontrado, pero no tiene un ID de usuario asociado");
+          return;
+        }
+    
+        console.log("ID Usuario obtenido:", id);
+        setTitular(id);
+        setError(null); // Limpia el error si la solicitud fue exitosa
+    
+        // Obtén el nombre del usuario con el ID_USUARIO
+        const usuarioResponse = await axios.get(`http://localhost:5056/api/user/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+    
+        setNombreUsuario(usuarioResponse.data.NOMBRE || "Usuario sin nombre registrado");
+    
+      } catch (error: any) {
+        console.error("Error al obtener los datos:", error);
+        setTitular(null);
+        setNombreUsuario(null);
+        if (error.response) {
+            // El servidor respondió con un error (código 4xx o 5xx)
+            console.error('Mensaje del backend:', error.response.data.message);
+            setError(error.response.data.message);
+        } else if (error.request) {
+            // La solicitud se hizo pero no hubo respuesta
+            console.error('No hubo respuesta del servidor');
+        } else {
+            // Error en la configuración de la solicitud
+            console.error('Error', error.message);
+        }
+      }
     }
-
-    console.log("ID Usuario obtenido:", id);
-    setTitular(id);
-
-    // Obtén el nombre del usuario con el ID_USUARIO
-    const usuarioResponse = await axios.get(`http://localhost:5056/api/user/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    setNombreUsuario(usuarioResponse.data.NOMBRE || "Usuario sin nombre registrado");
-
-  } catch (error) {
-    console.error("Error al obtener los datos:", error);
-    setTitular("Error al obtener los datos");
-}
-
+    else{
+      try {
+        const aliasResponse = await axios.get(`http://localhost:5056/api/cuenta/alias/${alias}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+    
+        const id = aliasResponse.data.ID_CUENTA;
+    
+        if (!id) {
+          setError("Alias encontrado, pero no tiene un ID de usuario asociado");
+          return;
+        }
+    
+        console.log("ID Usuario obtenido:", id);
+        setTitular(id);
+        setError(null); // Limpia el error si la solicitud fue exitosa
+    
+        // Obtén el nombre del usuario con el ID_USUARIO
+        const usuarioResponse = await axios.get(`http://localhost:5056/api/user/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+    
+        setNombreUsuario(usuarioResponse.data.NOMBRE || "Usuario sin nombre registrado");
+    
+      } catch (error: any) {
+        console.error("Error al obtener los datos:", error);
+        setTitular(null);
+        setNombreUsuario(null);
+        if (error.response) {
+            // El servidor respondió con un error (código 4xx o 5xx)
+            console.error('Mensaje del backend:', error.response.data.message);
+            setError(error.response.data.message);
+        } else if (error.request) {
+            // La solicitud se hizo pero no hubo respuesta
+            console.error('No hubo respuesta del servidor');
+        } else {
+            // Error en la configuración de la solicitud
+            console.error('Error', error.message);
+        }
+      }
+    }
   };
 
   return (
@@ -54,8 +111,14 @@ const ConsultaAlias = () => {
        
         <Button type="submit" variant="contained">Buscar</Button>
       </form>
-      {titular && <Typography variant="h6">Titular: {titular}</Typography>}
-      {nombreUsuario && <Typography variant="h6">Nombre: {nombreUsuario}</Typography>}
+
+      {error && <Typography variant="h6" color="error">{error}</Typography>}
+
+      {titular != null && nombreUsuario != null ?
+        <>
+          <Typography variant="h6">Titular: {titular}</Typography>
+          <Typography variant="h6">Nombre: {nombreUsuario}</Typography>
+        </> : null}
     </div>
   );
 };

@@ -15,10 +15,12 @@ using Microsoft.AspNetCore.Authorization;
 public class CuentaController : ControllerBase
 {
     private ICuentaRepository _cuentaRepository;
+    private IUsuarioRepository _usuarioRepository;
 
-    public CuentaController(ICuentaRepository cuentaRepository)
+    public CuentaController(ICuentaRepository cuentaRepository, IUsuarioRepository usuarioRepository)
     {
         _cuentaRepository = cuentaRepository;
+        _usuarioRepository = usuarioRepository;
     }
 
     [HttpGet]
@@ -38,11 +40,47 @@ public class CuentaController : ControllerBase
         return NotFound();
     }
     [HttpGet("alias/{alias}")]
-    public ActionResult<Cuenta> GetCuenta(string alias)
+    public ActionResult<Dictionary<string, object>> GetCuenta(string alias)
     {
         if (_cuentaRepository.GetCuentaByAlias(alias) is Cuenta cuenta)
         {
-            return Ok(cuenta);
+            var usuario = _usuarioRepository.GetUserById(cuenta.ID_USUARIO);
+
+            if (usuario == null)
+            {
+                return BadRequest(new { message = "Usuario no encontrado para la cuenta especificada." });
+            }
+
+            var info = new Dictionary<string, object>
+            {
+                { "ID_CUENTA", cuenta.ID_CUENTA },
+                { "NOMBRE", usuario.NOMBRE }
+            };
+
+            return Ok(info);
+        }
+
+        return BadRequest(new { message = "Alias no encontrado." });
+    }
+    [HttpGet("cbu/{cbu}")]
+    public ActionResult<Dictionary<string, object>> GetCuentaCBU(string cbu)
+    {
+        if (_cuentaRepository.GetCuentaByCbu(cbu) is Cuenta cuenta)
+        {
+            var usuario = _usuarioRepository.GetUserById(cuenta.ID_USUARIO);
+
+            if (usuario == null)
+            {
+                return NotFound("Usuario no encontrado para la cuenta especificada.");
+            }
+
+            var info = new Dictionary<string, object>
+            {
+                { "ID_CUENTA", cuenta.ID_CUENTA },
+                { "NOMBRE", usuario.NOMBRE }
+            };
+
+            return Ok(info);
         }
 
         return NotFound();
