@@ -1,124 +1,57 @@
+import React from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
-import { AppProvider, type Navigation } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
+import Container from '@mui/material/Container';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import { CssBaseline } from '@mui/material';
 
-const NAVIGATION: Navigation = [
-  {
-    kind: 'header',
-    title: 'Main items',
-  },
-  {
-    segment: 'dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: 'orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Analytics',
-  },
-  {
-    segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
-      },
-    ],
-  },
-  {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
-  },
-];
+import { AuthGuard } from '@/Components/auth/auth-guard';
+import { MainNav } from '@/Components/Dashboard/main-nav';
+import { SideNav } from '@/Components/Dashboard/side-nav';
+import SaldoCard from '../Saldo/SaldoCard';
 
-const demoTheme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: 'data-toolpad-color-scheme',
-  },
-  colorSchemes: { light: true, dark: true },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-function DemoPageContent({ pathname }: { pathname: string }) {
-  return (
-    <Box
-      sx={{
-        py: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}
-    >
-      <Typography>Dashboard content for {pathname}</Typography>
-    </Box>
-  );
+interface LayoutProps {
+  children?: React.ReactNode;
 }
 
-interface DemoProps {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
-  window?: () => Window;
-}
-
-export default function DashboardLayoutBasic(props: DemoProps) {
-  const { window } = props;
-
-  const router = useDemoRouter('/dashboard');
-
-  // Remove this const when copying and pasting into your project.
-  const demoWindow = window !== undefined ? window() : undefined;
-
+export default function dashboard({ children }: LayoutProps): React.JSX.Element {
   return (
-    // Remove this provider when copying and pasting into your project.
-    <DemoProvider window={demoWindow}>
-      {/* preview-start */}
-      <AppProvider
-        navigation={NAVIGATION}
-        router={router}
-        theme={demoTheme}
-        window={demoWindow}
+    <AuthGuard>
+      <CssBaseline />
+      <GlobalStyles
+        styles={{
+          body: {
+            '--MainNav-height': '64px',
+            '--MainNav-zIndex': 1000,
+            '--SideNav-width': '280px',
+            '--SideNav-zIndex': 1100,
+            '--MobileNav-width': '320px',
+            '--MobileNav-zIndex': 1100,
+            fontFamily: 'Poppins, sans-serif',
+          },
+        }}
+      />
+      <Box
+        sx={{
+          bgcolor: 'var(--mui-palette-background-default)',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          minHeight: '100vh',
+        }}
       >
-        <DashboardLayout>
-          <DemoPageContent pathname={router.pathname} />
-        </DashboardLayout>
-      </AppProvider>
-      {/* preview-end */}
-    </DemoProvider>
+        <SideNav />
+            <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
+              <MainNav />
+              <main>
+                <Container maxWidth="xl" sx={{ py: '64px' }}>
+                  <Box mb={4}>
+                    <SaldoCard />
+                  </Box>
+                  {children}
+                </Container>
+              </main>
+            </Box>
+          </Box>
+        </AuthGuard>
   );
 }

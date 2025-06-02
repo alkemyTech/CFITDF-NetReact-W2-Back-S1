@@ -47,16 +47,16 @@ public class CuentaController : ControllerBase
 
         return NotFound();
     }
-
+    [AllowAnonymous]
     [HttpPost]
-    public ActionResult<Cuenta> CreateCuenta(CreateCuentaDtos createCuentaDto)
+    public ActionResult<Cuenta> CreateCuenta([FromBody] CreateCuentaDto dto)
     {
         var cuenta = new Cuenta()
         {
-            ID_USUARIO = createCuentaDto.ID_USUARIO,
-            SALDO = createCuentaDto.SALDO,
-            ALIAS = createCuentaDto.ALIAS,
-            CBU = createCuentaDto.CBU,
+            ID_USUARIO = dto.ID_USUARIO,
+            SALDO = dto.SALDO,
+            ALIAS = dto.ALIAS,
+            CBU = dto.CBU,
         };
 
         _cuentaRepository.AddCuenta(cuenta);
