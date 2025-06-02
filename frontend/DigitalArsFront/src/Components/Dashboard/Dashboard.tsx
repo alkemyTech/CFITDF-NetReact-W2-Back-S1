@@ -45,7 +45,15 @@ const demoTheme = createTheme({
 
 export default function DashboardLayout() {
   return (
-    <ReactRouterAppProvider navigation={NAVIGATION} theme={demoTheme}>
+    <ReactRouterAppProvider
+      navigation={NAVIGATION}
+      theme={demoTheme}
+      branding={{
+        logo: <></>,
+        title: "Digital ARS",
+        homeUrl: "/dashboard",
+      }}
+    >
       <CoreDashboardLayout>
         <Outlet />
       </CoreDashboardLayout>
