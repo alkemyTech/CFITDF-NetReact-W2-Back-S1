@@ -20,13 +20,13 @@ namespace DigitalArs.Repositories {
             return _dbContext.USUARIO.FirstOrDefault(u => u.ID_USUARIO == Id);
         }
 
-        public void AddUser(Usuario entity) {
-            _dbContext.USUARIO.Add(entity);
+        public void AddUser(Usuario usuario) {
+            _dbContext.USUARIO.Add(usuario);
             _dbContext.SaveChanges();
         }
 
-        public void UpdateUser(Usuario entity) {
-            _dbContext.USUARIO.Update(entity);
+        public void UpdateUser(Usuario usuario) {
+            _dbContext.USUARIO.Update(usuario);
             _dbContext.SaveChanges();
         }
 

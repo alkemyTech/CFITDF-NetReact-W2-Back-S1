@@ -56,7 +56,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 // Swagger + Seguridad JWT
-builder.Services.AddControllers();
+// Configuración de JSON
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -92,6 +96,19 @@ builder.Services.AddSwaggerGen(c =>
 // CONSTRUCCIÓN DE LA APP
 // ----------------------------
 
+// Agrego cors para permitir solicitudes desde el frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        corsBuilder =>
+        {
+            corsBuilder.WithOrigins("http://localhost:5173")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials()
+                       .WithExposedHeaders("Authorization"); // leer ese header desde JS
+        });
+});
 var app = builder.Build();
 
 // Middleware
@@ -105,6 +122,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
+// Usa CORS
+app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

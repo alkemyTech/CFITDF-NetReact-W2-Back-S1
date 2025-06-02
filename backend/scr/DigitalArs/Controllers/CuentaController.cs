@@ -27,7 +27,7 @@ public class CuentaController : ControllerBase
         return Ok(_cuentaRepository.GetAllCuentas());
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("id/{id}")]
     public ActionResult<Cuenta> GetCuenta(int id)
     {
         if (_cuentaRepository.GetCuentaById(id) is Cuenta cuenta)
@@ -37,16 +37,26 @@ public class CuentaController : ControllerBase
 
         return NotFound();
     }
+    [HttpGet("alias/{alias}")]
+    public ActionResult<Cuenta> GetCuenta(string alias)
+    {
+        if (_cuentaRepository.GetCuentaByAlias(alias) is Cuenta cuenta)
+        {
+            return Ok(cuenta);
+        }
 
+        return NotFound();
+    }
+    [AllowAnonymous]
     [HttpPost]
-    public ActionResult<Cuenta> CreateCuenta(CreateCuentaDtos createCuentaDto)
+    public ActionResult<Cuenta> CreateCuenta([FromBody] CreateCuentaDto dto)
     {
         var cuenta = new Cuenta()
         {
-            ID_USUARIO = createCuentaDto.ID_USUARIO,
-            SALDO = createCuentaDto.SALDO,
-            ALIAS = createCuentaDto.ALIAS,
-            CBU = createCuentaDto.CBU,
+            ID_USUARIO = dto.ID_USUARIO,
+            SALDO = dto.SALDO,
+            ALIAS = dto.ALIAS,
+            CBU = dto.CBU,
         };
 
         _cuentaRepository.AddCuenta(cuenta);
