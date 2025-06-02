@@ -19,7 +19,7 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 
 const navItems = [
     { title: 'Menu', icon: <DashboardIcon />, path: '/dashboard' },   
-    { title: 'Movimientos', icon: <BarChartIcon />, path: '/transacciones' },
+    { title: 'Movimientos', icon: <BarChartIcon />, path: '/Transaccion'  },
     { title: 'Ahorros', icon: <SavingsIcon />, path: '/plazosfijos' },
 ];
 

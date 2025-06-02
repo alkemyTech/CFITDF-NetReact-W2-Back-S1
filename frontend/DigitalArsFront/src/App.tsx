@@ -8,6 +8,8 @@ import RegisterPage from './Components/Register/RegisterPage';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { useState, useMemo } from 'react';
 import getTheme from '../theme';
+import ConsultaAlias from './Components/Dashboard/ConsultaAlias';
+import Transaccion from './Components/FormTransaccion/Transaccion';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -24,6 +26,7 @@ function App() {
             element={<DashboardLayoutBasic darkMode={darkMode} setDarkMode={setDarkMode} />}
           />
           <Route path="/register" element={<RegisterPage />} />
+            <Route path="/transaccion" element={<Transaccion/>} />
         </Routes>
       </div>
     </ThemeProvider>
