@@ -1,4 +1,5 @@
 import { Container, Typography } from "@mui/material";
+import { PageContainer } from "@toolpad/core";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -24,9 +25,11 @@ export default function DetalleTransaccionPage() {
         justifyContent: "center",
       }}
     >
-      <Typography variant="h3">Error</Typography>
-      <Typography variant="body1">La transaccion que estas buscando no existe</Typography>
+      <div>
+        <Typography variant="h3" component="h3">Error</Typography>
+        <Typography variant="body1">La transaccion que estas buscando no existe</Typography>
+      </div>
     </Container>;
   
-  return <div>Transaccion Id: {id}</div>;
+  return <PageContainer>Transaccion Id: {id}</PageContainer>;
 }
