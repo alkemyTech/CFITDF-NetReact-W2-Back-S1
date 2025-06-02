@@ -1,19 +1,21 @@
+// components/Dashboard.tsx
 import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { CssBaseline } from '@mui/material';
-
 import { AuthGuard } from '@/Components/auth/auth-guard';
 import { MainNav } from '@/Components/Dashboard/main-nav';
 import { SideNav } from '@/Components/Dashboard/side-nav';
 import SaldoCard from '../Saldo/SaldoCard';
+import BoxPlazoFijo from '../CrearPlazoFIjo/BoxPlazoFIjo';
+
 
 interface LayoutProps {
   children?: React.ReactNode;
 }
 
-export default function dashboard({ children }: LayoutProps): React.JSX.Element {
+export default function Dashboard({ children }: LayoutProps): React.JSX.Element {
   return (
     <AuthGuard>
       <CssBaseline />
@@ -45,7 +47,8 @@ export default function dashboard({ children }: LayoutProps): React.JSX.Element 
               <main>
                 <Container maxWidth="xl" sx={{ py: '64px' }}>
                   <Box mb={4}>
-                    <SaldoCard />
+                  <SaldoCard />
+                  <BoxPlazoFijo />
                   </Box>
                   {children}
                 </Container>

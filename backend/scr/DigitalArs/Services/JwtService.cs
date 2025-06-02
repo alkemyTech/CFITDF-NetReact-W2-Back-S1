@@ -22,7 +22,7 @@ namespace DigitalArs.Services;
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.ID_USUARIO.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.ID_USUARIO.ToString()),
             new Claim(ClaimTypes.Email, user.EMAIL),            
             new Claim(ClaimTypes.Role, user.ID_ROL.ToString())
         };
