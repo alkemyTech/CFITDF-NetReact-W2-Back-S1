@@ -8,6 +8,7 @@ import {
   type Navigation,
 } from "@toolpad/core";
 import { Outlet } from "react-router-dom";
+import { AuthGuard } from '../auth/auth-guard';
 
 const NAVIGATION: Navigation = [
   {
@@ -45,18 +46,20 @@ const demoTheme = createTheme({
 
 export default function DashboardLayout() {
   return (
-    <ReactRouterAppProvider
-      navigation={NAVIGATION}
-      theme={demoTheme}
-      branding={{
-        logo: <></>,
-        title: "Digital ARS",
-        homeUrl: "/dashboard",
-      }}
-    >
-      <CoreDashboardLayout>
-        <Outlet />
-      </CoreDashboardLayout>
-    </ReactRouterAppProvider>
+    <AuthGuard>
+      <ReactRouterAppProvider
+        navigation={NAVIGATION}
+        theme={demoTheme}
+        branding={{
+          logo: <></>,
+          title: "Digital ARS",
+          homeUrl: "/dashboard",
+        }}
+        >
+        <CoreDashboardLayout>
+          <Outlet />
+        </CoreDashboardLayout>
+      </ReactRouterAppProvider>
+    </AuthGuard>
   );
 }

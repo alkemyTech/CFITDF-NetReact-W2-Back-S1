@@ -35,22 +35,29 @@ public class AuthController : ControllerBase
         if (user == null)
             return Unauthorized("El usuario no existe");
         // Verifica si la contraseña es correcta 
-        //    if (!_passwordService.VerifyPassword(user.PASS, dto.Password))
-        //      return Unauthorized("Contraseña incorrecta");
-        // bool isPasswordValid = _passwordService.VerifyPassword(user.PASS, dto.Password); //ME BUSCA CONTRASEÑAS HASHEADAS
-        bool isPasswordValid = user.PASS == dto.Password;
+        if (!_passwordService.VerifyPassword(user.PASS, dto.Password))
+              return Unauthorized("Contraseña incorrecta");
+         bool isPasswordValid = _passwordService.VerifyPassword(user.PASS, dto.Password); //ME BUSCA CONTRASEÑAS HASHEADAS
+        // bool isPasswordValid = user.PASS == dto.Password;
 
-        if (!isPasswordValid)
-        {
-            return Unauthorized("Contraseña incorrecta.");
-        }
+
         // Genera el token JWT si es todo valido
         var token = _jwtService.GenerateToken(user);
 
         // 4. Devolver token en el header
         Response.Headers.Add("Authorization", $"Bearer {token}");
 
-        return Ok(new { Mensaje = "Login exitoso.", token = token });
+        return Ok(new
+        {
+            Mensaje = "Login exitoso.",
+            token = token,
+            usuario = new
+            {
+                ID_USUARIO = user.ID_USUARIO,
+                NOMBRE = user.NOMBRE,
+                EMAIL = user.EMAIL
+            }
+        });
         
     }
 
