@@ -53,6 +53,7 @@ public class AuthController : ControllerBase
             token = token,
             usuario = new
             {
+                ID_USUARIO = user.ID_USUARIO,
                 NOMBRE = user.NOMBRE,
                 EMAIL = user.EMAIL
             }
