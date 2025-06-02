@@ -51,7 +51,6 @@ public class TransaccionController : ControllerBase
             ID_CUENTA_DESTINO = createTransaccionDto.ID_CUENTA_DESTINO,
             MONTO = createTransaccionDto.MONTO,
             FECHA = createTransaccionDto.FECHA,
-            TIPO = createTransaccionDto.TIPO,
         };
 
         _transaccionRepository.AddTransaccion(transaccion);
@@ -65,7 +64,6 @@ public class TransaccionController : ControllerBase
         if(_transaccionRepository.GetTransaccionById(id) is Transaccion transaccion)
         {
             transaccion.MONTO = updateTransaccion.MONTO;
-            transaccion.TIPO = updateTransaccion.TIPO;
 
             _transaccionRepository.UpdateTransaccion(transaccion);
             return NoContent();
