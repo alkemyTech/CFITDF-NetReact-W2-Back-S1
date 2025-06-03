@@ -1,60 +1,55 @@
-// components/Dashboard.tsx
-import React from 'react';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import GlobalStyles from '@mui/material/GlobalStyles';
-import { CssBaseline } from '@mui/material';
-import { AuthGuard } from '@/Components/auth/auth-guard';
-import { MainNav } from '@/Components/Dashboard/main-nav';
-import { SideNav } from '@/Components/Dashboard/side-nav';
-import SaldoCard from '../Saldo/SaldoCard';
-import BoxPlazoFijo from '../CrearPlazoFIjo/BoxPlazoFIjo';
+import { useTheme } from "@mui/material/styles";
+import HouseIcon from "@mui/icons-material/House";
+import SavingsIcon from "@mui/icons-material/Savings";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import { ReactRouterAppProvider } from "@toolpad/core/react-router";
+import {
+  DashboardLayout as CoreDashboardLayout,
+  type Navigation,
+} from "@toolpad/core";
+import { Outlet } from "react-router-dom";
+import { AuthGuard } from "../auth/auth-guard";
+import AccountToolbar from './AccountToolbar';
+import ActionsToolbar from './ActionsToolbar';
 
+const NAVIGATION: Navigation = [
+  {
+    segment: "dashboard",
+    title: "Inicio",
+    icon: <HouseIcon />,
+  },
+  {
+    segment: "dashboard/transacciones",
+    title: "Transacciones",
+    icon: <ReceiptIcon />,
+  },
+  {
+    segment: "dashboard/ahorros",
+    title: "Ahorros",
+    icon: <SavingsIcon />,
+  },
+];
 
-interface LayoutProps {
-  children?: React.ReactNode;
-}
-
-export default function Dashboard({ children }: LayoutProps): React.JSX.Element {
+export default function DashboardLayout() {
+  const theme = useTheme()
   return (
     <AuthGuard>
-      <CssBaseline />
-      <GlobalStyles
-        styles={{
-          body: {
-            '--MainNav-height': '64px',
-            '--MainNav-zIndex': 1000,
-            '--SideNav-width': '280px',
-            '--SideNav-zIndex': 1100,
-            '--MobileNav-width': '320px',
-            '--MobileNav-zIndex': 1100,
-            fontFamily: 'Poppins, sans-serif',
-          },
-        }}
-      />
-      <Box
-        sx={{
-          bgcolor: 'var(--mui-palette-background-default)',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-          minHeight: '100vh',
+      <ReactRouterAppProvider
+        navigation={NAVIGATION}
+        theme={theme}
+        branding={{
+          logo: <></>,
+          title: "Digital ARS",
+          homeUrl: "/dashboard",
         }}
       >
-        <SideNav />
-            <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', pl: { lg: 'var(--SideNav-width)' } }}>
-              <MainNav />
-              <main>
-                <Container maxWidth="xl" sx={{ py: '64px' }}>
-                  <Box mb={4}>
-                  <SaldoCard />
-                  <BoxPlazoFijo />
-                  </Box>
-                  {children}
-                </Container>
-              </main>
-            </Box>
-          </Box>
-        </AuthGuard>
+        <CoreDashboardLayout slots={{
+          toolbarAccount: AccountToolbar,
+          toolbarActions: ActionsToolbar
+        }}>
+          <Outlet />
+        </CoreDashboardLayout>
+      </ReactRouterAppProvider>
+    </AuthGuard>
   );
 }

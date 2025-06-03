@@ -60,7 +60,14 @@ export default function SaldoCard() {
           variant="h3"
           sx={{ fontWeight: 'bold', mt: 2 }}
         >
-          {saldo !== null ? `$${saldo.toFixed(2)}` : 'Cargando...'}
+          {saldo !== null ? saldo.toLocaleString("es-AR", {
+                style: "currency",
+                currency: "ARS",
+              }) : (0).toLocaleString("es-AR", {
+                style: "currency",
+                minimumIntegerDigits: 3,
+                currency: "ARS",
+              }).replace(/0/g, " - ")}
         </Typography>
       </CardContent>
     </Card>
