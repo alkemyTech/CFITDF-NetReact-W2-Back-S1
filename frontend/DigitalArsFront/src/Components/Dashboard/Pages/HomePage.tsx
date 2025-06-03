@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardContent,
   Container,
@@ -14,7 +15,8 @@ import {
 import { PageContainer } from "@toolpad/core";
 import type { Transaction } from "../../../types";
 import { useState } from "react";
-import SaldoCard from '@/Components/Saldo/SaldoCard';
+import SaldoCard from "@/Components/Saldo/SaldoCard";
+import { useNavigate } from 'react-router-dom';
 
 const testTransactions: Transaction[] = [
   {
@@ -42,6 +44,7 @@ const testTransactions: Transaction[] = [
 
 export default function InicioPage() {
   const [transacctions, setTransacctions] = useState(testTransactions);
+  const navigate = useNavigate();
   return (
     <PageContainer
       title="Dashboard"
@@ -49,8 +52,17 @@ export default function InicioPage() {
       maxWidth="md"
       sx={{ textAlign: "start" }}
     >
-      <SaldoCard/>
-      <Typography variant="h4" sx={{mb: 4}}>Transacciones Recientes</Typography>
+      <SaldoCard />
+      <Button
+        onClick={() => navigate("/dashboard/nueva_transaccion")}
+        variant="contained"
+        sx={{ width: "100%", mb: 4, textTransform: "uppercase" }}
+      >
+        Realizar Transaccion
+      </Button>
+      <Typography variant="h4" sx={{ mb: 4 }}>
+        Transacciones Recientes
+      </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

@@ -6,9 +6,10 @@ import FormLogin from './Components/FormLogin/FormLogin';
 import RegisterPage from './Components/Register/RegisterPage';
 import DashboardLayout from './Components/Dashboard/Dashboard';
 import InicioPage from './Components/Dashboard/Pages/HomePage';
-import Transaccion from './Components/FormTransaccion/Transaccion';
 import { useMemo, useState } from 'react';
 import AhorrosPage from './Components/Dashboard/Pages/AhorrosPage';
+import TransaccionesPage from './Components/Dashboard/Pages/TransaccionesPage';
+import NuevaTransaccionPage from './Components/Dashboard/Pages/NuevaTransaccion/NuevaTransaccionPage';
 
 
 function App() {
@@ -23,11 +24,11 @@ function App() {
           <Route path="/" element={<FormLogin />} />
           <Route path="/dashboard" element={<DashboardLayout />}>
               <Route path="/dashboard" element={<InicioPage/>}/>
-              <Route path="/dashboard/transacciones" element={<Transaccion/>}/>
+              <Route path="/dashboard/nueva_transaccion" element={<NuevaTransaccionPage/>}/>
+              <Route path="/dashboard/transacciones" element={<TransaccionesPage/>}/>
               <Route path="/dashboard/ahorros" element={<AhorrosPage/>}/>
           </Route>
           <Route path="/register" element={<RegisterPage/>}/>
-          <Route path="/transaccion"/>
         </Routes>
       </div>
     </ThemeProvider>

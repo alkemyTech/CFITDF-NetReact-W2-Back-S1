@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { TextField, Button, Typography } from "@mui/material";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import { TextField, Button, Typography, Box } from "@mui/material";
 import axios from "axios";
+import { PageContainer } from '@toolpad/core';
 
 const ConsultaAlias = () => {
   const [alias, setAlias] = useState("");
@@ -8,11 +9,11 @@ const ConsultaAlias = () => {
   const [nombreUsuario, setNombreUsuario] = useState(null); // Nuevo estado para el nombre 
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAlias(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token"); // Recupera el token si la API lo requiere
@@ -104,7 +105,7 @@ const ConsultaAlias = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+    <Box sx={{display: "flex", flexDirection: "column"}}>
       <Typography variant="h5">Ingrese Alias destino</Typography>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <TextField label="Alias" name="alias" value={alias} onChange={handleChange} required />
@@ -119,7 +120,7 @@ const ConsultaAlias = () => {
           <Typography variant="h6">Titular: {titular}</Typography>
           <Typography variant="h6">Nombre: {nombreUsuario}</Typography>
         </> : null}
-    </div>
+    </Box>
   );
 };
 
