@@ -71,7 +71,7 @@ public class CuentaController : ControllerBase
 
             if (usuario == null)
             {
-                return NotFound("Usuario no encontrado para la cuenta especificada.");
+                return BadRequest(new { message = "Usuario no encontrado para la cuenta especificada." });
             }
 
             var info = new Dictionary<string, object>
@@ -83,7 +83,7 @@ public class CuentaController : ControllerBase
             return Ok(info);
         }
 
-        return NotFound();
+        return BadRequest(new { message = "CBU no encontrado." });
     }
     [AllowAnonymous]
     [HttpPost]

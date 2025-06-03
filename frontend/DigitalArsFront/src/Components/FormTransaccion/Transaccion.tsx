@@ -1,5 +1,5 @@
 
-import ConsultaAlias from "../Dashboard/ConsultaAlias";
+import TransaccionModal from "../Dashboard/TransaccionModal";
 
 function Transaccion() {
  
@@ -7,7 +7,7 @@ function Transaccion() {
   return (
     <div>
       <h2>Realizar transferencia</h2>
-      <ConsultaAlias></ConsultaAlias>
+      <TransaccionModal></TransaccionModal>
     </div>
   );
 }
