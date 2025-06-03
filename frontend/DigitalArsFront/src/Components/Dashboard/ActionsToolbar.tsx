@@ -1,4 +1,4 @@
-import { Avatar, Badge, Box, IconButton, Stack, Tooltip } from "@mui/material";
+import { Badge, IconButton, Stack, Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import GroupIcon from "@mui/icons-material/Group";
 import NotificationsIcon from "@mui/icons-material/Notifications";
