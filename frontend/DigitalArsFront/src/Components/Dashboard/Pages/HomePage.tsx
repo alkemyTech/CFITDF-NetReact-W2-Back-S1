@@ -18,7 +18,7 @@ import { useState } from "react";
 import SaldoCard from "@/Components/Saldo/SaldoCard";
 import { useNavigate } from 'react-router-dom';
 import BoxPlazoFijo from '@/Components/CrearPlazoFIjo/BoxPlazoFIjo';
-import { useUserContext } from '../../../Context/UserContext'; // ✅ Usás el hook personalizado
+import { useUserContext } from '../../../Context/UserContext'; 
 
 const testTransactions: Transaction[] = [
   {
@@ -58,9 +58,7 @@ export default function InicioPage() {
     >
       <SaldoCard />
 
-      <Box mt={4}>
-        <BoxPlazoFijo />
-      </Box>
+
 
       <Box mt={6}>
         <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
