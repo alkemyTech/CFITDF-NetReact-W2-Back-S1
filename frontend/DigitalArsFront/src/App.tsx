@@ -13,6 +13,7 @@ import NuevaTransaccionPage from './Components/Dashboard/Pages/NuevaTransaccion/
 import CrearPlazoFijo from './Components/CrearPlazoFIjo/CrearPlazoFijo';
 
 
+
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const theme = useMemo(() => getTheme(darkMode), [darkMode]);
@@ -20,6 +21,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+     
       <div className="app">
         <Routes>
           <Route path="/" element={<FormLogin />} />
@@ -32,7 +34,8 @@ function App() {
           </Route>
           <Route path="/register" element={<RegisterPage/>}/>
         </Routes>
-      </div>
+        </div>
+     
     </ThemeProvider>
   );
 }

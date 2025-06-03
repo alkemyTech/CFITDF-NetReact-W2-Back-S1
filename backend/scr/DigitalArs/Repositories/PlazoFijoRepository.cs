@@ -20,7 +20,7 @@ namespace DigitalArs.Repositories
         public async Task<PlazoFijoResultadoDto> CrearAsync(CreatePlazoFijoDto dto)
         {
             // Buscar la cuenta asociada al usuario
-            var cuenta = await _context.Cuenta.FirstOrDefaultAsync(c => c.ID_USUARIO == dto.UsuarioId);
+            var cuenta = await _context.Cuentas.FirstOrDefaultAsync(c => c.ID_USUARIO == dto.UsuarioId);
             if (cuenta == null)
                 throw new InvalidOperationException("El usuario no tiene una cuenta asociada.");
             // Validar fondos
@@ -75,7 +75,7 @@ namespace DigitalArs.Repositories
         // ✅ Obtener por usuario
         public async Task<IEnumerable<PlazoFijo>> ObtenerPorUsuarioAsync(int idUsuario)
         {
-            var cuentas = await _context.Cuenta
+            var cuentas = await _context.Cuentas
                 .Where(c => c.ID_USUARIO == idUsuario)
                 .Select(c => c.ID_CUENTA)
                 .ToListAsync();

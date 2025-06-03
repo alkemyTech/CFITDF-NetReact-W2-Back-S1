@@ -1,41 +1,19 @@
-import { Card, CardContent, Typography, Box } from '@mui/material';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Button
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import SendIcon from '@mui/icons-material/Send';
+import SavingsIcon from '@mui/icons-material/Savings';
+import { useUserContext } from '../../Context/UserContext'
 
 export default function SaldoCard() {
-  const [saldo, setSaldo] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchSaldo = async () => {
-      const user = localStorage.getItem('user');
-      const token = localStorage.getItem('token');
-
-      if (!user || !token) return;
-
-      try {
-        const usuario = JSON.parse(user);
-        const userId = usuario.ID_USUARIO;
-
-        if (!userId) {
-          console.error("La ID del usuario no está disponible.");
-          return;
-        }
-
-        const response = await axios.get(`http://localhost:5056/api/cuenta/usuario/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        setSaldo(response.data.SALDO);
-      } catch (error) {
-        console.error("Error al obtener saldo:", error);
-      }
-    };
-
-    fetchSaldo();
-  }, []);
+  const navigate = useNavigate();
+  const { saldo } = useUserContext(); // obtengo saldo del contexto global
 
   return (
     <Card
@@ -45,7 +23,11 @@ export default function SaldoCard() {
         background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
         color: '#fff',
         boxShadow: 4,
-        p: 2
+        p: 2,
+        width: '100%',
+        maxWidth: 500,
+        mx: 'auto',
+        mt: 4
       }}
     >
       <CardContent>
@@ -60,15 +42,50 @@ export default function SaldoCard() {
           variant="h3"
           sx={{ fontWeight: 'bold', mt: 2 }}
         >
-          {saldo !== null ? saldo.toLocaleString("es-AR", {
-                style: "currency",
-                currency: "ARS",
-              }) : (0).toLocaleString("es-AR", {
-                style: "currency",
-                minimumIntegerDigits: 3,
-                currency: "ARS",
-              }).replace(/0/g, " - ")}
+          {typeof saldo === "number"
+            ? saldo.toLocaleString("es-AR", { style: "currency", currency: "ARS" })
+            : "Cargando..."}
         </Typography>
+
+        <Box display="flex" justifyContent="flex-start" gap={2} mt={3} flexWrap="wrap">
+          <Button
+            variant="contained"
+            endIcon={<SendIcon />}
+            sx={{
+              textTransform: "none",
+              borderRadius: 3,
+              fontWeight: 600,
+              minWidth: 150,
+              backgroundColor: "#fff",
+              color: "#1976d2",
+              '&:hover': {
+                backgroundColor: '#e3f2fd',
+              }
+            }}
+            onClick={() => navigate("/dashboard/nueva_transaccion")}
+          >
+            Enviar dinero
+          </Button>
+
+          <Button
+            variant="outlined"
+            endIcon={<SavingsIcon />}
+            sx={{
+              textTransform: "none",
+              borderRadius: 3,
+              fontWeight: 600,
+              minWidth: 150,
+              color: "#fff",
+              borderColor: "#fff",
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.1)',
+              }
+            }}
+            onClick={() => navigate("/dashboard/plazofijo/crear")}
+          >
+            Invertir ahora
+          </Button>
+        </Box>
       </CardContent>
     </Card>
   );

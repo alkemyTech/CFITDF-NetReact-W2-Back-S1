@@ -10,7 +10,7 @@ namespace DigitalArs.Controllers;
 using Microsoft.AspNetCore.Authorization;
 
 [Authorize]
-[Route("/api/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class CuentaController : ControllerBase
 {
@@ -132,10 +132,18 @@ public class CuentaController : ControllerBase
     [HttpGet("usuario/{idUsuario}")]
     public ActionResult<Cuenta> GetCuentaPorUsuario(int idUsuario)
     {
-        var cuenta = _cuentaRepository.GetCuentaByUsuarioId(idUsuario);
-        if (cuenta == null)
-            return NotFound("Cuenta no encontrada para el usuario.");
+        try
+        {
+            var cuenta = _cuentaRepository.GetCuentaByUsuarioId(idUsuario);
 
-        return Ok(cuenta);
+            if (cuenta == null)
+                return NotFound("Cuenta no encontrada para el usuario.");
+
+            return Ok(cuenta);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno: {ex.Message}");
+        }
     }
 }

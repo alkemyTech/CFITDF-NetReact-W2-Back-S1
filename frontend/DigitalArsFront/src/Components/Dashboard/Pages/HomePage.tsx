@@ -2,7 +2,6 @@ import {
   Button,
   Card,
   CardContent,
-  Container,
   Paper,
   Table,
   TableBody,
@@ -11,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Box,
 } from "@mui/material";
 import { PageContainer } from "@toolpad/core";
 import type { Transaction } from "../../../types";
@@ -44,49 +44,72 @@ const testTransactions: Transaction[] = [
 ];
 
 export default function InicioPage() {
-  const [transacctions, setTransacctions] = useState(testTransactions);
+  const [transacciones] = useState(testTransactions);
   const navigate = useNavigate();
+
   return (
     <PageContainer
       title="Dashboard"
       breadcrumbs={[]}
       maxWidth="md"
-      sx={{ textAlign: "start" }}
+      sx={{ textAlign: "start", mt: 4 }}
     >
       <SaldoCard />
-      <Button
-        onClick={() => navigate("/dashboard/nueva_transaccion")}
-        variant="contained"
-        sx={{ width: "100%", mb: 4, textTransform: "uppercase" }}
-      >
-        Realizar Transaccion
-      </Button>
-      <BoxPlazoFijo />
-      <Typography variant="h4" sx={{ mb: 4 }}>
-        Transacciones Recientes
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Fecha</TableCell>
-              <TableCell>Monto</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {transacctions.map((row) => (
-              <TableRow key={row.ID_TRANSACCION}>
-                <TableCell>
-                  {row.FECHA.toLocaleDateString("es-AR", {
-                    dateStyle: "short",
-                  })}
-                </TableCell>
-                <TableCell>{row.MONTO}</TableCell>
+
+      <Box mt={4}>
+        <BoxPlazoFijo />
+      </Box>
+
+      <Box mt={6}>
+        <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
+          Transacciones Recientes
+        </Typography>
+
+        <TableContainer component={Paper} elevation={3}>
+          <Table>
+            <TableHead sx={{ backgroundColor: "#1976d2" }}>
+              <TableRow>
+                <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Fecha</TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Monto</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {transacciones.map((row) => (
+                <TableRow key={row.ID_TRANSACCION}>
+                  <TableCell>
+                    {row.FECHA.toLocaleDateString("es-AR", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {row.MONTO.toLocaleString("es-AR", {
+                      style: "currency",
+                      currency: "ARS",
+                    })}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <Box mt={2} textAlign="center">
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/dashboard/transacciones")}
+            sx={{
+              mt: 2,
+              textTransform: "none",
+              borderRadius: 2,
+              fontWeight: 500,
+            }}
+          >
+            Ver todas las transacciones
+          </Button>
+        </Box>
+      </Box>
     </PageContainer>
   );
 }
