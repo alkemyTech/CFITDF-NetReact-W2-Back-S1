@@ -18,6 +18,7 @@ import { useState } from "react";
 import SaldoCard from "@/Components/Saldo/SaldoCard";
 import { useNavigate } from 'react-router-dom';
 import BoxPlazoFijo from '@/Components/CrearPlazoFIjo/BoxPlazoFIjo';
+import { useUserContext } from '../../../Context/UserContext'; // ✅ Usás el hook personalizado
 
 const testTransactions: Transaction[] = [
   {
@@ -46,10 +47,11 @@ const testTransactions: Transaction[] = [
 export default function InicioPage() {
   const [transacciones] = useState(testTransactions);
   const navigate = useNavigate();
+  const { usuario } = useUserContext(); // ✅ Traemos el usuario desde el contexto
 
   return (
     <PageContainer
-      title="Dashboard"
+      title={`Hola, ${usuario?.NOMBRE ?? 'Usuario'}!`} // ✅ Saludo dinámico
       breadcrumbs={[]}
       maxWidth="md"
       sx={{ textAlign: "start", mt: 4 }}
