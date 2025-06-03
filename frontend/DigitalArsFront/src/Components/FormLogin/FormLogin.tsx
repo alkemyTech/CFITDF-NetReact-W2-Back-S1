@@ -2,8 +2,10 @@ import { Box, Button, Container, Paper, TextField, Typography, Link } from '@mui
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+import { useUserContext } from '../../Context/UserContext';
 
 export default function FormLogin() {
+  const { setUsuario, recargarSaldo } = useUserContext();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,25 +13,38 @@ export default function FormLogin() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post('/api/auth/login', { Email: email, Password: password }, { withCredentials: true });
-  
+      const res = await axios.post(
+        '/api/auth/login',
+        { Email: email, Password: password },
+        { withCredentials: true }
+      );
+
       const { token, usuario } = res.data;
-  
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify({
+
+      // ✅ Declarás userData correctamente
+      const userData = {
         ID_USUARIO: usuario.ID_USUARIO,
         NOMBRE: usuario.NOMBRE,
         EMAIL: usuario.EMAIL,
-        
-      }));
-  
+        ID_ROL: usuario.ID_ROL,
+      };
+
+      // ✅ Guardás el token y el usuario en localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      // ✅ Actualizás el contexto global
+      setUsuario(userData);
+
+      // ✅ Actualizás el saldo del usuario logueado
+      recargarSaldo();
+
+      // ✅ Navegás al dashboard
       navigate('/dashboard');
     } catch (error: any) {
       setErrorMsg(error.response?.data?.message || 'Login fallido');
     }
-    
   };
-  
 
   return (
     <Container maxWidth="xs" sx={{ fontFamily: `'Poppins', sans-serif` }}>
@@ -47,7 +62,7 @@ export default function FormLogin() {
             color: '#fff',
             fontSize: 36,
             fontWeight: 'bold',
-            mb: 2
+            mb: 2,
           }}
         >
           A
@@ -88,7 +103,7 @@ export default function FormLogin() {
               mt: 2,
               borderRadius: 2,
               backgroundColor: '#1976d2',
-              textTransform: 'none'
+              textTransform: 'none',
             }}
             onClick={handleLogin}
           >

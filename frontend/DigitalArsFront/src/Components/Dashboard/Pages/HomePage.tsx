@@ -17,7 +17,7 @@ import type { Transaction } from "../../../types";
 import { useState } from "react";
 import SaldoCard from "@/Components/Saldo/SaldoCard";
 import { useNavigate } from 'react-router-dom';
-import BoxPlazoFijo from '@/Components/CrearPlazoFIjo/BoxPlazoFIjo';
+
 import { useUserContext } from '../../../Context/UserContext'; 
 
 const testTransactions: Transaction[] = [
