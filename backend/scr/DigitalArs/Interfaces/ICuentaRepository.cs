@@ -11,5 +11,7 @@ namespace DigitalArs.Interfaces
         Cuenta? GetCuentaByCbu(string alias);
         void UpdateCuenta(Cuenta cuenta);
         void RemoveCuenta(int Id);
+        Cuenta? GetCuentaByUsuarioId(int idUsuario);
+
     }
 }

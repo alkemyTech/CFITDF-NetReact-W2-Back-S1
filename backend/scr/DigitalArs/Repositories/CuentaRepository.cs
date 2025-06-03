@@ -66,6 +66,10 @@ namespace DigitalArs.Repositories
                 _dbContext.SaveChanges();
             }
         }
-
+        public Cuenta? GetCuentaByUsuarioId(int idUsuario)
+        {
+            return _dbContext.Cuenta.FirstOrDefault(c => c.ID_USUARIO == idUsuario);
+        }
+        
     }
 }

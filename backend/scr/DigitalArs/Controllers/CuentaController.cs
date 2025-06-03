@@ -129,4 +129,13 @@ public class CuentaController : ControllerBase
 
         return NotFound();
     }
+    [HttpGet("usuario/{idUsuario}")]
+    public ActionResult<Cuenta> GetCuentaPorUsuario(int idUsuario)
+    {
+        var cuenta = _cuentaRepository.GetCuentaByUsuarioId(idUsuario);
+        if (cuenta == null)
+            return NotFound("Cuenta no encontrada para el usuario.");
+
+        return Ok(cuenta);
+    }
 }

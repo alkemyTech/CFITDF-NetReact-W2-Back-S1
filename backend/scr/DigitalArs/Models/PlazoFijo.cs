@@ -1,6 +1,7 @@
 ﻿using DigitalArs.Constantes;
 using DigitalArs.Dtos;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalArs.Models
 {
@@ -8,7 +9,7 @@ namespace DigitalArs.Models
     {
         [Key]
         public int ID_PLAZOFIJO { get; set; }
-        public int ID_CUENTA { get; set; }
+        public int ID_CUENTA { get; set; }        
         public decimal MONTO { get; set; }
         public int PLAZO { get; set; }
         public decimal TASA_INTERES { get; set; }
@@ -16,6 +17,7 @@ namespace DigitalArs.Models
         public DateTime fecha_vencimiento { get; set; }
         public double INTERES_GENERADO { get; set; }
         public required string ESTADO { get; set; }
+
 
 
         public void CalcularFechaVencimiento()

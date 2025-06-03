@@ -10,6 +10,7 @@ import { useState, useMemo } from 'react';
 import getTheme from '../theme';
 // import ConsultaAlias from './Components/Dashboard/ConsultaAlias';
 import Transaccion from './Components/FormTransaccion/Transaccion';
+import CrearPlazoFijo from './Components/CrearPlazoFIjo/CrearPlazoFijo';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -20,13 +21,11 @@ function App() {
       <CssBaseline />
       <div className="app">
         <Routes>
-          <Route path="/" element={<FormLogin />} />
-          <Route
-            path="/dashboard"
-            element={< Dashboard />}
-          />
+          <Route path="/" element={<FormLogin />} />          
+          <Route path="/dashboard" element={< Dashboard />}          />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/transaccion" element={<Transaccion/>} />
+          <Route path="/transaccion" element={<Transaccion />} />
+          <Route path="/plazofijo/crear" element={<CrearPlazoFijo />} />
         </Routes>
       </div>
     </ThemeProvider>

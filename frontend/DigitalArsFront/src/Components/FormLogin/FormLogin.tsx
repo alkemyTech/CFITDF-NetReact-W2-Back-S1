@@ -11,7 +11,7 @@ export default function FormLogin() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post('/api/auth/login', { email, password }, { withCredentials: true });
+      const res = await axios.post('/api/auth/login', { Email: email, Password: password }, { withCredentials: true });
   
       const { token, usuario } = res.data;
   
@@ -20,12 +20,14 @@ export default function FormLogin() {
         ID_USUARIO: usuario.ID_USUARIO,
         NOMBRE: usuario.NOMBRE,
         EMAIL: usuario.EMAIL,
+        
       }));
   
       navigate('/dashboard');
     } catch (error: any) {
       setErrorMsg(error.response?.data?.message || 'Login fallido');
     }
+    
   };
   
 
