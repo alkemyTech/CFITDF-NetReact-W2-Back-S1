@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks.Dataflow;
+using System.Security.Claims;
+using DigitalArs.Data;
 
 namespace DigitalArs.Controllers;
 
@@ -29,6 +31,29 @@ public class TransaccionController : ControllerBase
     public ActionResult<Transaccion[]> GetTransacciones()
     {
         return Ok(_transaccionRepository.GetAllTransacciones());
+    }
+
+    [HttpGet("cuentas")]
+    public IActionResult Get()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        // Verifica si el usuario está autenticado
+        if (!int.TryParse(userIdClaim, out int userId))
+        {
+            return BadRequest("ID de usuario inválido.");
+        }
+        
+        var cuentas = _cuentaRepository.GetCuentasById(userId);
+        var idsCuentas = cuentas.Select(c => c.ID_CUENTA).ToList();
+
+        var todasTransacciones = _transaccionRepository.GetAllTransacciones();
+
+        // Filtra las transacciones 
+        var transaccionesUsuario = todasTransacciones
+            .Where(t => idsCuentas.Contains(t.ID_CUENTA_ORIGEN) || idsCuentas.Contains(t.ID_CUENTA_DESTINO))
+            .ToList();
+        return Ok(transaccionesUsuario);
     }
 
     [HttpGet("{id}")]

@@ -6,6 +6,7 @@ namespace DigitalArs.Interfaces
     {
         IEnumerable<Cuenta> GetAllCuentas();
         Cuenta? GetCuentaById(int Id);
+        IEnumerable<Cuenta> GetCuentasById(int id);
         void AddCuenta(Cuenta cuenta);
         Cuenta? GetCuentaByAlias(string alias);
         Cuenta? GetCuentaByCbu(string alias);

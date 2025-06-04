@@ -33,6 +33,11 @@ namespace DigitalArs.Repositories
 
         }
 
+        public IEnumerable<Cuenta> GetCuentasById(int id)
+        {
+            return _dbContext.Cuentas.Where(c => c.ID_USUARIO == id).ToList();
+        }
+
         public Cuenta? GetCuentaByAlias(string alias)
         {
             return _dbContext.Cuentas.FirstOrDefault(c => c.ALIAS == alias);
