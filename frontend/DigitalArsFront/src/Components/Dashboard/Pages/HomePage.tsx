@@ -19,6 +19,7 @@ import SaldoCard from "@/Components/Saldo/SaldoCard";
 import { useNavigate } from 'react-router-dom';
 import BoxPlazoFijo from '@/Components/CrearPlazoFIjo/BoxPlazoFIjo';
 import { useUserContext } from '../../../Context/UserContext'; // ✅ Usás el hook personalizado
+import TransaccionesPage from "./TransaccionesPage";
 
 const testTransactions: Transaction[] = [
   {
@@ -67,35 +68,9 @@ export default function InicioPage() {
           Transacciones Recientes
         </Typography>
 
-        <TableContainer component={Paper} elevation={3}>
-          <Table>
-            <TableHead sx={{ backgroundColor: "#1976d2" }}>
-              <TableRow>
-                <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Fecha</TableCell>
-                <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Monto</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {transacciones.map((row) => (
-                <TableRow key={row.ID_TRANSACCION}>
-                  <TableCell>
-                    {row.FECHA.toLocaleDateString("es-AR", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    {row.MONTO.toLocaleString("es-AR", {
-                      style: "currency",
-                      currency: "ARS",
-                    })}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Box>
+          <TransaccionesPage standalone={false}/>
+        </Box>
 
         <Box mt={2} textAlign="center">
           <Button
