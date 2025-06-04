@@ -86,25 +86,25 @@ public class TransaccionController : ControllerBase
         // Verifica si la cuenta de origen existe
         if (cuentaOrigenInfo == null)
         {
-            return BadRequest("Cuenta de origen no existe.");
+            return BadRequest(new { message = "Cuenta de origen no existe." });
         }
 
         // Verifica si la cuenta de destino existe
         if (cuentaDestinoInfo == null)
         {
-            return BadRequest("Cuenta no encontrada.");
+            return BadRequest(new { message = "Cuenta no encontrada." });
         }
 
         // Verifica si el monto es positivo
         if (transaccion.MONTO <= 0)
         {
-            return BadRequest("El monto debe ser un numero positivo mayor a 0.");
+            return BadRequest(new { message = "El monto debe ser un numero positivo mayor a 0." });
         }
 
         // verifica si tiene fondos suficientes
         if (transaccion.MONTO >= cuentaOrigenInfo.SALDO)
         {
-            return BadRequest("Fondos Insuficientes.");
+            return BadRequest(new { message = "Fondos Insuficientes." });
         }
 
         cuentaOrigenInfo.SALDO -= transaccion.MONTO;

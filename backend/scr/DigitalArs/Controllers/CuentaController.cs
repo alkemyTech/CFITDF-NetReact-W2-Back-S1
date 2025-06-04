@@ -44,7 +44,7 @@ public class CuentaController : ControllerBase
     {
         // Obtener el ID_USUARIO del token JWT
         var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
-        int? idUsuarioToken = null;
+        int? idUsuarioToken = 0;
         if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
         {
             idUsuarioToken = idParsed;
@@ -61,7 +61,7 @@ public class CuentaController : ControllerBase
 
             if(usuario.ID_USUARIO == idUsuarioToken)
             {
-                return BadRequest(new { message = "No pod�s transferirte a vos mismo usando el mismo alias." });
+                return BadRequest(new { message = "No podés transferirte a vos mismo usando el mismo alias." });
             }
 
             var info = new Dictionary<string, object>
@@ -79,6 +79,14 @@ public class CuentaController : ControllerBase
     [HttpGet("cbu/{cbu}")]
     public ActionResult<Dictionary<string, object>> GetCuentaCBU(string cbu)
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int? idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
         if (_cuentaRepository.GetCuentaByCbu(cbu) is Cuenta cuenta)
         {
             var usuario = _usuarioRepository.GetUserById(cuenta.ID_USUARIO);
@@ -88,10 +96,16 @@ public class CuentaController : ControllerBase
                 return BadRequest(new { message = "Usuario no encontrado para la cuenta especificada." });
             }
 
+            if (usuario.ID_USUARIO == idUsuarioToken)
+            {
+                return BadRequest(new { message = "No podés transferirte a vos mismo usando el mismo cbu." });
+            }
+
             var info = new Dictionary<string, object>
             {
                 { "ID_CUENTA", cuenta.ID_CUENTA },
-                { "NOMBRE", usuario.NOMBRE }
+                { "NOMBRE", usuario.NOMBRE },
+                { "ID_CUENTA_ORIGEN", idUsuarioToken }
             };
 
             return Ok(info);

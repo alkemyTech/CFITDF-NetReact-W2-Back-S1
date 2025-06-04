@@ -41,7 +41,18 @@ const TransaccionFormulario: React.FC<TransaccionFormularioProps> = ({ id_cuenta
       );
       setSuccess(true);
     } catch (err: any) {
-      setError(err.response?.data?.message || "Error al realizar la transacción");
+      console.error("Error al obtener los datos:", error);
+      if (err.response) {
+          // El servidor respondió con un error (código 4xx o 5xx)
+          console.error('Mensaje del backend:', err.response.data.message);
+          setError(err.response.data.message);
+      } else if (err.request) {
+          // La solicitud se hizo pero no hubo respuesta
+          console.error('No hubo respuesta del servidor');
+      } else {
+          // Error en la configuración de la solicitud
+          console.error('Error', err.message);
+      }
     } finally {
       setLoading(false);
     }
