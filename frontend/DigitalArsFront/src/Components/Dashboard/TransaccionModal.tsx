@@ -1,12 +1,76 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import axios from "axios";
-import { PageContainer } from '@toolpad/core';
+
+interface TransaccionFormularioProps {
+  id_cuenta_destino: number;
+  id_cuenta_origen: number;
+}
+
+const TransaccionFormulario: React.FC<TransaccionFormularioProps> = ({ id_cuenta_destino, id_cuenta_origen }) => {
+  const [monto, setMonto] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setMonto(Number(e.target.value));
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+
+    const token = localStorage.getItem("token");
+    const fecha = new Date().toISOString();
+
+    try {
+      await axios.post(
+        "http://localhost:5056/api/transaccion",
+        {
+          ID_CUENTA_ORIGEN: id_cuenta_origen,
+          ID_CUENTA_DESTINO: id_cuenta_destino,
+          MONTO: monto,
+          FECHA: fecha,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setSuccess(true);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Error al realizar la transacción");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 16 }}>
+      <TextField
+        label="Monto"
+        type="number"
+        value={monto}
+        onChange={handleChange}
+        required
+      />
+      <Button type="submit" variant="contained" disabled={loading}>
+        {loading ? "Enviando..." : "Enviar"}
+      </Button>
+      {error && <Typography color="error">{error}</Typography>}
+      {success && <Typography color="primary">Transacción realizada con éxito</Typography>}
+    </form>
+  );
+};
 
 const TransaccionModal = () => {
   const [alias, setAlias] = useState("");
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [confirm, setConfirm] = useState(false);
 
   const handleChange = (e: any) => {
     setAlias(e.target.value);
@@ -14,6 +78,8 @@ const TransaccionModal = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    setConfirm(false);
 
     const isOnlyNumbers = (str: string) => /^\d+$/.test(str);
 
@@ -62,13 +128,16 @@ const TransaccionModal = () => {
 
       {error && <Typography variant="h6" color="error">{error}</Typography>}
 
-      {data != null ?
+      {data != null && confirm == false ?
         <>
           <Typography variant="h6">Titular: {data.ID_CUENTA ? data.ID_CUENTA : "No id"}</Typography>
           <Typography variant="h6">Nombre: {data.NOMBRE ? data.NOMBRE : "No name"}</Typography>
-          <Button>Confirmar Cuenta</Button>
+          
+          {confirm ? null : <Button onClick={() => setConfirm(true)}>Confirmar Cuenta</Button>}
         </> : null
       }
+
+      {confirm ? <TransaccionFormulario id_cuenta_destino={data.ID_CUENTA} id_cuenta_origen={data.ID_CUENTA_ORIGEN} /> : null}
     </Box>
   );
 };
