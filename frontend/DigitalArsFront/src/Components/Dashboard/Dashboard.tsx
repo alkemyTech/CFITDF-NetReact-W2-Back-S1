@@ -12,6 +12,9 @@ import { AuthGuard } from "../auth/auth-guard";
 import AccountToolbar from './AccountToolbar';
 import ActionsToolbar from './ActionsToolbar';
 
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+const isAdmin = user.ID_ROL === 'Administrador';
+
 const NAVIGATION: Navigation = [
   {
     segment: "dashboard",
@@ -28,6 +31,15 @@ const NAVIGATION: Navigation = [
     title: "Ahorros",
     icon: <SavingsIcon />,
   },
+  ...(isAdmin
+    ? [
+        {
+          segment: "dashboard/admin",
+          title: "Admin",
+          icon: <SavingsIcon />,
+        },
+      ]
+    : []),
 ];
 
 export default function DashboardLayout() {

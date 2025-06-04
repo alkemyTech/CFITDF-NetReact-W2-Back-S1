@@ -47,17 +47,29 @@ public class AuthController : ControllerBase
         // 4. Devolver token en el header
         Response.Headers.Add("Authorization", $"Bearer {token}");
 
-        return Ok(new
+        var rolName = "";
+
+        if(user.ID_ROL == 1)
         {
-            Mensaje = "Login exitoso.",
-            token = token,
-            usuario = new
+            rolName = "Administrador";
+        }
+        else
+        {
+            rolName = "Usuario";
+        }
+
+            return Ok(new
             {
-                ID_USUARIO = user.ID_USUARIO,
-                NOMBRE = user.NOMBRE,
-                EMAIL = user.EMAIL
-            }
-        });
+                Mensaje = "Login exitoso.",
+                token = token,
+                usuario = new
+                {
+                    ID_USUARIO = user.ID_USUARIO,
+                    NOMBRE = user.NOMBRE,
+                    EMAIL = user.EMAIL,
+                    ID_ROL = rolName
+                }
+            });
         
     }
 

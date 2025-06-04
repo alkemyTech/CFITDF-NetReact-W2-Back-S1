@@ -6,7 +6,7 @@ interface Usuario {
     ID_USUARIO: number;
     NOMBRE: string;
     EMAIL: string;
-    ID_ROL: number;
+    ID_ROL: string;
 }
 
 interface UserContextType {
