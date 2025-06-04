@@ -61,7 +61,7 @@ public class CuentaController : ControllerBase
 
             if(usuario.ID_USUARIO == idUsuarioToken)
             {
-                return BadRequest(new { message = "No podés transferirte a vos mismo usando el mismo alias." });
+                return BadRequest(new { message = "No podï¿½s transferirte a vos mismo usando el mismo alias." });
             }
 
             var info = new Dictionary<string, object>
@@ -115,7 +115,27 @@ public class CuentaController : ControllerBase
 
         return Ok(cuenta);
     }
+    [HttpPost("Depositar")]
+    public ActionResult<Cuenta> Depositar([FromBody] DepositarCuentaDto dto)
+{
+    var cuenta = _cuentaRepository.GetCuentaByUsuarioId(dto.ID_USUARIO);
+    
+    if (cuenta == null)
+    {
+        return NotFound("Cuenta no encontrada");
+    }
 
+    if (dto.SALDO <= 0)
+    {
+        return BadRequest("El monto debe ser mayor a cero.");
+    }
+
+    cuenta.SALDO += dto.SALDO; // Suma el monto al saldo actual
+    
+    _cuentaRepository.UpdateCuenta(cuenta);
+
+    return Ok(cuenta);
+}
     [HttpPut("{id}")]
     public ActionResult UpdateCuenta(int id, UpdateCuentaDto updateCuentaDto)
     {
