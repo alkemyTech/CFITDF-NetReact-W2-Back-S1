@@ -1,5 +1,6 @@
 import { PageContainer, type Breadcrumb } from '@toolpad/core';
 import ConsultaAlias from './ConsultaAlias';
+import TransaccionModal from '../../TransaccionModal';
 
 function NuevaTransaccionPage() {
   const breadcrumbs: Breadcrumb[] = [
@@ -9,7 +10,7 @@ function NuevaTransaccionPage() {
 
   return (
     <PageContainer title='Nueva Transacción' breadcrumbs={breadcrumbs}>
-      <ConsultaAlias></ConsultaAlias>
+      <TransaccionModal></TransaccionModal>
     </PageContainer>
   );
 }

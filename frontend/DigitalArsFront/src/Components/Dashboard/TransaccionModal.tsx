@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { TextField, Button, Typography } from "@mui/material";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import { TextField, Button, Typography, Box } from "@mui/material";
 import axios from "axios";
+import { PageContainer } from '@toolpad/core';
 
 const TransaccionModal = () => {
   const [alias, setAlias] = useState("");
@@ -27,6 +28,8 @@ const TransaccionModal = () => {
         setError("Alias encontrado, pero no tiene un ID de usuario asociado");
         return;
       }
+
+      console.log(aliasResponse.data)
       
       console.log("ID Usuario obtenido:", id);
       setData(aliasResponse.data);
@@ -49,7 +52,7 @@ const TransaccionModal = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+    <Box sx={{display: "flex", flexDirection: "column"}}>
       <Typography variant="h5">Ingrese Alias destino</Typography>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <TextField label="Alias" name="alias" value={alias} onChange={handleChange} required />
@@ -66,7 +69,7 @@ const TransaccionModal = () => {
           <Button>Confirmar Cuenta</Button>
         </> : null
       }
-    </div>
+    </Box>
   );
 };
 
