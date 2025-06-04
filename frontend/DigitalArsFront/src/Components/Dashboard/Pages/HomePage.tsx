@@ -13,40 +13,14 @@ import {
   Box,
 } from "@mui/material";
 import { PageContainer } from "@toolpad/core";
-import type { Transaction } from "../../../types";
-import { useState } from "react";
 import SaldoCard from "@/Components/Saldo/SaldoCard";
 import { useNavigate } from 'react-router-dom';
-import BoxPlazoFijo from '@/Components/CrearPlazoFIjo/BoxPlazoFIjo';
-import { useUserContext } from '../../../Context/UserContext'; // ✅ Usás el hook personalizado
+
+import { useUserContext } from '../../../Context/UserContext'; 
 import TransaccionesPage from "./TransaccionesPage";
 
-const testTransactions: Transaction[] = [
-  {
-    ID_TRANSACCION: 1,
-    ID_CUENTA_ORIGEN: 1,
-    ID_CUENTA_DESTINO: 2,
-    FECHA: new Date(),
-    MONTO: 10000,
-  },
-  {
-    ID_TRANSACCION: 2,
-    ID_CUENTA_ORIGEN: 1,
-    ID_CUENTA_DESTINO: 2,
-    FECHA: new Date(),
-    MONTO: 5250,
-  },
-  {
-    ID_TRANSACCION: 3,
-    ID_CUENTA_ORIGEN: 1,
-    ID_CUENTA_DESTINO: 2,
-    FECHA: new Date(),
-    MONTO: 8300,
-  },
-];
 
 export default function InicioPage() {
-  const [transacciones] = useState(testTransactions);
   const navigate = useNavigate();
   const { usuario } = useUserContext(); // ✅ Traemos el usuario desde el contexto
 
@@ -59,9 +33,7 @@ export default function InicioPage() {
     >
       <SaldoCard />
 
-      <Box mt={4}>
-        <BoxPlazoFijo />
-      </Box>
+
 
       <Box mt={6}>
         <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
