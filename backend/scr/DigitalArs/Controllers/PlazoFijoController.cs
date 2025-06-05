@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
+using DigitalArs.Constantes;
 using DigitalArs.Dtos;
 using DigitalArs.Interfaces;
 using DigitalArs.Models;
-using DigitalArs.Constantes;
+using DigitalArs.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalArs.Controllers
 {
@@ -13,15 +14,37 @@ namespace DigitalArs.Controllers
     public class PlazoFijoController : ControllerBase
     {
         private readonly IPlazoFijoRepository _repo;
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly ICuentaRepository _cuentaRepository;
 
-        public PlazoFijoController(IPlazoFijoRepository repo)
+        public PlazoFijoController(IPlazoFijoRepository repo, IUsuarioRepository usuarioRepository, ICuentaRepository cuentaRepository)
         {
             _repo = repo;
+            _usuarioRepository = usuarioRepository;
+            _cuentaRepository = cuentaRepository;
         }
 
         [HttpGet("obtener todos")]
         public async Task<ActionResult<IEnumerable<PlazoFijo>>> GetTodos()
         {
+            // Obtener el ID_USUARIO del token JWT
+            var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+            int idUsuarioToken = 0;
+            if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+            {
+                idUsuarioToken = idParsed;
+            }
+
+            if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+            {
+                var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+                if (usuario.ID_ROL != 1)
+                {
+                    return BadRequest(new { message = "Acceso no autorizado. " });
+                }
+            }
+
             var lista = await _repo.ObtenerTodosAsync();
             return Ok(lista);
         }
@@ -86,6 +109,24 @@ namespace DigitalArs.Controllers
         [HttpPut("{id}/cancelar")]
         public async Task<IActionResult> Cancelar(int id)
         {
+            // Obtener el ID_USUARIO del token JWT
+            var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+            int idUsuarioToken = 0;
+            if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+            {
+                idUsuarioToken = idParsed;
+            }
+
+            if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+            {
+                var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+                if (usuario.ID_ROL != 1)
+                {
+                    return BadRequest(new { message = "Acceso no autorizado. " });
+                }
+            }
+
             var pf = await _repo.ObtenerPorIdAsync(id);
             if (pf == null) return NotFound();
 

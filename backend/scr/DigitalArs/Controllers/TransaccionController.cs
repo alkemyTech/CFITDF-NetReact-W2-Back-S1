@@ -1,14 +1,15 @@
-﻿using DigitalArs.Dtos;
+﻿using DigitalArs.Data;
+using DigitalArs.Dtos;
 using DigitalArs.Interfaces;
 using DigitalArs.Models;
+using DigitalArs.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Diagnostics.Contracts;
-using System.Threading.Tasks.Dataflow;
 using System.Security.Claims;
-using DigitalArs.Data;
+using System.Threading.Tasks.Dataflow;
 
 namespace DigitalArs.Controllers;
 
@@ -20,16 +21,36 @@ public class TransaccionController : ControllerBase
 {
     private ITransaccionRepository _transaccionRepository;
     private ICuentaRepository _cuentaRepository;
+    private IUsuarioRepository _usuarioRepository;
 
-    public TransaccionController(ITransaccionRepository transaccionRepository, ICuentaRepository cuentaRepository)
+    public TransaccionController(ITransaccionRepository transaccionRepository, ICuentaRepository cuentaRepository, IUsuarioRepository usuarioRepository)
     {
         _transaccionRepository = transaccionRepository;
         _cuentaRepository = cuentaRepository;
+        _usuarioRepository = usuarioRepository;
     }
 
     [HttpGet]
     public ActionResult<Transaccion[]> GetTransacciones()
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (usuario.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+
         return Ok(_transaccionRepository.GetAllTransacciones());
     }
 
@@ -59,6 +80,24 @@ public class TransaccionController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<Transaccion> GetTransaccion(int id)
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (usuario.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+
         Transaccion transaccion = _transaccionRepository.GetTransaccionById(id);
 
         if (transaccion != null)
@@ -132,6 +171,24 @@ public class TransaccionController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult RemoveTransaccion(int id)
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (usuario.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+
         if (_transaccionRepository.GetTransaccionById(id) is Transaccion transaccion)
         {
             _transaccionRepository.RemoveTransaccion(id);

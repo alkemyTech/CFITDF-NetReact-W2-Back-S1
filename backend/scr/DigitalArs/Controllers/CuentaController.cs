@@ -26,6 +26,24 @@ public class CuentaController : ControllerBase
     [HttpGet]
     public ActionResult<Cuenta[]> GetCuentas()
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (usuario.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+
         return Ok(_cuentaRepository.GetAllCuentas());
     }
 
@@ -153,6 +171,24 @@ public class CuentaController : ControllerBase
     [HttpPut("{id}")]
     public ActionResult UpdateCuenta(int id, UpdateCuentaDto updateCuentaDto)
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (usuario.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+
         if (_cuentaRepository.GetCuentaById(id) is Cuenta cuenta)
         {
             cuenta.SALDO = updateCuentaDto.SALDO;
@@ -169,6 +205,24 @@ public class CuentaController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult RemoveCuenta(int id)
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (usuario.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+
         if (_cuentaRepository.GetCuentaById(id) is Cuenta cuenta)
         {
             _cuentaRepository.RemoveCuenta(id);

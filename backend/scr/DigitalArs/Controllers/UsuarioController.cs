@@ -17,10 +17,12 @@ public class UsuarioController : ControllerBase
 
     private IUsuarioRepository _usuarioRepository;
     private readonly PasswordService _passwordService;
-    public UsuarioController(IUsuarioRepository usuarioRepository, PasswordService passwordService)
+    private ICuentaRepository _cuentaRepository;
+    public UsuarioController(IUsuarioRepository usuarioRepository, PasswordService passwordService, ICuentaRepository cuentaRepository)
     {
         _usuarioRepository = usuarioRepository;
         _passwordService = passwordService;
+        _cuentaRepository = cuentaRepository;
     }
 
 
@@ -28,6 +30,24 @@ public class UsuarioController : ControllerBase
     [HttpGet]
     public ActionResult<Usuario[]> GetAllUser()
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (usuario.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+
         return Ok(_usuarioRepository.GetAllUser());
     }
 
@@ -67,6 +87,24 @@ public class UsuarioController : ControllerBase
     [HttpPut("{id}")]
     public ActionResult UpdateUser(int id, UpdateUsuarioDto updateUsuarioDto)
     {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+        {
+            idUsuarioToken = idParsed;
+        }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var user = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (user.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+
         var usuario = _usuarioRepository.GetUserById(id);
         if (usuario == null)
         {
@@ -81,16 +119,33 @@ public class UsuarioController : ControllerBase
         return NoContent();
     }
 
-        [HttpDelete("{id}")]
-        public ActionResult RemoveUser(int id)
+    [HttpDelete("{id}")]
+    public ActionResult RemoveUser(int id)
+    {
+        // Obtener el ID_USUARIO del token JWT
+        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+        int idUsuarioToken = 0;
+        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
         {
-            if (_usuarioRepository.GetUserById(id) is Usuario usuario)
-            {
-                _usuarioRepository.RemoveUser(id);
-                return NoContent();
-            }
-            return NotFound();
+            idUsuarioToken = idParsed;
         }
+
+        if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+        {
+            var user = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+            if (user.ID_ROL != 1)
+            {
+                return BadRequest(new { message = "Acceso no autorizado. " });
+            }
+        }
+        if (_usuarioRepository.GetUserById(id) is Usuario usuario)
+        {
+            _usuarioRepository.RemoveUser(id);
+            return NoContent();
+        }
+        return NotFound();
     }
+}
 
 
