@@ -11,7 +11,7 @@ import AhorrosPage from './Components/Dashboard/Pages/AhorrosPage';
 import TransaccionesPage from './Components/Dashboard/Pages/TransaccionesPage';
 import NuevaTransaccionPage from './Components/Dashboard/Pages/NuevaTransaccion/NuevaTransaccionPage';
 import CrearPlazoFijo from './Components/CrearPlazoFIjo/CrearPlazoFijo';
-
+import DepositoModal from './Components/Dashboard/DepositoModal';
 
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
               <Route path="/dashboard/transacciones" element={<TransaccionesPage/>}/>
               <Route path="/dashboard/ahorros" element={<AhorrosPage/>}/>
               <Route path="/dashboard/plazofijo/crear" element={<CrearPlazoFijo />} />
+              <Route path="/dashboard/depositar" element={<DepositoModal />} />
           </Route>
           <Route path="/register" element={<RegisterPage/>}/>
         </Routes>

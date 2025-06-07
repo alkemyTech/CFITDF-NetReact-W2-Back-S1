@@ -85,6 +85,27 @@ export default function SaldoCard() {
           >
             Invertir ahora
           </Button>
+          
+        </Box>
+                  <Box>
+                    <Button
+            variant="outlined"
+            endIcon={<SavingsIcon />}
+            sx={{
+              textTransform: "none",
+              borderRadius: 3,
+              fontWeight: 600,
+              minWidth: 150,
+              color: "#fff",
+              borderColor: "#fff",
+              '&:hover': {
+                backgroundColor: 'rgba(255,255,255,0.1)',
+              }
+            }}
+           onClick={() => navigate("/dashboard/depositar")}
+
+          >
+            Ingresar Dinero          </Button>
         </Box>
       </CardContent>
     </Card>
