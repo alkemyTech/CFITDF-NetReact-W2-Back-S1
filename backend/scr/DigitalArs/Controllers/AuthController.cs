@@ -40,6 +40,12 @@ public class AuthController : ControllerBase
          bool isPasswordValid = _passwordService.VerifyPassword(user.PASS, dto.Password); //ME BUSCA CONTRASEÑAS HASHEADAS
         // bool isPasswordValid = user.PASS == dto.Password;
 
+        // Valida si el usuario esta dado de baja
+        if (user.FECHA_BAJA.HasValue)
+        {
+            return Unauthorized(new { message = "El usuario está dado de baja" });
+        }
+            
 
         // Genera el token JWT si es todo valido
         var token = _jwtService.GenerateToken(user);
