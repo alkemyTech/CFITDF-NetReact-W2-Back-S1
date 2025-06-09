@@ -68,7 +68,7 @@ public class UsuarioController : ControllerBase
         {
             NOMBRE = createUsuarioDto.NOMBRE,
             EMAIL = createUsuarioDto.EMAIL,
-            CREATION_DATE = createUsuarioDto.CREATION_DATE,
+            CREATION_DATE = DateTime.Now,
             PASS = _passwordService.HashPassword(createUsuarioDto.PASS), // PASSWORD HASHEADA
            // PASS = createUsuarioDto.PASS, // PASSWORD SIN HASHEAR
             ID_ROL = createUsuarioDto.ID_ROL
@@ -113,7 +113,7 @@ public class UsuarioController : ControllerBase
 
         usuario.NOMBRE = updateUsuarioDto.NOMBRE;
         usuario.EMAIL = updateUsuarioDto.EMAIL;
-        usuario.PASS = updateUsuarioDto.PASS;
+        usuario.PASS = _passwordService.HashPassword(updateUsuarioDto.PASS);
 
         _usuarioRepository.UpdateUser(usuario);
         return NoContent();
