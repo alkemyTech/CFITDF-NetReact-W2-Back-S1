@@ -4,6 +4,19 @@ import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { UserProvider } from './Context/UserContext'; // asegurate de que el path sea correcto
+import axios from 'axios';
+
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
