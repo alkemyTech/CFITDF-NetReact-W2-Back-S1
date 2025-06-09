@@ -236,7 +236,7 @@ export default function AdminUsuariosPage() {
         </DialogActions>
       </>
     ),
-    renderRowActions: ({ row, table }) => (
+    renderRowActions: ({ row, table }) => row.original.FECHA_BAJA ? <></> : (
       <Box sx={ { display: 'flex', gap: '1rem' } }>
         <Tooltip title="Editar">
           <IconButton onClick={ () => table.setEditingRow(row) }>
@@ -272,6 +272,11 @@ export default function AdminUsuariosPage() {
         Nuevo usuario
       </Button>
     ),
+    muiTableBodyCellProps: ({row}) => ({
+      sx: {
+        color: row.original.FECHA_BAJA ? "red" : ""
+      }
+    }),
     state: {
       isLoading: isLoadingUsers,
       isSaving: isMutatingUser,

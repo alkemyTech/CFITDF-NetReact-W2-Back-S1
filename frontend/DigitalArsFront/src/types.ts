@@ -19,6 +19,7 @@ export interface User {
   CREATION_DATE: Date;
   PASS: string;
   ID_ROL: number;
+  FECHA_BAJA: Date;
 }
 
 export interface Cuenta {
