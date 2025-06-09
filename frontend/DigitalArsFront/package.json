@@ -12,13 +12,15 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^7.1.0",
-    "@mui/material": "^7.1.0",
+    "@mui/icons-material": "^7.1.1",
+    "@mui/material": "^7.1.1",
+    "@mui/x-date-pickers": "^8.5.1",
     "@toolpad/core": "^0.15.0",
     "@types/jwt-decode": "^3.1.0",
     "axios": "^1.9.0",
     "digitalarsfront": "file:",
     "jwt-decode": "^4.0.0",
+    "material-react-table": "^3.2.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.1"
