@@ -38,12 +38,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             setUsuario(userObj); // ✅ seteamos el usuario al contexto
 
             const response = await axios.get(
-                `http://localhost:5056/api/cuenta/usuario/${userObj.ID_USUARIO}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+                `/api/cuenta/usuario/${userObj.ID_USUARIO}`,
             );
 
             console.log("Respuesta del backend:", response.data);
