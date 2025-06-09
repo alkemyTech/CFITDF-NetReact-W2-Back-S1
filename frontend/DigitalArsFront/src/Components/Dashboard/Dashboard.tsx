@@ -11,54 +11,61 @@ import { Outlet } from "react-router-dom";
 import { AuthGuard } from "../auth/auth-guard";
 import AccountToolbar from './AccountToolbar';
 import ActionsToolbar from './ActionsToolbar';
+import { useUserContext } from "@/Context/UserContext";
+import { useMemo } from "react";
 
-const user = JSON.parse(localStorage.getItem('user') || '{}');
-const isAdmin = user.ID_ROL === 'Administrador';
-
-const NAVIGATION: Navigation = [
+const ADMIN_NAVIGATION: Navigation = [
   {
-    segment: "dashboard",
-    title: "Inicio",
-    icon: <HouseIcon />,
-  },
-  {
-    segment: "dashboard/transacciones",
-    title: "Transacciones",
-    icon: <ReceiptIcon />,
-  },
-  {
-    segment: "dashboard/ahorros",
-    title: "Ahorros",
+    kind: "page",
+    title: "Administrar",
     icon: <SavingsIcon />,
+    segment: "dashboard/admin",
+    children: [
+      { title: "Usuarios", segment: "usuarios" },
+      { title: "Cuentas", segment: "cuentas" }
+    ]
   },
-  ...(isAdmin
-    ? [
-        {
-          segment: "dashboard/admin",
-          title: "Admin",
-          icon: <SavingsIcon />,
-        },
-      ]
-    : []),
-];
+]
+
 
 export default function DashboardLayout() {
+  const {usuario} = useUserContext()
+  const isAdmin = usuario?.ID_ROL === 'Administrador';
+
+  const NAVIGATION = useMemo<Navigation>(() => [
+    {
+      segment: "dashboard",
+      title: "Inicio",
+      icon: <HouseIcon />,
+    },
+    {
+      segment: "dashboard/transacciones",
+      title: "Transacciones",
+      icon: <ReceiptIcon />,
+    },
+    {
+      segment: "dashboard/ahorros",
+      title: "Ahorros",
+      icon: <SavingsIcon />,
+    },
+    ...(isAdmin ? ADMIN_NAVIGATION : [])
+  ], [usuario])
   const theme = useTheme()
   return (
     <AuthGuard>
       <ReactRouterAppProvider
-        navigation={NAVIGATION}
-        theme={theme}
-        branding={{
+        navigation={ NAVIGATION }
+        theme={ theme }
+        branding={ {
           logo: <></>,
           title: "Digital ARS",
           homeUrl: "/dashboard",
-        }}
+        } }
       >
-        <CoreDashboardLayout slots={{
+        <CoreDashboardLayout slots={ {
           toolbarAccount: AccountToolbar,
           toolbarActions: ActionsToolbar
-        }}>
+        } }>
           <Outlet />
         </CoreDashboardLayout>
       </ReactRouterAppProvider>
