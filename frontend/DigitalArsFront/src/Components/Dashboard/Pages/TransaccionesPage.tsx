@@ -15,6 +15,7 @@ import axios from "axios";
 
 interface Transaccion {
   ID_TRANSACCION: number;
+  ID_CUENTA_ORIGEN: number;
   FECHA: Date; // Aseguramos que la fecha sea un objeto Date
   MONTO: number;
 }
@@ -26,6 +27,9 @@ interface Props {
 
 export default function TransaccionesPage({standalone = true}: Props) {
   const [transacciones, setTransacciones] = useState<Transaccion[]>([]);
+
+  const user = localStorage.getItem('user');
+  const id_usuario = user ? JSON.parse(user).ID_USUARIO : null;
 
   useEffect(() => {
     const fetchTransacciones = async () =>{
@@ -71,6 +75,7 @@ export default function TransaccionesPage({standalone = true}: Props) {
               <TableRow>
                 <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Fecha</TableCell>
                 <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Monto</TableCell>
+                <TableCell sx={{ color: "#fff", fontWeight: "bold" }}>Tipo</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -84,10 +89,15 @@ export default function TransaccionesPage({standalone = true}: Props) {
                     })}
                   </TableCell>
                   <TableCell>
-                    {row.MONTO.toLocaleString("es-AR", {
+                    <span style={{ color: id_usuario === row.ID_CUENTA_ORIGEN ? "red" : "green" }}>
+                      {row.MONTO.toLocaleString("es-AR", {
                       style: "currency",
                       currency: "ARS",
-                    })}
+                      })}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    {id_usuario === row.ID_CUENTA_ORIGEN ? "Emitido" : "Recibido"}
                   </TableCell>
                 </TableRow>
               ))}
