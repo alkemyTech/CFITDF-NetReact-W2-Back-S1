@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,15 +100,17 @@ builder.Services.AddSwaggerGen(c =>
 // Agrego cors para permitir solicitudes desde el frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        corsBuilder =>
-        {
-            corsBuilder.WithOrigins("http://localhost:5173")
-                       .AllowAnyHeader()
-                       .AllowAnyMethod()
-                       .AllowCredentials()
-                       .WithExposedHeaders("Authorization"); // leer ese header desde JS
-        });
+    options.AddPolicy("AllowFrontend", corsBuilder =>
+    {
+        corsBuilder
+            .WithOrigins("http://localhost:5173",
+            "http://localhost:5000",
+            "http://gc.kis.v2.scr.kaspersky-labs.com")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .WithExposedHeaders("Authorization");
+    });
 });
 var app = builder.Build();
 
@@ -123,10 +126,17 @@ if (app.Environment.IsDevelopment())
 }
 
 
+
+
 // Usa CORS
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseRouting();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+//METRICAS
+app.UseHttpMetrics();
+app.MapMetrics();
+
 app.MapControllers();
 app.Run();

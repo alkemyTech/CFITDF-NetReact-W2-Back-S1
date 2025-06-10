@@ -16,6 +16,7 @@ CREATE TABLE USUARIO (
 	PASS NVARCHAR(150) NOT NULL,
 	CREATION_DATE DATETIME DEFAULT GETDATE(),
 	ID_ROL INT NOT NULL,
+    FECHA_BAJA DATETIME,
 
 	CONSTRAINT FK_ROL_CUENTA
 		FOREIGN KEY (ID_ROL)
@@ -47,7 +48,8 @@ CREATE TABLE TRANSACCIONES (
 
 	CONSTRAINT FK_TRANSACCION_ORIGEN
 		FOREIGN KEY (ID_CUENTA_ORIGEN)
-		REFERENCES CUENTA(ID_CUENTA),
+		REFERENCES CUENTA(ID_CUENTA)
+		ON DELETE CASCADE,
 
 	CONSTRAINT FK_TRANSACCION_DESTINO
 		FOREIGN KEY (ID_CUENTA_DESTINO)
@@ -83,7 +85,7 @@ INSERT INTO ROL(NOMBRE_ROL)
 VALUES('NORMAL');
 
 -- Admin
--- Contraseña: 12341234
+-- Contraseï¿½a: 12341234
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('admin1', 'admin1@gmail.com', 'AQAAAAIAAYagAAAAEM6fUMzmUoPJX6f45bMFWCrNOUOKoyvZOdvWbOcroxiViiHuKyQ9ld423g45qZnuwg==', 1);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -92,7 +94,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.admin.1', 1234567890123456);
 GO
 
 -- Usuario 1
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Juan P rez', 'juan.perez@mail.com', 'AQAAAAIAAYagAAAAEMwerU9rI6704Hpt7Xmz+lZsTCGwV9KeVBXxH17R/merLXaovqWco7ySQvoAODDBhQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -101,7 +103,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.juan.perez', 1234567890000001);
 GO
 
 -- Usuario 2
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Mar a G mez', 'maria.gomez@mail.com', 'AQAAAAIAAYagAAAAEOVbyrLGHjDWRBbPdNX6PLweN1SdeFU2D2neUEcoC4dBzXVtd26Kqe6B6yStNl/jEg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -110,7 +112,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.maria.gomez', 1234567890000002);
 GO
 
 -- Usuario 3
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Carlos L pez', 'carlos.lopez@mail.com', 'AQAAAAIAAYagAAAAEDUflfk7t9vxhO2mS0qbRG4O33KtfBDSuPU5cB31cr0JwwS3Xdzn73Ekdg1sjEBg8g==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -119,7 +121,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.carlos.lopez', 1234567890000003);
 GO
 
 -- Usuario 4
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Ana Mart nez', 'ana.martinez@mail.com', 'AQAAAAIAAYagAAAAECQoQcBFOSu1fSsBHyW8zY7TGesdluEJzivKNfKQgW8wj5gxbd3ugKHzN9ZmKUxHjg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -128,7 +130,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.ana.martinez', 1234567890000004);
 GO
 
 -- Usuario 5
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Pedro Ram rez', 'pedro.ramirez@mail.com', 'AQAAAAIAAYagAAAAEIvsRbt7fwaXZVvfloDuOgt2Jk2i7hwiNYFgCv9ZDwwXjn6LZQ5mx49H5HFpI1rkMg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -137,7 +139,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.pedro.ramirez', 1234567890000005);
 GO
 
 -- Usuario 6
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Laura S nchez', 'laura.sanchez@mail.com', 'AQAAAAIAAYagAAAAEHqBeqxjppyqmZH+d7rJIAUQWddxZojj0mcX9+M/VCM2tDccabKsYal2LK66mltJZQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -146,7 +148,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.laura.sanchez', 1234567890000006);
 GO
 
 -- Usuario 7
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Diego Torres', 'diego.torres@mail.com', 'AQAAAAIAAYagAAAAEBR8NpOzR/PkUaYDqyzTS+u8YiQ5COf1aOWsc6F442Fpyt/5tXQrUFyFWNE8NnMzkQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -155,7 +157,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.diego.torres', 1234567890000007);
 GO
 
 -- Usuario 8
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Camila D az', 'camila.diaz@mail.com', 'AQAAAAIAAYagAAAAELWo4JODUoTtp4V4dEtsneovyTP9KgkWk2iM8JKx6ifYS2ZBdAZn/1MRQlkO7vCtQg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -164,7 +166,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.camila.diaz', 1234567890000008);
 GO
 
 -- Usuario 9
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Luc a Romero', 'lucia.romero@mail.com', 'AQAAAAIAAYagAAAAEAUUypLf6w33Kh8cw+1vdjnb1Q5tMsj1MDymiHESMozOx3+hBekj51CaFFhtIGjf5Q==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -173,7 +175,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.lucia.romero', 1234567890000009);
 GO
 
 -- Usuario 10
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Javier Herrera', 'javier.herrera@mail.com', 'AQAAAAIAAYagAAAAEK8QEMdK8P8nGj372ALbPm0ay1pI/+u7/uosWl9ZjsTO/tkU7t5F0gDUE2MFW6mhmA==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -182,7 +184,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.javier.herrera', 1234567890000010);
 GO
 
 -- Usuario 11
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Valentina Rojas', 'valentina.rojas@mail.com', 'AQAAAAIAAYagAAAAEA6Wmz1n2PxpJh7gz809nmajFO5NSCegU7mna1AuwByik3OAjLlf6nLiFr4j0TDIlg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -191,7 +193,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.valentina.rojas', 1234567890000011);
 GO
 
 -- Usuario 12
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Mart n Castro', 'martin.castro@mail.com', 'AQAAAAIAAYagAAAAEFUE5fHHO3DR4TLNKK9Igs2YYih6WMd/uXNiaCzNnGBUIPNuOUrVQh5k9FtQjiOOhQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -200,7 +202,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.martin.castro', 1234567890000012);
 GO
 
 -- Usuario 13
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Sof a Morales', 'sofia.morales@mail.com', 'AQAAAAIAAYagAAAAEA1f/Z6n7nefWC1Mlep25A1qILY0y+q6lqiBJerjTWpCuEuRQEd7gSHU+4sFn6cKlQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -209,7 +211,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.sofia.morales', 1234567890000013);
 GO
 
 -- Usuario 14
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Federico Aguirre', 'federico.aguirre@mail.com', 'AQAAAAIAAYagAAAAEKc0evB4xaEHMIz+gjqxawPaArJPoFZJpfoNfF5gS3qy4D5YX+ZFL4soaVbtT759Rg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -218,7 +220,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.federico.aguirre', 1234567890000014);
 GO
 
 -- Usuario 15
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Isabella Paredes', 'isabella.paredes@mail.com', 'AQAAAAIAAYagAAAAECa5sPw0x/jFpuGT9919e4UqttgFSigGwGrefsdKhsk/WN61xztDI/mXDs71uWbD9w==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -227,7 +229,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.isabella.paredes', 1234567890000015);
 GO
 
 -- Usuario 16
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Tom s Ib  ez', 'tomas.ibanez@mail.com', 'AQAAAAIAAYagAAAAEFzm/67u/GhHxZq3sQN4K0QF6lDwxWr3I3mYLfSI4JWldLs85aVQXFCSLypOSQ+R/Q==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -236,7 +238,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.tomas.ibanez', 1234567890000016);
 GO
 
 -- Usuario 17
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Emilia Vera', 'emilia.vera@mail.com', 'AQAAAAIAAYagAAAAEO+LUg1Y1n+sGDWRwXdbSG1AZOPDfuCbyZUEwf340D+NCoO7gmZfMHxRtM8X7A3tag==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -245,7 +247,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.emilia.vera', 1234567890000017);
 GO
 
 -- Usuario 18
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Mat as Salas', 'matias.salas@mail.com', 'AQAAAAIAAYagAAAAEBbSQqJmu8Lrj8i46eDg7j5lly5ioelpYEfKSsnRWx0KzcZ7zqYjs+i8ehuvP3IEHQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -254,7 +256,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.matias.salas', 1234567890000018);
 GO
 
 -- Usuario 19
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Agustina Godoy', 'agustina.godoy@mail.com', 'AQAAAAIAAYagAAAAEOD0bOOaUP4FSEB2Jx/mqS42N3PcFwRkTJduyCQ7qjqNk/YtYvtQTH0/P1Yq/O85xg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -263,7 +265,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.agustina.godoy', 1234567890000019);
 GO
 
 -- Usuario 20
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Nicol s Silva', 'nicolas.silva@mail.com', 'AQAAAAIAAYagAAAAECSl2E/V+gWIuWgDTu5FQmLZ7fkNGSsag0fTSOcBYbqcyvej2OONitZRNbFahngpmg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -272,7 +274,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.nicolas.silva', 1234567890000020);
 GO
 
 -- Usuario 21
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Florencia Navarro', 'florencia.navarro@mail.com', 'AQAAAAIAAYagAAAAEAiH86SZUh8377oHlZjrYRGqjnkVUn8Dv5sMGY0T0S1B9QrdIzhom6UkWG5796nmXQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -281,7 +283,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.florencia.navarro', 1234567890000021)
 GO
 
 -- Usuario 22
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Sebasti n Correa', 'sebastian.correa@mail.com', 'AQAAAAIAAYagAAAAEI+YwRwqo+jzaINvxtGVi4D3k98F8SHEHWLT5Y13yC6WeIl9t4OI1S6xCpPQUiwwBQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -290,7 +292,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.sebastian.correa', 1234567890000022);
 GO
 
 -- Usuario 23
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Julieta M ndez', 'julieta.mendez@mail.com', 'AQAAAAIAAYagAAAAEKANGvWij4Zr4c3esvv0oEwvlhZYI+3IzXwb9oueCGbTt7llPwo+ZDo84O2zRc0mIg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -299,7 +301,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.julieta.mendez', 1234567890000023);
 GO
 
 -- Usuario 24
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Gonzalo Far as', 'gonzalo.farias@mail.com', 'AQAAAAIAAYagAAAAEAf8rBH//6Ei7JbcZH3WUWzpthHeXJZeCi8/za7+BKM+U6WMSi+dWRxK5dwfrSGiKQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -308,7 +310,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.gonzalo.farias', 1234567890000024);
 GO
 
 -- Usuario 25
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Milagros Quiroga', 'milagros.quiroga@mail.com', 'AQAAAAIAAYagAAAAEEa4Y5ndPPXf7OLBoJw33fpRAzcv5not0LN2sdk48Uw2FnrTVLbhull85VHRHw8ReA==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -317,7 +319,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.milagros.quiroga', 1234567890000025);
 GO
 
 -- Usuario 26
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Ramiro Pe a', 'ramiro.pena@mail.com', 'AQAAAAIAAYagAAAAEFwMcKWBZN3gy2I4vWohmNiYqc0BmHHeQW+JkyLMn+NmcKYEbBVM1Ss7R8Yi/tgSEg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -326,7 +328,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.ramiro.pena', 1234567890000026);
 GO
 
 -- Usuario 27
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Martina Ruiz', 'martina.ruiz@mail.com', 'AQAAAAIAAYagAAAAEAwlJM7hnvG0GKZwyusxfCaM56IL4tBSlQE97gNr9Ge6JaZemJoFdEBu9O7QiPRZrA==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -335,7 +337,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.martina.ruiz', 1234567890000027);
 GO
 
 -- Usuario 28
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Leandro Molina', 'leandro.molina@mail.com', 'AQAAAAIAAYagAAAAELCr6sr6YnUHTEpQW7TUikZcS2nyo4uybQWNpldiLgvwdEYp1a7daxzHLHPOTlwGCg==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -344,7 +346,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.leandro.molina', 1234567890000028);
 GO
 
 -- Usuario 29
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Bianca Ayala', 'bianca.ayala@mail.com', 'AQAAAAIAAYagAAAAECkqfZ2pMq++0OEzBcdpG3n+8uPYqW+khHxmncVTI9UIadGEhJVJbzqFJxHZUuKtEQ==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -353,7 +355,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.bianca.ayala', 1234567890000029);
 GO
 
 -- Usuario 30
--- Contraseña: clave123
+-- Contraseï¿½a: clave123
 INSERT INTO USUARIO (NOMBRE, EMAIL, PASS, ID_ROL)
 VALUES ('Facundo Del R o', 'facundo.delrio@mail.com', 'AQAAAAIAAYagAAAAEIwM1ewRENjzXy5QAvCRgmjD02IAmH80NdXC8NmJ5p/u8pboR9Y92BIkxPKX6Vue2w==', 2);
 DECLARE @ID_USUARIO INT = SCOPE_IDENTITY();
@@ -362,7 +364,7 @@ VALUES (@ID_USUARIO, 10000.00, 'digitalars.facundo.delrio', 1234567890000030);
 GO
 
 -- transacciones
-INSERT INTO TRANSACCIONES (ID_CUENTA_ORIGEN, ID_CUENTA_DESTINO, MONTO, TIPO)
+INSERT INTO TRANSACCIONES (ID_CUENTA_ORIGEN, ID_CUENTA_DESTINO, MONTO)
 VALUES (2, 3, 1500),
        (3, 2, 1500),
        (4, 5, 2000),
@@ -389,3 +391,107 @@ VALUES
 (10, 1000, 90, 5.5, 'EN PROCESO'),
 (11, 2000, 30, 3.2, 'VALIDO');
 GO
+
+
+-- Obtener el saldo y alias de cada cuenta con nombre de usuario y rol
+SELECT 
+    U.NOMBRE AS Usuario,
+    R.NOMBRE_ROL AS Rol,
+    C.SALDO,
+    C.ALIAS
+FROM CUENTA c
+JOIN USUARIO U ON C.ID_USUARIO = U.ID_USUARIO
+JOIN ROL R ON U.ID_ROL = R.ID_ROL;
+
+-- Ver el historial de transacciones de una cuenta especÃ­fica
+SELECT 
+    T.ID_TRANSACCION,
+    CO.ALIAS AS Cuenta_Origen,
+    CD.ALIAS AS Cuenta_Destino,
+    T.MONTO,
+    T.FECHA
+FROM TRANSACCIONES T
+JOIN CUENTA CO ON T.ID_CUENTA_ORIGEN = CO.ID_CUENTA
+JOIN CUENTA CD ON T.ID_CUENTA_DESTINO = CD.ID_CUENTA
+WHERE CO.ID_CUENTA = 1 OR CD.ID_CUENTA = 6
+ORDER BY T.FECHA DESC;
+
+SELECT * FROM USUARIO;
+
+-- Consultar todos los plazos fijos de un usuario
+SELECT 
+    U.NOMBRE,
+    C.ALIAS,
+    PF.MONTO,
+    PF.PLAZO,
+    PF.TASA_INTERES,
+    PF.FECHA_INICIO,
+    PF.FECHA_VENCIMIENTO,
+    PF.INTERES_GENERADO,
+    PF.ESTADO
+FROM PLAZO_FIJO PF
+JOIN CUENTA C ON PF.ID_CUENTA = C.ID_CUENTA
+JOIN USUARIO U ON C.ID_USUARIO = U.ID_USUARIO
+WHERE U.ID_USUARIO = 5;
+
+-- Usuarios con el mayor saldo total
+SELECT 
+    U.NOMBRE,
+    (SELECT SUM(C.SALDO) FROM CUENTA C WHERE C.ID_USUARIO = U.ID_USUARIO) AS SaldoTotal
+FROM USUARIO U
+ORDER BY SaldoTotal DESC;
+
+-- Ordenar usuarios por menor saldo
+SELECT 
+    U.NOMBRE,
+    (SELECT SUM(C.SALDO) FROM CUENTA C WHERE C.ID_USUARIO = U.ID_USUARIO) AS SaldoTotal
+FROM USUARIO U
+ORDER BY SaldoTotal ASC
+
+-- Usuario con mas transacciones
+SELECT TOP 1
+    U.NOMBRE AS Usuario,
+    COUNT(T.ID_TRANSACCION) AS Cantidad_Transacciones
+FROM TRANSACCIONES T
+JOIN CUENTA C ON T.ID_CUENTA_ORIGEN = C.ID_CUENTA OR T.ID_CUENTA_DESTINO = C.ID_CUENTA
+JOIN USUARIO U ON C.ID_USUARIO = U.ID_USUARIO
+GROUP BY U.NOMBRE
+ORDER BY Cantidad_Transacciones DESC;
+
+-- Saldo Promedio por Rol
+SELECT 
+    R.NOMBRE_ROL AS Rol,
+    AVG(C.SALDO) AS Saldo_Promedio
+FROM CUENTA C
+JOIN USUARIO U ON C.ID_USUARIO = U.ID_USUARIO
+JOIN ROL R ON U.ID_ROL = R.ID_ROL
+GROUP BY R.NOMBRE_ROL;
+
+-- Plazos fijos prÃ³ximos a vencer
+SELECT 
+    U.NOMBRE AS Usuario,
+    C.ALIAS AS Cuenta,
+    PF.MONTO,
+    PF.PLAZO,
+    PF.FECHA_VENCIMIENTO,
+    PF.ESTADO
+FROM PLAZO_FIJO PF
+JOIN CUENTA C ON PF.ID_CUENTA = C.ID_CUENTA
+JOIN USUARIO U ON C.ID_USUARIO = U.ID_USUARIO
+WHERE PF.FECHA_VENCIMIENTO BETWEEN GETDATE() AND DATEADD(DAY, 30, GETDATE())
+ORDER BY PF.FECHA_VENCIMIENTO ASC;
+
+-- Usuarios con plazos fijos segÃºn su estado
+SELECT 
+    U.NOMBRE AS Usuario,
+    C.ALIAS AS Cuenta,
+    PF.MONTO,
+    PF.PLAZO,
+    PF.TASA_INTERES,
+    PF.FECHA_INICIO,
+    PF.FECHA_VENCIMIENTO,
+    PF.ESTADO
+FROM PLAZO_FIJO PF
+JOIN CUENTA C ON PF.ID_CUENTA = C.ID_CUENTA
+JOIN USUARIO U ON C.ID_USUARIO = U.ID_USUARIO
+WHERE PF.ESTADO = 'VALIDO';

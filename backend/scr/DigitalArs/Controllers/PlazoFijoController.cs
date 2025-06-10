@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
+using DigitalArs.Constantes;
 using DigitalArs.Dtos;
 using DigitalArs.Interfaces;
 using DigitalArs.Models;
-using DigitalArs.Constantes;
+using DigitalArs.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalArs.Controllers
 {
@@ -13,16 +14,38 @@ namespace DigitalArs.Controllers
     public class PlazoFijoController : ControllerBase
     {
         private readonly IPlazoFijoRepository _repo;
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly ICuentaRepository _cuentaRepository;
 
-        public PlazoFijoController(IPlazoFijoRepository repo)
+        public PlazoFijoController(IPlazoFijoRepository repo, IUsuarioRepository usuarioRepository, ICuentaRepository cuentaRepository)
         {
             _repo = repo;
+            _usuarioRepository = usuarioRepository;
+            _cuentaRepository = cuentaRepository;
         }
 
-        [HttpGet("/obtener todos")]
+        [HttpGet("obtener todos")]
         public async Task<ActionResult<IEnumerable<PlazoFijo>>> GetTodos()
         {
-            var lista = await _repo.ObtenerTodosAsync();
+            // Obtener el ID_USUARIO del token JWT
+            var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+            int idUsuarioToken = 0;
+            if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+            {
+                idUsuarioToken = idParsed;
+            }
+
+            if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+            {
+                var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+                if (usuario.ID_ROL != 1)
+                {
+                    return BadRequest(new { message = "Acceso no autorizado. " });
+                }
+            }
+
+            var lista = await _repo.ObtenerTodosAsync() ?? new List<PlazoFijo>();
             return Ok(lista);
         }
 
@@ -39,27 +62,18 @@ namespace DigitalArs.Controllers
             return Ok(dto);
         }
         // CREA EL PLAZO FIJO USANDO EL CUERPO DE CREATEPLAZOFIJODTO Y ADEMAS AGREGA LOS C�LCULOS NECESARIOS
-        [HttpPost("/Crear")]
+        [HttpPost("Crear")]
         public async Task<ActionResult<PlazoFijoResultadoDto>> Crear([FromBody] CreatePlazoFijoDto dto)
         {
-            var plazoFijo = new PlazoFijo
+            try
             {
-                MONTO = dto.Monto,
-                PLAZO = dto.Plazo,
-                FECHA_INICIO = dto.Fecha_Inicio,
-                ID_CUENTA = dto.UsuarioId,
-                ESTADO = EstadosPlazoFijo.VIGENTE
-            };
-
-            plazoFijo.DeterminarTasaPorPlazo();
-            plazoFijo.CalcularInteres();
-            plazoFijo.CalcularFechaVencimiento();
-            plazoFijo.ActualizarEstado();
-
-            var creado = await _repo.CrearAsync(plazoFijo);
-            var resultado = MapearAResultadoDto(creado);
-
-            return CreatedAtAction(nameof(GetPorId), new { id = creado.ID_PLAZOFIJO }, resultado);
+                var resultado = await _repo.CrearAsync(dto);
+                return CreatedAtAction(nameof(GetPorId), new { id = resultado.FechaInicio }, resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // [HttpPut("{id}/Actualizar")]
@@ -95,6 +109,24 @@ namespace DigitalArs.Controllers
         [HttpPut("{id}/cancelar")]
         public async Task<IActionResult> Cancelar(int id)
         {
+            // Obtener el ID_USUARIO del token JWT
+            var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
+            int idUsuarioToken = 0;
+            if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
+            {
+                idUsuarioToken = idParsed;
+            }
+
+            if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
+            {
+                var usuario = _usuarioRepository.GetUserById(admin.ID_USUARIO);
+
+                if (usuario.ID_ROL != 1)
+                {
+                    return BadRequest(new { message = "Acceso no autorizado. " });
+                }
+            }
+
             var pf = await _repo.ObtenerPorIdAsync(id);
             if (pf == null) return NotFound();
 
@@ -105,6 +137,23 @@ namespace DigitalArs.Controllers
             await _repo.ActualizarAsync(pf);
 
             return NoContent();
+        }
+        [HttpGet("usuario/{idUsuario}")]
+        public async Task<ActionResult<IEnumerable<PlazoFijoResultadoDto>>> ObtenerPorUsuario(int idUsuario)
+        {
+            var plazos = await _repo.ObtenerPorUsuarioAsync(idUsuario) ?? new List<PlazoFijo>();
+            var resultado = plazos.Select(p => new PlazoFijoResultadoDto
+            {
+                Monto = p.MONTO,
+                PlazoDias = p.PLAZO,
+                TasaInteres = p.TASA_INTERES,
+                FechaInicio = p.FECHA_INICIO,
+                FechaVencimiento = p.fecha_vencimiento,
+                InteresGenerado = p.INTERES_GENERADO,
+                MontoFinal = p.ObtenerMontoTotalAlVencimiento(),
+                Estado = p.ESTADO
+            });
+            return Ok(resultado);
         }
 
     }

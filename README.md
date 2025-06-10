@@ -1,97 +1,105 @@
-Repositorio Back Squad 1 | NetReact | CFI TDF 25
+# DigitalArs Wallet
 
-# Guía para levantar el entorno de desarrollo.
+**DigitalArs** es una aplicación full stack de billetera virtual desarrollada con:
+- **Frontend:** React + Material UI + Toolpad
+- **Backend:** .NET 8 Web API (C#)
+- **Base de datos:** SQL Server 2022
+- **DevOps y monitoreo:** Docker Compose, Prometheus, Grafana, Telegraf
 
-## 1.  Requisitos previos
+---
 
- - Docker Desktop instalado y corriendo en modo Linux Containers.
+##  Características principales
 
- - Acceso a la carpeta del proyecto (mejor si es fuera de carpetas sincronizadas).
+- Login y autenticación con JWT.
+- CRUD de usuarios y cuentas.
+- Panel de administración con edición en tablas (MaterialReactTable).
+- Monitoreo profesional (Prometheus, Grafana).
+- Preparado para correr en entornos Docker o en local.
 
--  Archivo .env en la raíz, con los valores necesarios.
+---
 
- - Recursos suficientes asignados a Docker (mínimo 2 GB RAM, 2 CPU).
+##  Requisitos previos
 
--  Permisos de administrador si es necesario (para instalar Docker o mapear puertos bajos).
+- [Docker y Docker Compose](https://docs.docker.com/get-docker/) instalados.
+- (Opcional para desarrollo) [Node.js](https://nodejs.org/) y [.NET SDK 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
-## 2. Estructura del proyecto
+---
 
+##  Levantar el entorno completo
 
-|--- 
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/tuusuario/digitalars-wallet.git
+   cd digitalars-wallet
+2. **Crear archivo .env en la raíz:**
 
-├── backend/
+DB_PASSWORD=TuPasswordSegura123!
+JWT_SECRET_KEY=UnaClaveSuperSecreta
 
-├── frontend/
+3. **Levantar la app (backend, frontend, base, monitoreo, todo):**
 
-|── bacups
-
-├── infra/
-
-│   ├── prometheus/
-
-│   ├── grafana/
-
-│   └── telegraf/
-
-├── docker-compose.yml
-
-└── .env
-
-## 3. Variables de entorno
------- ¡ VER VARIABLES DE ENTORNO AL FINAL DEL DOCUMENTO (A MODO DE PRACTICA)!----------------
-Los archivos .env se guardan en la carpeta envs/.
-
-Antes de levantar el entorno, copiá el .env adecuado a la raíz del proyecto.
-
-## 4. Levantar el entorno
 docker-compose up --build
 
-## 5. Puertos de cada servicio
+4. **Acceder desde el navegador:**
 
-Backend     	  http://localhost:5000	         5000	  API .NET
+Frontend: http://localhost:5173
 
-Frontend	      http://localhost:3000	         3000	  React
+Backend Swagger API: http://localhost:5000/swagger
 
-SQL Server		                                  1433   Base de datos
+Grafana: http://localhost:3003
+(usuario y clave por defecto: admin / admin)
 
-Prometheus	    http://localhost:9090	         9090	  Métricas
+Prometheus: http://localhost:9090
 
-Grafana	       http://localhost:3000	         3000	  Dashboards/monitoreo
+Usuarios iniciales:
+Crea usuarios y cuentas desde el panel admin.
 
-Telegraf	      http://localhost:9273/metrics	 9273	  Exportador de métricas
+## 📝 Estructura del proyecto
+
+digitalars-wallet/
+│
+├── backend/                  # Código fuente del backend .NET
+│   └── scr/DigitalArs
+│
+├── frontend/                 # Código fuente del frontend React
+│   └── DigitalArsFront
+│
+├── infra/                    # Configuración de monitoreo
+│   ├── prometheus/
+│   └── telegraf/
+│
+├── backups/                  # Carpeta para backups de la BD
+│
+├── docker-compose.yml
+└── README.md
+
+## Flujos de desarrollo
+**Desarrollo local sin Docker**
+Backend:
+cd backend/scr/DigitalArs
+dotnet run
+
+Frontend:
+cd frontend/DigitalArsFront
+npm install
+npm run dev
+
+**🔒 Seguridad y JWT**
+El backend requiere autenticación por JWT.
+
+El token se guarda en localStorage al hacer login.
 
 
-## 6. Flujo de trabajo con ramas 
+**📈 Monitoreo**
+Grafana y Prometheus ya están configurados y corriendo por default.
 
-        Para mantener el proyecto ordenado y estable.
+Accedé a los dashboards en http://localhost:3003.
 
-        ### Ramas principales
+**💡 ToDo y mejoras**
+ - Agregar pruebas automáticas (unitarias e integración)
 
-        - **`main`**  
-        Rama principal y siempre estable. Todo lo que está en `main` debe pasar los tests y estar listo para desplegar en producción.
+ - Mejorar la experiencia de usuario mobile
 
-        - **`dev`**  
-        Rama de desarrollo donde se integran todas las nuevas funcionalidades y correcciones antes de pasar a `main`. 
+ - Agregar logs más detallados en backend y frontend
 
-        **SUBIR CAMBIOS**
-        ```bash
-        git checkout dev
-        git push origin dev
-
-
-## 7. Recomendaciones
-
-Cambiá los puertos en el docker-compose.yml si alguno ya está en uso en tu maquina.
-
-Los datos de la base de datos se mantienen en el contenedor gracias a los volúmenes configurados.
-
-Consultá Grafana (por defecto pass: admin/admin) y Prometheus para monitorear el sistema.
-
-
-¡VARIABLES DE ENTORNO!
-
-|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-|.env                                                                                    |
-|   DB_PASSWORD=Admin1234.  # Mínimo 8 caracteres, mayúsculas, números y símbolos        |
-|                                   |
-||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ 

@@ -2,8 +2,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/material": "^7.1.0",
-    "framer-motion": "^12.15.0"
+    "@mui/material": "^5.15.14",
+    "framer-motion": "^12.15.0",
+    "jwt-decode": "^4.0.0"
   },
   "devDependencies": {
     "vite-tsconfig-paths": "^5.1.4"

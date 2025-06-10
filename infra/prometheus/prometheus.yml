@@ -1,12 +1,14 @@
 global:
-#intervalo de tiempo entre consultas
   scrape_interval: 5s
 
-#Expongo el puerto 9273 para que telegraf pueda enviar las métricas
 scrape_configs:
-  - job_name: 'telegraf'
+  - job_name: 'backend'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['backend:5000']
+
+  - job_name: 'sqlserver'
     static_configs:
       - targets: ['telegraf:9273']
-  - job_name: 'stress_app'
-    static_configs:
-      - targets: ['host.docker.internal:5000']
+
+      

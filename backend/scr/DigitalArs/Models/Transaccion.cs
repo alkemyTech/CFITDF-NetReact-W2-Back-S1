@@ -11,6 +11,5 @@ namespace DigitalArs.Models
         public int ID_CUENTA_DESTINO { get; set; }
         public double MONTO { get; set; }
         public DateTime FECHA { get; set; }
-        public required string TIPO { get; set; }
     }
 }

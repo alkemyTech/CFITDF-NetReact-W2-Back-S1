@@ -1,6 +1,7 @@
 ﻿using DigitalArs.Constantes;
 using DigitalArs.Dtos;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalArs.Models
 {
@@ -8,14 +9,15 @@ namespace DigitalArs.Models
     {
         [Key]
         public int ID_PLAZOFIJO { get; set; }
-        public int ID_CUENTA { get; set; }
+        public int ID_CUENTA { get; set; }        
         public decimal MONTO { get; set; }
         public int PLAZO { get; set; }
         public decimal TASA_INTERES { get; set; }
         public DateTime FECHA_INICIO { get; set; }
         public DateTime fecha_vencimiento { get; set; }
-        public double INTERES_GENERADO { get; set; }
+        public decimal INTERES_GENERADO { get; set; }
         public required string ESTADO { get; set; }
+
 
 
         public void CalcularFechaVencimiento()
@@ -24,8 +26,8 @@ namespace DigitalArs.Models
         }
         public void CalcularInteres()
         {
-            double tasaDiaria = (double)TASA_INTERES / 100 / 365;
-            INTERES_GENERADO = (double)MONTO * tasaDiaria * PLAZO;
+            decimal tasaDiaria = TASA_INTERES / 100 / 365;
+            INTERES_GENERADO = MONTO * tasaDiaria * PLAZO;
         }
         public void ActualizarEstado()
         {
@@ -38,9 +40,8 @@ namespace DigitalArs.Models
         }
         public decimal ObtenerMontoTotalAlVencimiento()
         {
-            return MONTO + (decimal)INTERES_GENERADO;
+            return MONTO + INTERES_GENERADO;
         }
-
 
         public void DeterminarTasaPorPlazo()
         {
