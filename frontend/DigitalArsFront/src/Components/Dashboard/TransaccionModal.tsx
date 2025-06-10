@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import axios from "axios";
+import { useUserContext } from '../../Context/UserContext';
 
 interface TransaccionFormularioProps {
   id_cuenta_destino: number;
@@ -12,7 +13,7 @@ const TransaccionFormulario: React.FC<TransaccionFormularioProps> = ({ id_cuenta
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMonto(Number(e.target.value));
   };
@@ -28,7 +29,7 @@ const TransaccionFormulario: React.FC<TransaccionFormularioProps> = ({ id_cuenta
 
     try {
       await axios.post(
-        "http://localhost:5056/api/transaccion",
+        `${API_URL}/api/transaccion`,
         {
           ID_CUENTA_ORIGEN: id_cuenta_origen,
           ID_CUENTA_DESTINO: id_cuenta_destino,
@@ -80,8 +81,9 @@ const TransaccionModal = () => {
   const [alias, setAlias] = useState("");
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const [confirm, setConfirm] = useState(false);
+  const { cuenta } = useUserContext();
 
   const handleChange = (e: any) => {
     setAlias(e.target.value);
@@ -96,7 +98,7 @@ const TransaccionModal = () => {
 
     const token = localStorage.getItem("token"); // Recupera el token si la API lo requiere
     try {
-      const aliasResponse = await axios.get(isOnlyNumbers(alias) ? `http://localhost:5056/api/cuenta/cbu/${alias}` : `http://localhost:5056/api/cuenta/alias/${alias}`, {
+      const aliasResponse = await axios.get(isOnlyNumbers(alias) ? `${API_URL}/api/cuenta/cbu/${alias}` : `${API_URL}/api/cuenta/alias/${alias}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const id = aliasResponse.data.ID_CUENTA;
@@ -148,7 +150,11 @@ const TransaccionModal = () => {
         </> : null
       }
 
-      {confirm ? <TransaccionFormulario id_cuenta_destino={data.ID_CUENTA} id_cuenta_origen={data.ID_CUENTA_ORIGEN} /> : null}
+      {confirm && cuenta?.ID_CUENTA
+        ? <TransaccionFormulario
+          id_cuenta_destino={data.ID_CUENTA}
+          id_cuenta_origen={cuenta.ID_CUENTA}
+        /> : null}
     </Box>
   );
 };

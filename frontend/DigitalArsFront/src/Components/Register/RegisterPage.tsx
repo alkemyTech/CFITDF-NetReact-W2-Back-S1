@@ -10,9 +10,11 @@ export default function RegisterPage() {
     const [password, setPassword] = useState('');
     const [mensaje, setMensaje] = useState('');
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     const handleRegister = async () => {
         try {
-            const resUser = await axios.post('/api/User', {
+            const resUser = await axios.post(`${API_URL}/api/User/register`, {
                 NOMBRE: nombre,
                 EMAIL: email,
                 CREATION_DATE: new Date().toISOString(),
@@ -20,9 +22,15 @@ export default function RegisterPage() {
                 ID_ROL: 2,
             });
 
-            const userId = resUser.data.ID_USUARIO;
+            console.log("📥 Respuesta del backend:", resUser.data);
 
-            await axios.post('/api/Cuenta', {
+            const userId = resUser.data.ID_USUARIO;
+            if (!userId) {
+                alert("⚠️ No se recibió ID del usuario desde el backend.");
+                return;
+            }
+
+            await axios.post(`${API_URL}/api/Cuenta`, {
                 ID_USUARIO: userId,
                 SALDO: 0,
                 ALIAS: `${nombre.toLowerCase()}.digitalars`,

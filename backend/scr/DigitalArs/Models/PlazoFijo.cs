@@ -15,7 +15,7 @@ namespace DigitalArs.Models
         public decimal TASA_INTERES { get; set; }
         public DateTime FECHA_INICIO { get; set; }
         public DateTime fecha_vencimiento { get; set; }
-        public double INTERES_GENERADO { get; set; }
+        public decimal INTERES_GENERADO { get; set; }
         public required string ESTADO { get; set; }
 
 
@@ -26,8 +26,8 @@ namespace DigitalArs.Models
         }
         public void CalcularInteres()
         {
-            double tasaDiaria = (double)TASA_INTERES / 100 / 365;
-            INTERES_GENERADO = (double)MONTO * tasaDiaria * PLAZO;
+            decimal tasaDiaria = TASA_INTERES / 100 / 365;
+            INTERES_GENERADO = MONTO * tasaDiaria * PLAZO;
         }
         public void ActualizarEstado()
         {
@@ -40,9 +40,8 @@ namespace DigitalArs.Models
         }
         public decimal ObtenerMontoTotalAlVencimiento()
         {
-            return MONTO + (decimal)INTERES_GENERADO;
+            return MONTO + INTERES_GENERADO;
         }
-
 
         public void DeterminarTasaPorPlazo()
         {

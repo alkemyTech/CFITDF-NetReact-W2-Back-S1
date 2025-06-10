@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
-  // createRow,
   type MRT_ColumnDef,
   type MRT_Row,
   type MRT_TableOptions,
@@ -26,95 +25,97 @@ import axios, { AxiosError } from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import { PageContainer, useDialogs, useNotifications } from '@toolpad/core';
 
-export default function AdminUsuariosPage() {
+export default function AdminCuentasPage() {
   const notifications = useNotifications();
   const dialogs = useDialogs();
   const [searchParams] = useSearchParams();
-
   const [idUsuario, setIdUsuario] = useState(searchParams.get("ID_USUARIO"));
   const [cuentas, setCuentas] = useState<Cuenta[]>([]);
   const [isLoadingError, setIsLoadingUsersError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isMutating, setIsMutating] = useState(false)
-
+  const [isMutating, setIsMutating] = useState(false);
   const shouldCreate = useMemo(() => searchParams.get("create") === "true", [searchParams]);
 
-  const columns = useMemo<MRT_ColumnDef<Cuenta>[]>(
-    () => [
-      {
-        accessorKey: 'ID_CUENTA',
-        header: 'ID Cuenta',
-        maxSize: 10,
-        enableSorting: false,
-        enableColumnActions: false,
-        muiEditTextFieldProps: {
-          required: false,
-          hidden: true,
-          sx: { display: "none" },
-        },
+  // BASE de la API: funciona local y en Docker
+  const API_BASE = import.meta.env.VITE_API_URL || "";
+
+  const columns = useMemo<MRT_ColumnDef<Cuenta>[]>(() => [
+    {
+      accessorKey: 'ID_CUENTA',
+      header: 'ID Cuenta',
+      maxSize: 10,
+      enableSorting: false,
+      enableColumnActions: false,
+      muiEditTextFieldProps: {
+        required: false,
+        hidden: true,
+        sx: { display: "none" },
       },
-      {
-        accessorKey: 'ID_USUARIO',
-        header: 'ID Usuario',
-        enableSorting: false,
-        enableColumnActions: false,
-        maxSize: 10,
-        filterFn: (row, _field, value) => 
-          row.original.ID_USUARIO.toString() === value,
-        muiEditTextFieldProps: {
-          type: "number",
-          required: true,
-          value: idUsuario,
-          onChange: (e) => setIdUsuario(e.target.value),
-        },
+    },
+    {
+      accessorKey: 'ID_USUARIO',
+      header: 'ID Usuario',
+      enableSorting: false,
+      enableColumnActions: false,
+      maxSize: 10,
+      filterFn: (row, _field, value) =>
+        row.original.ID_USUARIO.toString() === value,
+      muiEditTextFieldProps: {
+        type: "number",
+        required: true,
+        value: idUsuario,
+        onChange: (e) => setIdUsuario(e.target.value),
       },
-      {
-        accessorKey: "ALIAS",
-        header: "Alias",
-        muiEditTextFieldProps: {
-          required: true,
-        }
+    },
+    {
+      accessorKey: "ALIAS",
+      header: "Alias",
+      muiEditTextFieldProps: {
+        required: true,
+      }
+    },
+    {
+      accessorKey: "CBU",
+      header: "CBU",
+      muiEditTextFieldProps: {
+        required: true,
+      }
+    },
+    {
+      accessorKey: 'SALDO',
+      header: 'Saldo',
+      Cell: ({ row }) =>
+        typeof row.original.SALDO === "number"
+          ? row.original.SALDO.toLocaleString("es-AR", { style: "currency", currency: "ARS" })
+          : "-",
+      muiEditTextFieldProps: {
+        type: "number",
+        required: true
       },
-      {
-        accessorKey: "CBU",
-        header: "CBU",
-        muiEditTextFieldProps: {
-          required: true,
-        }
-      },
-      {
-        accessorKey: 'SALDO',
-        header: 'Saldo',
-        Cell: ({ row }) => row.original.SALDO
-          .toLocaleString("es-AR", { style: "currency", currency: "ARS" }),
-        muiEditTextFieldProps: {
-          type: "number",
-          required: true
-        },
-      },
-    ],
-    [],
-  );
+    },
+  ], [idUsuario]);
 
   //CREATE action
   const handleCreateCuenta: MRT_TableOptions<Cuenta>['onCreatingRowSave'] = async ({
     values,
     table,
   }) => {
-    console.log("Values", values)
-    const { ALIAS, CBU, SALDO } = values
-    setIsMutating(true)
+    const { ALIAS, CBU, SALDO } = values;
+    setIsMutating(true);
     try {
-      await axios.post("/api/cuenta", {
+      const token = localStorage.getItem("token");
+      await axios.post(`${API_BASE}/api/cuenta`, {
         ID_USUARIO: idUsuario,
         ALIAS,
         CBU,
         SALDO
-      })
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       table.setCreatingRow(null); //exit creating mode
       fetchCuentas();
     } finally {
-      setIsMutating(false)
+      setIsMutating(false);
     }
   };
 
@@ -124,22 +125,19 @@ export default function AdminUsuariosPage() {
     row,
     table,
   }) => {
-    console.log(values)
     try {
-      await axios.put(`/api/cuenta/${row.original.ID_USUARIO}`, values)
+      const token = localStorage.getItem("token");
+      await axios.put(`${API_BASE}/api/cuenta/${row.original.ID_CUENTA}`, values, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       notifications.show("Cuenta actualizada correctamente!", {
         severity: "success",
         autoHideDuration: 5000
-      })
+      });
       table.setEditingRow(null); //exit editing mode
-      notifications.show("Cuenta actualizada correctamente!", {
-        severity: "success"
-      })
     } catch (e: any) {
-      if (e instanceof AxiosError) {
-        if (e.status === 401) return;
-      }
-      notifications.show("Hubo un error interno al intentar actualizar la cuenta")
+      if (e instanceof AxiosError && e.status === 401) return;
+      notifications.show("Hubo un error interno al intentar actualizar la cuenta");
     }
   };
 
@@ -153,44 +151,50 @@ export default function AdminUsuariosPage() {
       cancelText: "Cancelar",
     });
     if (deleteConfirmed) {
-      await axios.delete(`/api/cuenta/${row.original.ID_CUENTA}`)
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_BASE}/api/cuenta/${row.original.ID_CUENTA}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       fetchCuentas();
     }
   };
 
   async function fetchCuentas() {
     try {
-      setIsLoading(true)
-      const res = await axios.get<Cuenta[]>("/api/cuenta");
+      setIsLoading(true);
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${API_BASE}/api/cuenta`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setCuentas(res.data);
-    } catch (e: any) {
-      setIsLoadingUsersError(true)
+      console.log("Cuentas recibidas del backend:", res.data);
+    } catch (e) {
+      setIsLoadingUsersError(true);
+      console.error("Error fetching cuentas:", e);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchCuentas()
-    if (searchParams.has("ID_USUARIO")) {
-      table.setColumnFilters(() => [{ id: "ID_USUARIO", value: searchParams.get("ID_USUARIO") }]);
-    }
-  }, [])
+    fetchCuentas();
+  }, []);
 
   useEffect(() => {
     if (shouldCreate) {
-      table.setCreatingRow(true)
+      table.setCreatingRow(true);
     }
-  }, [shouldCreate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldCreate]);
 
   const table = useMaterialReactTable({
     localization: MRT_Localization_ES,
     columns,
     data: cuentas,
-    createDisplayMode: 'modal', //default ('row', and 'custom' are also available)
-    editDisplayMode: 'modal', //default ('row', 'cell', 'table', and 'custom' are also available)
+    createDisplayMode: 'modal',
+    editDisplayMode: 'modal',
     enableEditing: true,
-    getRowId: (row) => row?.ID_USUARIO?.toString(),
+    getRowId: (row) => row?.ID_CUENTA?.toString(),
     muiToolbarAlertBannerProps: isLoadingError
       ? {
         color: 'error',
@@ -204,43 +208,41 @@ export default function AdminUsuariosPage() {
     },
     onCreatingRowSave: handleCreateCuenta,
     onEditingRowSave: handleUpdateCuenta,
-    //optionally customize modal content
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
         <DialogTitle variant="h4">Crear Cuenta</DialogTitle>
         <DialogContent
-          sx={ { display: 'flex', flexDirection: 'column', gap: '1rem' } }
+          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
         >
-          { internalEditComponents } {/* or render custom edit components here */ }
+          {internalEditComponents}
         </DialogContent>
         <DialogActions>
-          <MRT_EditActionButtons variant="text" table={ table } row={ row } />
+          <MRT_EditActionButtons variant="text" table={table} row={row} />
         </DialogActions>
       </>
     ),
-    //optionally customize modal content
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
         <DialogTitle variant="h4">Editar Cuenta</DialogTitle>
         <DialogContent
-          sx={ { display: 'flex', flexDirection: 'column', gap: '1.5rem' } }
+          sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
         >
-          { internalEditComponents } {/* or render custom edit components here */ }
+          {internalEditComponents}
         </DialogContent>
         <DialogActions>
-          <MRT_EditActionButtons variant="text" table={ table } row={ row } />
+          <MRT_EditActionButtons variant="text" table={table} row={row} />
         </DialogActions>
       </>
     ),
     renderRowActions: ({ row, table }) => (
-      <Box sx={ { display: 'flex', gap: '1rem' } }>
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Tooltip title="Editar">
-          <IconButton onClick={ () => table.setEditingRow(row) }>
+          <IconButton onClick={() => table.setEditingRow(row)}>
             <EditIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Eliminar">
-          <IconButton color="error" onClick={ () => openDeleteConfirmModal(row) }>
+          <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -249,9 +251,9 @@ export default function AdminUsuariosPage() {
     renderTopToolbarCustomActions: ({ table }) => (
       <Button
         variant="contained"
-        onClick={ () => {
+        onClick={() => {
           table.setCreatingRow(true);
-        } }
+        }}
       >
         Nueva cuenta
       </Button>
@@ -263,8 +265,9 @@ export default function AdminUsuariosPage() {
     },
   });
 
-  return <PageContainer>
-    <MaterialReactTable table={ table } />
-  </PageContainer>
-};
-
+  return (
+    <PageContainer>
+      <MaterialReactTable table={table} />
+    </PageContainer>
+  );
+}

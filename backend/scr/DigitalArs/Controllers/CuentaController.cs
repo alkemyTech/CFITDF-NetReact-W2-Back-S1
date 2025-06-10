@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks.Dataflow;
 namespace DigitalArs.Controllers;
+
 using Microsoft.AspNetCore.Authorization;
 
 [Authorize]
@@ -23,16 +24,23 @@ public class CuentaController : ControllerBase
         _usuarioRepository = usuarioRepository;
     }
 
+    // ---- Helper para obtener el ID del usuario desde el token ----
+    private int GetIdUsuarioFromToken()
+    {
+        var claim = User.Claims.FirstOrDefault(c =>
+            c.Type == "ID_USUARIO" ||
+            c.Type == "sub" || // El estándar JWT para Subject (ID)
+            c.Type.EndsWith("nameidentifier")
+        );
+        if (claim != null && int.TryParse(claim.Value, out int id))
+            return id;
+        return 0;
+    }
+
     [HttpGet]
     public ActionResult<Cuenta[]> GetCuentas()
     {
-        // Obtener el ID_USUARIO del token JWT
-        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
-        int idUsuarioToken = 0;
-        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
-        {
-            idUsuarioToken = idParsed;
-        }
+        int idUsuarioToken = GetIdUsuarioFromToken();
 
         if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
         {
@@ -44,7 +52,7 @@ public class CuentaController : ControllerBase
             }
         }
 
-        return Ok(_cuentaRepository.GetAllCuentas());
+        return Ok(_cuentaRepository.GetAllCuentas() ?? new List<Cuenta>());
     }
 
     [HttpGet("id/{id}")]
@@ -57,16 +65,11 @@ public class CuentaController : ControllerBase
 
         return NotFound();
     }
+
     [HttpGet("alias/{alias}")]
     public ActionResult<Dictionary<string, object>> GetCuenta(string alias)
     {
-        // Obtener el ID_USUARIO del token JWT
-        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
-        int? idUsuarioToken = 0;
-        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
-        {
-            idUsuarioToken = idParsed;
-        }
+        int? idUsuarioToken = GetIdUsuarioFromToken();
 
         if (_cuentaRepository.GetCuentaByAlias(alias) is Cuenta cuenta)
         {
@@ -77,7 +80,7 @@ public class CuentaController : ControllerBase
                 return BadRequest(new { message = "Usuario no encontrado para la cuenta especificada." });
             }
 
-            if(usuario.ID_USUARIO == idUsuarioToken)
+            if (usuario.ID_USUARIO == idUsuarioToken)
             {
                 return BadRequest(new { message = "No podés transferirte a vos mismo usando el mismo alias." });
             }
@@ -94,16 +97,11 @@ public class CuentaController : ControllerBase
 
         return BadRequest(new { message = "Alias no encontrado." });
     }
+
     [HttpGet("cbu/{cbu}")]
     public ActionResult<Dictionary<string, object>> GetCuentaCBU(string cbu)
     {
-        // Obtener el ID_USUARIO del token JWT
-        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
-        int? idUsuarioToken = 0;
-        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
-        {
-            idUsuarioToken = idParsed;
-        }
+        int? idUsuarioToken = GetIdUsuarioFromToken();
 
         if (_cuentaRepository.GetCuentaByCbu(cbu) is Cuenta cuenta)
         {
@@ -131,6 +129,7 @@ public class CuentaController : ControllerBase
 
         return BadRequest(new { message = "CBU no encontrado." });
     }
+
     [AllowAnonymous]
     [HttpPost]
     public ActionResult<Cuenta> CreateCuenta([FromBody] CreateCuentaDto dto)
@@ -147,37 +146,33 @@ public class CuentaController : ControllerBase
 
         return Ok(cuenta);
     }
+
     [HttpPost("Depositar")]
     public ActionResult<Cuenta> Depositar([FromBody] DepositarCuentaDto dto)
-{
-    var cuenta = _cuentaRepository.GetCuentaByUsuarioId(dto.ID_USUARIO);
-    
-    if (cuenta == null)
     {
-        return NotFound("Cuenta no encontrada");
+        var cuenta = _cuentaRepository.GetCuentaByUsuarioId(dto.ID_USUARIO);
+
+        if (cuenta == null)
+        {
+            return NotFound("Cuenta no encontrada");
+        }
+
+        if (dto.SALDO <= 0)
+        {
+            return BadRequest("El monto debe ser mayor a cero.");
+        }
+
+        cuenta.SALDO += dto.SALDO; // Suma el monto al saldo actual
+
+        _cuentaRepository.UpdateCuenta(cuenta);
+
+        return Ok(cuenta);
     }
 
-    if (dto.SALDO <= 0)
-    {
-        return BadRequest("El monto debe ser mayor a cero.");
-    }
-
-    cuenta.SALDO += dto.SALDO; // Suma el monto al saldo actual
-    
-    _cuentaRepository.UpdateCuenta(cuenta);
-
-    return Ok(cuenta);
-}
     [HttpPut("{id}")]
     public ActionResult UpdateCuenta(int id, UpdateCuentaDto updateCuentaDto)
     {
-        // Obtener el ID_USUARIO del token JWT
-        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
-        int idUsuarioToken = 0;
-        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
-        {
-            idUsuarioToken = idParsed;
-        }
+        int idUsuarioToken = GetIdUsuarioFromToken();
 
         if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
         {
@@ -205,13 +200,7 @@ public class CuentaController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult RemoveCuenta(int id)
     {
-        // Obtener el ID_USUARIO del token JWT
-        var claimIdUsuario = User.Claims.FirstOrDefault(c => c.Type == "ID_USUARIO" || c.Type.EndsWith("nameidentifier"));
-        int idUsuarioToken = 0;
-        if (claimIdUsuario != null && int.TryParse(claimIdUsuario.Value, out int idParsed))
-        {
-            idUsuarioToken = idParsed;
-        }
+        int idUsuarioToken = GetIdUsuarioFromToken();
 
         if (_cuentaRepository.GetCuentaById(idUsuarioToken) is Cuenta admin)
         {
@@ -231,6 +220,7 @@ public class CuentaController : ControllerBase
 
         return NotFound();
     }
+
     [HttpGet("usuario/{idUsuario}")]
     public ActionResult<Cuenta> GetCuentaPorUsuario(int idUsuario)
     {

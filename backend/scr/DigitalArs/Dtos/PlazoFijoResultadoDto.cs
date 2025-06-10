@@ -7,8 +7,8 @@ namespace DigitalArs.Dtos
         public decimal TasaInteres { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaVencimiento { get; set; }
-        public double InteresGenerado { get; set; }
+        public decimal InteresGenerado { get; set; }
         public decimal MontoFinal { get; set; }
-        public string Estado { get; set; }
+        public string Estado { get; set; } = string.Empty;
     }
 }

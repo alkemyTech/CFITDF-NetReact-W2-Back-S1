@@ -13,13 +13,13 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+
 interface Transaccion {
   ID_TRANSACCION: number;
   ID_CUENTA_ORIGEN: number;
-  FECHA: Date; // Aseguramos que la fecha sea un objeto Date
+  FECHA: Date; // Aseguramos que la fecha sea un objeto Date 
   MONTO: number;
 }
-
 interface Props {
   standalone?: boolean;
 }
@@ -31,16 +31,16 @@ export default function TransaccionesPage({standalone = true}: Props) {
   const user = localStorage.getItem('user');
   const id_usuario = user ? JSON.parse(user).ID_USUARIO : null;
 
+  const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchTransacciones = async () =>{
       try {
         const token = localStorage.getItem('token');
-        const response =await axios.get<Transaccion[]>(
-          'http://localhost:5056/api/transaccion/cuentas',{
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+        const response = await axios.get<Transaccion[]>(
+          `${API_URL}/api/transaccion/cuentas`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+        );
         const datos = response.data.map(t => ({
           ...t,
           FECHA: new Date(t.FECHA), // Aseguramos que la fecha sea un objeto Date

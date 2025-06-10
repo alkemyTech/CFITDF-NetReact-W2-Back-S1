@@ -30,53 +30,47 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
-        //Busca usuario por email
+        Console.WriteLine("🔐 Intentando login para: " + dto.Email);
+
         var user = await _context.USUARIO.FirstOrDefaultAsync(u => u.EMAIL == dto.Email);
+
         if (user == null)
-            return Unauthorized("El usuario no existe");
-        // Verifica si la contraseña es correcta 
-        if (!_passwordService.VerifyPassword(user.PASS, dto.Password))
-              return Unauthorized("Contraseña incorrecta");
-         bool isPasswordValid = _passwordService.VerifyPassword(user.PASS, dto.Password); //ME BUSCA CONTRASEÑAS HASHEADAS
-        // bool isPasswordValid = user.PASS == dto.Password;
-
-        // Valida si el usuario esta dado de baja
-        if (user.FECHA_BAJA.HasValue)
         {
-            return Unauthorized(new { message = "El usuario está dado de baja" });
+            Console.WriteLine("❌ Usuario no encontrado: " + dto.Email);
+            return Unauthorized("El usuario no existe");
         }
-            
 
-        // Genera el token JWT si es todo valido
+        Console.WriteLine("✅ Usuario encontrado: " + user.EMAIL);
+
+        if (!_passwordService.VerifyPassword(user.PASS, dto.Password))
+        {
+            Console.WriteLine("❌ Contraseña incorrecta para usuario: " + dto.Email);
+            return Unauthorized("Contraseña incorrecta");
+        }
+
+        Console.WriteLine("🔐 Contraseña correcta, generando token...");
+
         var token = _jwtService.GenerateToken(user);
 
-        // 4. Devolver token en el header
         Response.Headers.Add("Authorization", $"Bearer {token}");
 
-        var rolName = "";
+        var rolName = user.ID_ROL == 1 ? "Administrador" : "Usuario";
 
-        if(user.ID_ROL == 1)
-        {
-            rolName = "Administrador";
-        }
-        else
-        {
-            rolName = "Usuario";
-        }
+        Console.WriteLine("✅ Login exitoso. Rol: " + rolName);
 
-            return Ok(new
+        return Ok(new
+        {
+            Mensaje = "Login exitoso.",
+            token = token,
+            usuario = new
             {
-                Mensaje = "Login exitoso.",
-                token = token,
-                usuario = new
-                {
-                    ID_USUARIO = user.ID_USUARIO,
-                    NOMBRE = user.NOMBRE,
-                    EMAIL = user.EMAIL,
-                    ID_ROL = rolName
-                }
-            });
-        
+                ID_USUARIO = user.ID_USUARIO,
+                NOMBRE = user.NOMBRE,
+                EMAIL = user.EMAIL,
+                ID_ROL = user.ID_ROL,
+                NOMBRE_ROL = rolName
+            }
+        });
     }
 
     // CONSULTA DATOS DE USUARIO AUTENTICADO

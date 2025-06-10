@@ -4,30 +4,58 @@ services:
     container_name: sqlserver
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=${DB_PASSWORD} # En variables de entorno
+      - SA_PASSWORD=${DB_PASSWORD}
     ports:
       - "1433:1433"
     volumes:
-      - test_sql_data:/var/opt/mssql #Pesistencia de datos
-      - ./backups:/backups #Para backups manuales
+      - test_sql_data:/var/opt/mssql
+      - ./backups:/backups
+    networks:
+      - app-network
 
   db-init:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql-tools
     depends_on:
       - sqlserver
-    entrypoint: /bin/bash -c "
-      sleep 15 &&
-      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P ${DB_PASSWORD} -Q 'IF DB_ID('DIGITALARS_DB') IS NULL CREATE DATABASE DIGITALARS_DB;'"
+    entrypoint: >
+      /bin/bash -c "sleep 15 &&
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P $${DB_PASSWORD} -Q \"IF DB_ID('DIGITALARS_DB') IS NULL CREATE DATABASE DIGITALARS_DB;\""
+    networks:
+      - app-network
 
-  telegraf:
-    image: telegraf:latest
-    container_name: telegraf
+  backend:
+    build:
+      context: ./backend/scr/DigitalArs
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Jwt__Key=${JWT_SECRET_KEY}
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=DIGITALARS_DB;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True
     depends_on:
       - sqlserver
+    networks:
+      - app-network
     volumes:
-      - ./infra/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - aspnet-data-protection-keys:/root/.aspnet/DataProtection-Keys
+
+  frontend:
+    build:
+      context: ./frontend/DigitalArsFront
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:5000
+    container_name: frontend
     ports:
-      - "9273:9273"
+      - "5173:3001" # Host:Contenedor
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
   prometheus:
     image: prom/prometheus
@@ -36,29 +64,42 @@ services:
       - ./infra/prometheus:/etc/prometheus
     ports:
       - "9090:9090"
+    restart: unless-stopped
+    networks:
+      - app-network
 
   grafana:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - "3000:3000"
+      - "3003:3000"
     volumes:
       - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
+    restart: unless-stopped
+    networks:
+      - app-network
 
-  backend:
+  telegraf:
     build:
-      context: ./backend/scr/DigitalArs
-      dockerfile: Dockerfile
-    ports:
-      - "5000:8080"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8080   
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=DIGITALARS_DB;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;
+      context: .
+      dockerfile: Dockerfile.telegraf
+    container_name: telegraf
     depends_on:
       - sqlserver
+    ports:
+      - "9273:9273"
+    volumes:
+      - ./infra/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    networks:
+      - app-network
+
 volumes:
   test_sql_data:
   grafana_data:
+  aspnet-data-protection-keys:
+
+networks:
+  app-network:
+    external: true

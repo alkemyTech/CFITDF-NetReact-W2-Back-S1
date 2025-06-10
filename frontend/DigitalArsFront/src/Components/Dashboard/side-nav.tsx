@@ -3,7 +3,6 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
     Box,
     Divider,
-    Stack,
     Typography,
     List,
     ListItem,

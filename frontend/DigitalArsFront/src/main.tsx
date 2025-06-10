@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-import { UserProvider } from './Context/UserContext'; // asegurate de que el path sea correcto
+import { UserProvider } from './Context/UserContext'; 
 import axios from 'axios';
 
 axios.interceptors.request.use(

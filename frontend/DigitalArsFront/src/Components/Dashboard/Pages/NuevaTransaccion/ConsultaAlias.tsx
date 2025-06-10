@@ -1,12 +1,12 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import axios from "axios";
-import { PageContainer } from '@toolpad/core';
+
 
 const ConsultaAlias = () => {
   const [alias, setAlias] = useState("");
   const [titular, setTitular] = useState(null);
-  const [nombreUsuario, setNombreUsuario] = useState(null); // Nuevo estado para el nombre 
+  const [nombreUsuario, setNombreUsuario] = useState(null); 
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +22,7 @@ const ConsultaAlias = () => {
 
     if (isOnlyNumbers(alias)) {
       try {
-        const aliasResponse = await axios.get(`http://localhost:5056/api/cuenta/cbu/${alias}`, {
+        const aliasResponse = await axios.get(`http://localhost:5000/api/cuenta/cbu/${alias}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
     
@@ -38,7 +38,7 @@ const ConsultaAlias = () => {
         setError(null); // Limpia el error si la solicitud fue exitosa
     
         // Obtén el nombre del usuario con el ID_USUARIO
-        const usuarioResponse = await axios.get(`http://localhost:5056/api/user/${id}`, {
+        const usuarioResponse = await axios.get(`http://localhost:5000/api/user/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
     
@@ -63,7 +63,7 @@ const ConsultaAlias = () => {
     }
     else{
       try {
-        const aliasResponse = await axios.get(`http://localhost:5056/api/cuenta/alias/${alias}`, {
+        const aliasResponse = await axios.get(`http://localhost:5000/api/cuenta/alias/${alias}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
     
@@ -79,7 +79,7 @@ const ConsultaAlias = () => {
         setError(null); // Limpia el error si la solicitud fue exitosa
     
         // Obtén el nombre del usuario con el ID_USUARIO
-        const usuarioResponse = await axios.get(`http://localhost:5056/api/user/${id}`, {
+        const usuarioResponse = await axios.get(`http://localhost:5000/api/user/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
     

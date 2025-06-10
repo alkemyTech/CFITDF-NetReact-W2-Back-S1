@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-    Box,
     Button,
     MenuItem,
     TextField,
@@ -28,7 +27,8 @@ export default function CrearPlazoFijo() {
     const [error, setError] = useState("");
     const [usuarioId, setUsuarioId] = useState<number>(0);
     const token = localStorage.getItem("token");
-    
+    const API_URL = import.meta.env.VITE_API_URL;
+
     useEffect(() => {
         if (token) {
             try {
@@ -66,7 +66,7 @@ export default function CrearPlazoFijo() {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post("/api/PlazoFijo/Crear", dto, {
+            const response = await axios.post(`${API_URL}/api/PlazoFijo/Crear`, dto, {
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
 
             });

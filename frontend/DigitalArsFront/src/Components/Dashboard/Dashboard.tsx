@@ -11,28 +11,15 @@ import { Outlet } from "react-router-dom";
 import { AuthGuard } from "../auth/auth-guard";
 import AccountToolbar from './AccountToolbar';
 import ActionsToolbar from './ActionsToolbar';
-import { useUserContext } from "@/Context/UserContext";
-import { useMemo } from "react";
-
-const ADMIN_NAVIGATION: Navigation = [
-  {
-    kind: "page",
-    title: "Administrar",
-    icon: <SavingsIcon />,
-    segment: "dashboard/admin",
-    children: [
-      { title: "Usuarios", segment: "usuarios" },
-      { title: "Cuentas", segment: "cuentas" }
-    ]
-  },
-]
-
+import { useUserContext } from '../../Context/UserContext'; 
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 export default function DashboardLayout() {
-  const {usuario} = useUserContext()
-  const isAdmin = usuario?.ID_ROL === 'Administrador';
+  const theme = useTheme();
+  const { usuario } = useUserContext();
+  const isAdmin = usuario?.NOMBRE_ROL === "Administrador";
 
-  const NAVIGATION = useMemo<Navigation>(() => [
+  const NAVIGATION: Navigation = [
     {
       segment: "dashboard",
       title: "Inicio",
@@ -48,9 +35,17 @@ export default function DashboardLayout() {
       title: "Ahorros",
       icon: <SavingsIcon />,
     },
-    ...(isAdmin ? ADMIN_NAVIGATION : [])
-  ], [usuario])
-  const theme = useTheme()
+    ...(isAdmin
+      ? [
+        {
+          segment: "dashboard/admin",
+          title: "Admin",
+          icon: <AdminPanelSettingsIcon />,
+        },
+      ]
+      : []),
+  ];
+
   return (
     <AuthGuard>
       <ReactRouterAppProvider
@@ -62,10 +57,12 @@ export default function DashboardLayout() {
           homeUrl: "/dashboard",
         } }
       >
-        <CoreDashboardLayout slots={ {
-          toolbarAccount: AccountToolbar,
-          toolbarActions: ActionsToolbar
-        } }>
+        <CoreDashboardLayout
+          slots={{
+            toolbarAccount: AccountToolbar,
+            toolbarActions: ActionsToolbar,
+          }}
+        >
           <Outlet />
         </CoreDashboardLayout>
       </ReactRouterAppProvider>

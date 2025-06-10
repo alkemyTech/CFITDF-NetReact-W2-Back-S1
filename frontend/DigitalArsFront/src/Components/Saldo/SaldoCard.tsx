@@ -1,19 +1,28 @@
+import { useState } from "react";
 import {
   Card,
   CardContent,
   Typography,
   Box,
-  Button
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import SendIcon from '@mui/icons-material/Send';
 import SavingsIcon from '@mui/icons-material/Savings';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../Context/UserContext'
+import InfoCuenta from '../InfoCuenta/InfoCuenta';
+import DepositoModal from '../Dashboard/DepositoModal';
 
 export default function SaldoCard() {
   const navigate = useNavigate();
-  const { saldo } = useUserContext(); // obtengo saldo del contexto global
+  const { saldo } = useUserContext();
+  const [openDeposito, setOpenDeposito] = useState(false);
 
   return (
     <Card
@@ -47,19 +56,34 @@ export default function SaldoCard() {
             : "Cargando..."}
         </Typography>
 
-        <Box display="flex" justifyContent="flex-start" gap={2} mt={3} flexWrap="wrap">
+        {/* Botones alineados */}
+        <Box
+          display="flex"
+          justifyContent="flex-start"
+          alignItems="center"
+          gap={2}
+          mt={4}
+          flexWrap="wrap"
+        >
           <Button
             variant="contained"
-            endIcon={<SendIcon />}
+            startIcon={<SendIcon />}
             sx={{
-              textTransform: "none",
-              borderRadius: 3,
-              fontWeight: 600,
-              minWidth: 150,
-              backgroundColor: "#fff",
+              background: "#fff",
               color: "#1976d2",
+              textTransform: "none",
+              fontWeight: 700,
+              fontSize: 16,
+              borderRadius: 8,
+              boxShadow: '0 2px 8px rgba(25, 118, 210, 0.15)',
+              px: 3,
+              py: 1.5,
+              minWidth: 160,
+              transition: '0.2s',
               '&:hover': {
-                backgroundColor: '#e3f2fd',
+                background: "#e3f2fd",
+                color: "#1565c0",
+                boxShadow: '0 4px 14px rgba(25, 118, 210, 0.20)',
               }
             }}
             onClick={() => navigate("/dashboard/nueva_transaccion")}
@@ -67,45 +91,80 @@ export default function SaldoCard() {
             Enviar dinero
           </Button>
 
+          {/* Botón para ingresar dinero */}
           <Button
-            variant="outlined"
-            endIcon={<SavingsIcon />}
+            variant="contained"
+            startIcon={<AddCircleIcon />}
             sx={{
+              background: "rgba(255,255,255,0.92)",
+              color: "#1976d2",
               textTransform: "none",
-              borderRadius: 3,
-              fontWeight: 600,
-              minWidth: 150,
-              color: "#fff",
-              borderColor: "#fff",
+              fontWeight: 700,
+              fontSize: 16,
+              borderRadius: 8,
+              border: '2px solid #fff',
+              boxShadow: '0 2px 8px rgba(25, 118, 210, 0.10)',
+              px: 3,
+              py: 1.5,
+              minWidth: 160,
+              transition: '0.2s',
               '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.1)',
+                background: "#e3f2fd",
+                color: "#1565c0",
+                border: '2px solid #90caf9',
+                boxShadow: '0 4px 14px rgba(25, 118, 210, 0.15)',
+              }
+            }}
+            onClick={() => setOpenDeposito(true)}
+          >
+            Ingresar dinero
+          </Button>
+
+          <Button
+            variant="contained"
+            startIcon={<SavingsIcon />}
+            sx={{
+              background: "rgba(255,255,255,0.92)",
+              color: "#1976d2",
+              textTransform: "none",
+              fontWeight: 700,
+              fontSize: 16,
+              borderRadius: 8,
+              border: '2px solid #fff',
+              boxShadow: '0 2px 8px rgba(25, 118, 210, 0.10)',
+              px: 3,
+              py: 1.5,
+              minWidth: 160,
+              transition: '0.2s',
+              '&:hover': {
+                background: "#e3f2fd",
+                color: "#1565c0",
+                border: '2px solid #90caf9',
+                boxShadow: '0 4px 14px rgba(25, 118, 210, 0.15)',
               }
             }}
             onClick={() => navigate("/dashboard/plazofijo/crear")}
           >
             Invertir ahora
           </Button>
-          
         </Box>
-                  <Box>
-                    <Button
-            variant="outlined"
-            endIcon={<SavingsIcon />}
-            sx={{
-              textTransform: "none",
-              borderRadius: 3,
-              fontWeight: 600,
-              minWidth: 150,
-              color: "#fff",
-              borderColor: "#fff",
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.1)',
-              }
-            }}
-           onClick={() => navigate("/dashboard/depositar")}
 
-          >
-            Ingresar Dinero          </Button>
+        {/* MODAL para ingresar dinero */}
+        <Dialog open={openDeposito} onClose={() => setOpenDeposito(false)} maxWidth="xs" fullWidth>
+          <DialogTitle sx={{ fontWeight: 700, color: "#1976d2" }}>Depositar Dinero</DialogTitle>
+          <DialogContent>
+            <DepositoModal onClose={() => setOpenDeposito(false)} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenDeposito(false)} color="primary">
+              Cancelar
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* botón para compartir datos de cuenta */}
+        <Box mt={3}>
+          <InfoCuenta />
         </Box>
       </CardContent>
     </Card>

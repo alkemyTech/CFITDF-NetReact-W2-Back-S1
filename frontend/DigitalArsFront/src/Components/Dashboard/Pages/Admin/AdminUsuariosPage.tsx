@@ -36,6 +36,8 @@ export default function AdminUsuariosPage() {
   const [isLoadingUsersError, setIsLoadingUsersError] = useState(false);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [isMutatingUser, setIsMutatingUser] = useState(false)
+  // BASE de la API
+  const API_BASE = import.meta.env.VITE_API_URL || "";
 
   const columns = useMemo<MRT_ColumnDef<User>[]>(
     () => [
@@ -111,16 +113,19 @@ export default function AdminUsuariosPage() {
     const { NOMBRE, EMAIL, PASS, ID_ROL } = values
     setIsMutatingUser(true)
     try {
-      await axios.post("/api/user", {
+      const token = localStorage.getItem("token");
+      await axios.post(`${API_BASE}/api/user`, {
         NOMBRE,
         EMAIL,
         PASS,
         ID_ROL
-      })
-      table.setCreatingRow(null); //exit creating mode
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      table.setCreatingRow(null);
       fetchUsers();
     } finally {
-      setIsMutatingUser(false)
+      setIsMutatingUser(false);
     }
   };
 
@@ -136,17 +141,18 @@ export default function AdminUsuariosPage() {
     }
     console.log(values)
     try {
-      await axios.put(`/api/user/${row.original.ID_USUARIO}`, values)
+      const token = localStorage.getItem("token");
+      await axios.put(`${API_BASE}/api/user/${row.original.ID_USUARIO}`, values, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       notifications.show("Usuario actualizado", {
         severity: "success",
         autoHideDuration: 5000
-      })
-      table.setEditingRow(null); //exit editing mode
+      });
+      table.setEditingRow(null);
     } catch (e: any) {
-      if (e instanceof AxiosError) {
-        if (e.status === 401) return;
-      }
-      notifications.show("Hubo un error interno al intentar actualizar")
+      if (e instanceof AxiosError && e.status === 401) return;
+      notifications.show("Hubo un error interno al intentar actualizar");
     }
   };
 
@@ -167,13 +173,16 @@ export default function AdminUsuariosPage() {
 
   async function fetchUsers() {
     try {
-      setIsLoadingUsers(true)
-      const res = await axios.get<User[]>("/api/user");
+      setIsLoadingUsers(true);
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${API_BASE}/api/user`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setUsers(res.data);
     } catch (e: any) {
-      setIsLoadingUsersError(true)
+      setIsLoadingUsersError(true);
     } finally {
-      setIsLoadingUsers(false)
+      setIsLoadingUsers(false);
     }
   }
 
@@ -250,7 +259,7 @@ export default function AdminUsuariosPage() {
         </Tooltip>
         <Tooltip title="Ver cuentas">
           {/* @ts-expect-error */ }
-          <IconButton LinkComponent={ Link } to={ `/dashboard/admin/cuentas?ID_USUARIO=${row.original.ID_USUARIO}` } color="info" >
+          <IconButton LinkComponent={Link} to={`/dashboard/admin/cuentas?ID_USUARIO=${row.original.ID_USUARIO}`} color="info" >
             <CreditCardIcon />
           </IconButton>
         </Tooltip>

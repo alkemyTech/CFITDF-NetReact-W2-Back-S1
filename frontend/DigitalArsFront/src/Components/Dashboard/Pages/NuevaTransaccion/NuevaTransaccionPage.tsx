@@ -1,5 +1,5 @@
 import { PageContainer, type Breadcrumb } from '@toolpad/core';
-import ConsultaAlias from './ConsultaAlias';
+
 import TransaccionModal from '../../TransaccionModal';
 
 function NuevaTransaccionPage() {

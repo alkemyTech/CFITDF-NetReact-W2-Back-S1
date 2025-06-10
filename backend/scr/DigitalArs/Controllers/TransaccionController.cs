@@ -74,7 +74,7 @@ public class TransaccionController : ControllerBase
         var transaccionesUsuario = todasTransacciones
             .Where(t => idsCuentas.Contains(t.ID_CUENTA_ORIGEN) || idsCuentas.Contains(t.ID_CUENTA_DESTINO))
             .ToList();
-        return Ok(transaccionesUsuario);
+        return Ok(transaccionesUsuario ?? new List<Transaccion>());
     }
 
     [HttpGet("{id}")]

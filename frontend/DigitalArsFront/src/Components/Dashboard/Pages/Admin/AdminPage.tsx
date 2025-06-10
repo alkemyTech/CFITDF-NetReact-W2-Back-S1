@@ -1,17 +1,17 @@
-import { Card, CardActionArea, CardContent, Grid, Stack, SvgIcon, Typography } from "@mui/material";
+import { Box, Card, CardActionArea, CardContent,  Stack, SvgIcon, Typography } from "@mui/material";
 import PeopleIcon from '@mui/icons-material/People';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { PageContainer } from "@toolpad/core";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom"; 
 
-function AdminPageCard({title, href, Icon,}: {title: string, href: string, Icon: typeof SvgIcon}) {
+function AdminPageCard({ title, href, Icon, }: { title: string, href: string, Icon: typeof SvgIcon }) {
   return (
     <Card>
       {/*@ts-expect-error */}
       <CardActionArea LinkComponent={Link} to={href}>
         <CardContent>
           <Stack gap={5} p={2} justifyContent="center" alignItems="center">
-            <Icon fontSize="large"/>
+            <Icon fontSize="large" />
             <Typography variant="h5">{title}</Typography>
           </Stack>
         </CardContent>
@@ -21,14 +21,17 @@ function AdminPageCard({title, href, Icon,}: {title: string, href: string, Icon:
 }
 
 export default function AdminPage() {
-  return <PageContainer>
-    <Grid container spacing={2}>
-      <Grid size={{xs: 12, md: 6}}>
-        <AdminPageCard title="Administrar Usuarios" Icon={PeopleIcon} href="usuarios" />
-      </Grid>
-      <Grid size={{xs: 12, md: 6}}>
-        <AdminPageCard title="Administrar Cuentas" Icon={CreditCardIcon} href="cuentas" />
-      </Grid>
-    </Grid>
-  </PageContainer>;
+  return (
+    <PageContainer>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+        <Stack flex={1} minWidth={300}>
+          <AdminPageCard title="Administrar Usuarios" Icon={PeopleIcon} href="usuarios" />
+        </Stack>
+        <Stack flex={1} minWidth={300}>
+          <AdminPageCard title="Administrar Cuentas" Icon={CreditCardIcon} href="cuentas" />
+        </Stack>
+      </Box>
+      <Outlet />
+    </PageContainer>
+  );
 }

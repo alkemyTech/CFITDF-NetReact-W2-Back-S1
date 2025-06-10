@@ -1,14 +1,5 @@
 import {
   Button,
-  Card,
-  CardContent,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
   Box,
 } from "@mui/material";
@@ -22,11 +13,11 @@ import TransaccionesPage from "./TransaccionesPage";
 
 export default function InicioPage() {
   const navigate = useNavigate();
-  const { usuario } = useUserContext(); // ✅ Traemos el usuario desde el contexto
+  const { usuario } = useUserContext(); // Traemos el usuario desde el contexto
 
   return (
     <PageContainer
-      title={`Hola, ${usuario?.NOMBRE ?? 'Usuario'}!`} // ✅ Saludo dinámico
+      title={`Hola, ${usuario?.NOMBRE ?? 'Usuario'}!`} // Saludo 
       breadcrumbs={[]}
       maxWidth="md"
       sx={{ textAlign: "start", mt: 4 }}

@@ -45,7 +45,7 @@ namespace DigitalArs.Controllers
                 }
             }
 
-            var lista = await _repo.ObtenerTodosAsync();
+            var lista = await _repo.ObtenerTodosAsync() ?? new List<PlazoFijo>();
             return Ok(lista);
         }
 
@@ -141,7 +141,7 @@ namespace DigitalArs.Controllers
         [HttpGet("usuario/{idUsuario}")]
         public async Task<ActionResult<IEnumerable<PlazoFijoResultadoDto>>> ObtenerPorUsuario(int idUsuario)
         {
-            var plazos = await _repo.ObtenerPorUsuarioAsync(idUsuario);
+            var plazos = await _repo.ObtenerPorUsuarioAsync(idUsuario) ?? new List<PlazoFijo>();
             var resultado = plazos.Select(p => new PlazoFijoResultadoDto
             {
                 Monto = p.MONTO,

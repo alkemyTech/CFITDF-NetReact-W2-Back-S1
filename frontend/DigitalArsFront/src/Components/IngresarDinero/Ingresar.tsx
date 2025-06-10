@@ -1,6 +1,6 @@
 
 import DepositoModal from "../Dashboard/DepositoModal";
-import TransaccionModal from "../Dashboard/TransaccionModal";
+
 
 function Transaccion() {
  
@@ -8,7 +8,9 @@ function Transaccion() {
   return (
     <div>
       <h2>Realizar transferencia</h2>
-      <DepositoModal></DepositoModal>
+      <DepositoModal onClose={function (): void {
+        throw new Error("Function not implemented.");
+      } }></DepositoModal>
     </div>
   );
 }

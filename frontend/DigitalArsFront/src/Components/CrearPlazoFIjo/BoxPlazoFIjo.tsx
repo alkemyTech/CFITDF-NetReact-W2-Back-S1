@@ -2,19 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import {
+    Stack,
     Card,
     CardContent,
     Typography,
-    Grid,
     Box,
     Divider,
     CircularProgress,
     LinearProgress,
-    Chip
+    Chip,
 } from "@mui/material";
 import TimelineIcon from "@mui/icons-material/Timeline";
 
-// Tipo de dato para los plazos fijos
 interface PlazoFijo {
     Monto: number;
     PlazoDias: number;
@@ -31,14 +30,14 @@ export default function BoxPlazoFijo() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const token = localStorage.getItem("token");
-
+    const API_URL = import.meta.env.VITE_API_URL;
     useEffect(() => {
         const fetchPlazosFijos = async () => {
             if (!token) return;
             try {
                 const decoded: any = jwtDecode(token);
                 const usuarioId = parseInt(decoded.sub || "0");
-                const res = await axios.get(`/api/PlazoFijo/usuario/${usuarioId}`, {
+                const res = await axios.get(`${API_URL}/api/PlazoFijo/usuario/${usuarioId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setPlazosFijos(res.data);
@@ -62,14 +61,16 @@ export default function BoxPlazoFijo() {
     };
 
     return (
-        <Grid container spacing={3} sx={{ mt: 4 }}>
+        <Stack spacing={3}>
             {loading ? (
                 <Box sx={{ m: 2, display: "flex", alignItems: "center" }}>
                     <CircularProgress size={24} sx={{ mr: 2 }} />
                     <Typography>Cargando plazos fijos...</Typography>
                 </Box>
             ) : error ? (
-                <Typography color="error" sx={{ m: 2 }}>{error}</Typography>
+                <Typography color="error" sx={{ m: 2 }}>
+                    {error}
+                </Typography>
             ) : plazosFijos.length === 0 ? (
                 <Typography sx={{ m: 2 }}>No tenés plazos fijos activos.</Typography>
             ) : (
@@ -78,44 +79,58 @@ export default function BoxPlazoFijo() {
                     const montoFinal = pf.Monto + pf.InteresGenerado;
 
                     return (
-                        <Grid item xs={12} md={6} key={index}>
-                            <Card sx={{ borderRadius: 4, boxShadow: 3, p: 2 }}>
-                                <CardContent>
-                                    <Box display="flex" alignItems="center" mb={1}>
-                                        <TimelineIcon color="primary" sx={{ mr: 1 }} />
-                                        <Typography variant="h6" fontWeight={600}>
-                                            Plazo Fijo #{index + 1}
-                                        </Typography>
-                                        <Chip
-                                            label={pf.Estado}
-                                            color={pf.Estado === "Activo" ? "success" : "default"}
-                                            size="small"
-                                            sx={{ ml: 2 }}
-                                        />
-                                    </Box>
+                        <Card key={index} sx={{ borderRadius: 4, boxShadow: 3, p: 2 }}>
+                            <CardContent>
+                                <Box display="flex" alignItems="center" mb={1}>
+                                    <TimelineIcon color="primary" sx={{ mr: 1 }} />
+                                    <Typography variant="h6" fontWeight={600}>
+                                        Plazo Fijo #{index + 1}
+                                    </Typography>
+                                    <Chip
+                                        label={pf.Estado}
+                                        color={pf.Estado === "Activo" ? "success" : "default"}
+                                        size="small"
+                                        sx={{ ml: 2 }}
+                                    />
+                                </Box>
 
-                                    <Divider sx={{ mb: 2 }} />
+                                <Divider sx={{ mb: 2 }} />
 
-                                    <Typography gutterBottom><strong>Monto:</strong> ${pf.Monto.toFixed(2)}</Typography>
-                                    <Typography gutterBottom><strong>Tasa de interés:</strong> {pf.TasaInteres}%</Typography>
-                                    <Typography gutterBottom><strong>Inicio:</strong> {new Date(pf.FechaInicio).toLocaleDateString()}</Typography>
-                                    <Typography gutterBottom><strong>Vencimiento:</strong> {new Date(pf.FechaVencimiento).toLocaleDateString()}</Typography>
-                                    <Typography gutterBottom><strong>Interés generado:</strong> ${pf.InteresGenerado.toFixed(2)}</Typography>
-                                    <Typography gutterBottom><strong>Total al vencimiento:</strong> ${montoFinal.toFixed(2)}</Typography>
+                                <Typography gutterBottom>
+                                    <strong>Monto:</strong> ${pf.Monto.toFixed(2)}
+                                </Typography>
+                                <Typography gutterBottom>
+                                    <strong>Tasa de interés:</strong> {pf.TasaInteres}%
+                                </Typography>
+                                <Typography gutterBottom>
+                                    <strong>Inicio:</strong> {new Date(pf.FechaInicio).toLocaleDateString()}
+                                </Typography>
+                                <Typography gutterBottom>
+                                    <strong>Vencimiento:</strong> {new Date(pf.FechaVencimiento).toLocaleDateString()}
+                                </Typography>
+                                <Typography gutterBottom>
+                                    <strong>Interés generado:</strong> ${pf.InteresGenerado.toFixed(2)}
+                                </Typography>
+                                <Typography gutterBottom>
+                                    <strong>Total al vencimiento:</strong> ${montoFinal.toFixed(2)}
+                                </Typography>
 
-                                    <Box mt={2}>
-                                        <Typography variant="body2" gutterBottom>
-                                            Progreso del Plazo Fijo
-                                        </Typography>
-                                        <LinearProgress variant="determinate" value={progreso} sx={{ height: 10, borderRadius: 5 }} />
-                                        <Typography variant="caption">{progreso.toFixed(0)}%</Typography>
-                                    </Box>
-                                </CardContent>
-                            </Card>
-                        </Grid>
+                                <Box mt={2}>
+                                    <Typography variant="body2" gutterBottom>
+                                        Progreso del Plazo Fijo
+                                    </Typography>
+                                    <LinearProgress
+                                        variant="determinate"
+                                        value={progreso}
+                                        sx={{ height: 10, borderRadius: 5 }}
+                                    />
+                                    <Typography variant="caption">{progreso.toFixed(0)}%</Typography>
+                                </Box>
+                            </CardContent>
+                        </Card>
                     );
                 })
             )}
-        </Grid>
+        </Stack>
     );
 }

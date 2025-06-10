@@ -14,7 +14,7 @@ export default function DetalleTransaccionPage() {
   const params = useParams();
   const id = Number(params.transactionId);
   const isIdValid = typeof id === "number" && !isNaN(id)
-  const [transaction, setTransaction] = useState<Transaction | null>(null);
+  const [transaction] = useState<Transaction | null>(null);
 
   if (!isIdValid || !transaction)
     return <Container

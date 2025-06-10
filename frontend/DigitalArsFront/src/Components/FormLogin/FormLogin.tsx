@@ -10,36 +10,38 @@ export default function FormLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        '/api/auth/login',
+        `${API_URL}/api/auth/login`,
         { Email: email, Password: password },
         { withCredentials: true }
       );
 
       const { token, usuario } = res.data;
 
-      // ✅ Declarás userData correctamente
+      // Declara userData 
       const userData = {
         ID_USUARIO: usuario.ID_USUARIO,
         NOMBRE: usuario.NOMBRE,
         EMAIL: usuario.EMAIL,
         ID_ROL: usuario.ID_ROL,
+        NOMBRE_ROL: usuario.NOMBRE_ROL
       };
 
-      // ✅ Guardás el token y el usuario en localStorage
+      // Guarda el token y el usuario en localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
 
-      // ✅ Actualizás el contexto global
+      // Actualiza el contexto global
       setUsuario(userData);
 
-      // ✅ Actualizás el saldo del usuario logueado
+      // Actualiza el saldo del usuario logueado
       recargarSaldo();
 
-      // ✅ Navegás al dashboard
+      //  Navega al dashboard
       navigate('/dashboard');
     } catch (error: any) {
       setErrorMsg(error.response?.data?.message || 'Login fallido');
