@@ -29,7 +29,7 @@
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/tuusuario/digitalars-wallet.git
+   git clone https://github.com/alkemyTech/CFITDF-NetReact-W2-Back-S1.git
    cd digitalars-wallet
 2. **Crear archivo .env en la raíz:**
 
